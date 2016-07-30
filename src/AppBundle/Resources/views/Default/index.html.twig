@@ -1,0 +1,65 @@
+{% extends "AppBundle:Design:design.html.twig" %}
+
+{% block content %}
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+            <h1>{{ "welcome"|trans }}</h1>
+            <p>{{ "website_description"|trans }}</p>
+            <p><a class="btn btn-primary btn-lg" href="#" role="button">{{ "who_are_we"|trans }} &raquo;</a></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Prochains évènements</h1>
+        {% if nextEvents|length == 0 %}
+            <p>{{ "noCurrentEvents"|trans }}</p>
+        {% else %}
+            <div class="row">
+                {% for event in nextEvents %}
+                    <div class="col-md-4">
+                        <h2>{{ event.name }}</h2>
+                        <p>
+                            {% if event.description|length < 200 %}
+                                {{ event.description }}
+                            {% else %}
+                                {{ event.description|slice(0, 200) ~ "..." }}
+                            {% endif %}
+                        </p>
+                        <p><a class="btn btn-default" href="#" role="button">{{ "details"|trans }} &raquo;</a></p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div> <!-- /container -->
+
+    <div id="mapid" class="col-md-12" style="min-width: 310px; height: 500px; max-width: 100%; margin: 0 auto"></div>
+
+    <div class="container">
+
+        <hr>
+        <footer>
+            <p><a href="{{ url_source_code }}">Site libre de droit</a></p>
+        </footer>
+    </div> <!-- /container -->
+{% endblock %}
+
+{% block js %}
+    <script type="application/javascript">
+
+        var mymap = L.map('mapid').setView([{{ map_center }}], 11);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            id: 'mapbox.streets'
+        }).addTo(mymap);
+
+        {% for event in nextEvents %}
+            var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(mymap);
+            marker.bindPopup("<strong>{{ event.name }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}");
+        {% endfor %}
+    </script>
+{% endblock %}
