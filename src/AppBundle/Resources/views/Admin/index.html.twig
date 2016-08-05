@@ -1,0 +1,140 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+    {% if app.user.association is null %}
+        {{ "no_association_assigned"|trans }}
+    {% else %}
+        {{ app.user.association.name }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if app.user.association is not null %}
+        {# Open <form> #}
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+        <div class="well well-sm">
+            {{ "association_form_hint"|trans }}
+        </div>
+
+        <p>
+
+            {# General errors of the form #}
+            {{ form_errors(form) }}
+
+            <h3>{{ "general"|trans }}</h3>
+
+            {# Manual and exploded generation: #}
+            <div class="form-group">
+
+                {# Label. #}
+                {{ form_label(form.name, "name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+
+                    {# Display errors for this field. #}
+                    {{ form_errors(form.name) }}
+
+                    {# Input #}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.description, "description"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.description) }}
+
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.urlVideo, "url_video"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.urlVideo) }}
+
+                    {{ form_widget(form.urlVideo, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+                <div class="form-group">
+
+                    {{ form_label(form.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                    <div class="col-sm-10">
+                        {{ form_errors(form.website) }}
+
+                        {{ form_widget(form.website, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    {{ form_label(form.email, "email"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                    <div class="col-sm-10">
+                        {{ form_errors(form.email) }}
+
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+            <div class="form-group">
+
+                {{ form_label(form.phone, "phone"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.phone) }}
+
+                    {{ form_widget(form.phone, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <h3>{{ "address"|trans }}</h3>
+            <div class="form-group">
+
+                {{ form_label(form.street, "street"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.street) }}
+
+                    {{ form_widget(form.street, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.zipCode, "zipCode"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.zipCode) }}
+
+                    {{ form_widget(form.zipCode, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.city, "city"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.city) }}
+
+                    {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+
+            <div class="form-group">
+
+                <div class="col-sm-2 control-label"></div>
+
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                </div>
+            </div>
+        </p>
+
+
+        {# Close <form> #}
+        {{ form_end(form) }}
+    {% endif %}
+{% endblock %}

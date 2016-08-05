@@ -6,19 +6,29 @@
         <div class="container">
             <h1>{{ "welcome"|trans }}</h1>
             <p>{{ "website_description"|trans }}</p>
-            <p><a class="btn btn-primary btn-lg" href="#" role="button">{{ "who_are_we"|trans }} &raquo;</a></p>
+            {% if mainAssociation is not null %}
+                <p><a class="btn btn-primary btn-lg" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}" role="button">{{ "who_are_we"|trans }} &raquo;</a></p>
+            {% endif %}
         </div>
     </div>
 
     <div class="container">
         <h1>Prochains évènements</h1>
         {% if nextEvents|length == 0 %}
-            <p>{{ "noCurrentEvents"|trans }}</p>
+            <p>{{ "no_current_events"|trans }}</p>
         {% else %}
             <div class="row">
                 {% for event in nextEvents %}
                     <div class="col-md-4">
                         <h2>{{ event.name }}</h2>
+                        <h3>
+                            {{ event.startTime|date("d/m/Y H:i", time_zone) }} -
+                            {% if event.takesLessThanOneDay %}
+                                {{ event.endTime|date("H:i", time_zone) }}
+                            {% else %}
+                                {{ event.endTime|date("d/m/Y H:i", time_zone) }}
+                            {% endif %}
+                        </h3>
                         <p>
                             {% if event.description|length < 200 %}
                                 {{ event.description }}
@@ -26,22 +36,14 @@
                                 {{ event.description|slice(0, 200) ~ "..." }}
                             {% endif %}
                         </p>
-                        <p><a class="btn btn-default" href="#" role="button">{{ "details"|trans }} &raquo;</a></p>
+                        <p><a class="btn btn-default" href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}" role="button">{{ "details"|trans }} &raquo;</a></p>
                     </div>
                 {% endfor %}
             </div>
         {% endif %}
-    </div> <!-- /container -->
+    </div>
 
     <div id="mapid" class="col-md-12" style="min-width: 310px; height: 500px; max-width: 100%; margin: 0 auto"></div>
-
-    <div class="container">
-
-        <hr>
-        <footer>
-            <p><a href="{{ url_source_code }}">Site libre de droit</a></p>
-        </footer>
-    </div> <!-- /container -->
 {% endblock %}
 
 {% block js %}
@@ -59,7 +61,13 @@
 
         {% for event in nextEvents %}
             var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(mymap);
-            marker.bindPopup("<strong>{{ event.name }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}");
+            /*var link = $("<strong>{{ event.name }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}").click(function() {
+
+                location.href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}";
+            })[0];
+            marker.bindPopup(link);*/
+
+            marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
         {% endfor %}
     </script>
 {% endblock %}

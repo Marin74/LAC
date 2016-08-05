@@ -1,0 +1,114 @@
+{% extends 'AppBundle:Design:design.html.twig' %}
+
+
+{% block title %}
+    {% if association is not null %}
+        {{ association.name }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if app.request.query.has("source") and app.request.query.get("source") == "superAdmin" %}
+            <nav aria-label="...">
+                <ul class="pager">
+                    <li class="previous"><a href="{{ url("app_superadmin_events") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
+                </ul>
+            </nav>
+        {% endif %}
+
+        {% if association is null %}
+            <h1 class="page-header">{{ "association_unknown"|trans }}</h1>
+        {% else %}
+
+            {% if association.urlVideo is not empty %}
+                <div class="center">
+                    <iframe width="80%" height="315" src="{{ association.urlVideo }}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+                </div>
+            {% endif %}
+
+            {% if association.description is not empty %}
+                <p class="lead">
+                    {{ association.description }}
+                </p>
+            {% endif %}
+
+            {% if association.fullAddress is not empty
+                or association.website is not empty
+            %}
+                <h1>{{ "coordinates"|trans }}</h1>
+                <ul>
+                    {% if association.fullAddress is not empty %}
+
+                        <li>
+                            {{ "address_colon"|trans({"%address%": association.fullAddress }) }}
+                        </li>
+                    {% endif %}
+
+                    {% if association.phone is not empty %}
+                        <li>
+                            {{ "phone_colon"|trans({"%phone%": association.phone }) }}
+                        </li>
+                    {% endif %}
+
+                    {% if association.website is not empty %}
+                        <li>
+                            <a href="{{ association.website }}">{{ "website"|trans }}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+
+            {% if association.nextEvents|length > 0 %}
+                <div class="container">
+                    <h1>{{ "next_events"|trans }}</h1>
+                    <div class="row">
+                        {% for event in association.nextEvents %}
+                            <div class="col-md-4">
+                                <h2>{{ event.name }}</h2>
+                                <h3>
+                                    {{ event.startTime|date("d/m/Y H:i", time_zone) }} -
+                                    {% if event.takesLessThanOneDay %}
+                                        {{ event.endTime|date("H:i", time_zone) }}
+                                    {% else %}
+                                        {{ event.endTime|date("d/m/Y H:i", time_zone) }}
+                                    {% endif %}
+                                </h3>
+                                <p>
+                                    {% if event.description|length < 200 %}
+                                        {{ event.description }}
+                                    {% else %}
+                                        {{ event.description|slice(0, 200) ~ "..." }}
+                                    {% endif %}
+                                </p>
+                                <p><a class="btn btn-default" href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}" role="button">{{ "details"|trans }} &raquo;</a></p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div id="mapid" class="col-md-12" style="min-width: 310px; height: 500px; max-width: 100%; margin: 0 auto"></div>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="application/javascript">
+
+        var mymap = L.map('mapid').setView([{{ map_center }}], 11);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            id: 'mapbox.streets'
+        }).addTo(mymap);
+
+        {% for event in association.nextEvents %}
+            var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(mymap);
+            marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
+        {% endfor %}
+    </script>
+{% endblock %}

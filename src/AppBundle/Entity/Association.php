@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Association
@@ -25,6 +26,7 @@ class Association
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -32,6 +34,11 @@ class Association
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min=100,
+     *     max="500"
+     * )
      */
     private $description;
 
@@ -78,9 +85,21 @@ class Association
     private $city;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="urlVideo", type="string", length=255, nullable=true)
+     */
+    private $urlVideo;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event",mappedBy="association")
      */
     private $events;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User",mappedBy="association")
+     */
+    private $owners;
 
 
     /**
@@ -115,6 +134,79 @@ class Association
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getNameForUrl()
+    {
+        $name = "evenement";
+
+        if (!empty($this->getName())) {
+            $name = $this->getName();
+
+            $name = str_replace(" ", "-", $name);
+            $name = str_replace("'", "", $name);
+            $name = str_replace('"', "", $name);
+            $name = str_replace("/", "", $name);
+            $name = str_replace("|", "", $name);
+            $name = str_replace('\\', "", $name);
+            $name = str_replace('?', "", $name);
+            $name = str_replace('!', "", $name);
+            $name = str_replace('(', "", $name);
+            $name = str_replace(')', "", $name);
+            $name = str_replace('°', "", $name);
+            $name = str_replace('&', "", $name);
+            $name = str_replace('§', "", $name);
+            $name = str_replace('*', "", $name);
+            $name = str_replace('%', "", $name);
+            $name = str_replace(':', "", $name);
+            $name = str_replace(',', "", $name);
+            $name = str_replace('=', "", $name);
+            $name = str_replace('+', "", $name);
+            $name = str_replace('%', "", $name);
+            $name = str_replace('.', "", $name);
+            $name = str_replace('<', "", $name);
+            $name = str_replace('>', "", $name);
+            $name = str_replace('@', "", $name);
+            $name = str_replace('#', "", $name);
+            
+            // Lowercase
+            $name = str_replace("é", "e", $name);
+            $name = str_replace("è", "e", $name);
+            $name = str_replace("ê", "e", $name);
+            $name = str_replace("ë", "e", $name);
+            $name = str_replace("â", "a", $name);
+            $name = str_replace("à", "a", $name);
+            $name = str_replace("ä", "a", $name);
+            $name = str_replace("ô", "o", $name);
+            $name = str_replace("ö", "o", $name);
+            $name = str_replace("ù", "u", $name);
+            $name = str_replace("ü", "u", $name);
+            $name = str_replace("î", "i", $name);
+            $name = str_replace("ï", "i", $name);
+            $name = str_replace("ç", "c", $name);
+            $name = str_replace("æ", "ae", $name);
+            $name = str_replace("œ", "oe", $name);
+
+            // Uppercase
+            $name = str_replace("É", "E", $name);
+            $name = str_replace("È", "E", $name);
+            $name = str_replace("Ê", "E", $name);
+            $name = str_replace("Ë", "E", $name);
+            $name = str_replace("Â", "A", $name);
+            $name = str_replace("À", "A", $name);
+            $name = str_replace("Ä", "A", $name);
+            $name = str_replace("Ô", "O", $name);
+            $name = str_replace("Ö", "O", $name);
+            $name = str_replace("Ù", "U", $name);
+            $name = str_replace("Ü", "U", $name);
+            $name = str_replace("Î", "i", $name);
+            $name = str_replace("Ï", "i", $name);
+            $name = str_replace("Ç", "c", $name);
+            $name = str_replace("Æ", "ae", $name);
+            $name = str_replace("Œ", "oe", $name);
+        }
+
+        return $name;
     }
 
     /**
@@ -285,9 +377,65 @@ class Association
         return $this->city;
     }
 
+    public function setUrlVideo($urlVideo)
+    {
+        $this->urlVideo = $urlVideo;
+
+        return $this;
+    }
+
+    public function getUrlVideo()
+    {
+        return $this->urlVideo;
+    }
+
     public function getEvents()
     {
         return $this->events;
+    }
+
+    public function getNextEvents() {
+
+        $nextEvents = array();
+        $now = new \DateTime();
+
+        foreach($this->getEvents() as $event) {
+            if($now < $event->getEndTime())
+                $nextEvents[] = $event;
+        }
+
+        return $nextEvents;
+    }
+    
+    public function getFullAddress()
+    {
+        $address = "";
+
+        if (!empty($this->getStreet())) {
+            $address = $this->getStreet();
+
+            if (!empty($this->getZipCode()))
+                $address .= ", " . $this->getZipCode();
+        }
+
+        if (!empty($this->getCity())) {
+            
+            if(!empty($address)) {
+                if(!empty($this->getZipCode()))
+                    $address .= " ";
+                else
+                    $address .= ", ";
+            }
+            
+            $address .= $this->getCity();
+        }
+        
+        return $address;
+    }
+
+    public function getOwners()
+    {
+        return $this->owners;
     }
 }
 

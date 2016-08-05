@@ -1,0 +1,381 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+    {{ "associations"|trans }}
+{% endblock %}
+
+{% block content %}
+    {% if app.user.association is not null %}
+        <p>
+            <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_association"|trans }}</a>
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>{{ "association"|trans }}</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for association in associations %}
+                    <tr>
+                        <td><a data-toggle="modal" data-target="#modal_update_{{ association.id }}" id="a_update_{{ association.id }}">{{ association.name }}</a></td>
+                        <td>
+                            <a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl, "source": "admin"}) }}">{{ "consult"|trans }}</a>
+                        </td>
+                        <td>
+                            <a data-toggle="modal" data-target="#modal_delete_{{ association.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+        {# Form to add association #}
+        <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ "association"|trans }}</h4>
+                    </div>
+                    {{ form_start(formAdd, {'attr': {'class': 'form-horizontal'}}) }}
+                    <div class="modal-body">
+
+                        <div id="warning_add"></div>
+
+                        <p>
+
+                            {# General errors of the form #}
+                            {{ form_errors(formAdd) }}
+
+                            <h3>{{ "general"|trans }}</h3>
+
+                            {# Manual and exploded generation: #}
+                            <div class="form-group">
+
+                                {# Label. #}
+                                {{ form_label(formAdd.name, "name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+
+                                    {# Display errors for this field. #}
+                                    {{ form_errors(formAdd.name) }}
+
+                                    {# Input #}
+                                    {{ form_widget(formAdd.name, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_label(formAdd.description, "description"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+                                    {{ form_errors(formAdd.description) }}
+
+                                    {{ form_widget(formAdd.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_label(formAdd.urlVideo, "url_video"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+                                    {{ form_errors(formAdd.urlVideo) }}
+
+                                    {{ form_widget(formAdd.urlVideo, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_label(formAdd.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+                                    {{ form_errors(formAdd.website) }}
+
+                                    {{ form_widget(formAdd.website, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_label(formAdd.email, "email"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+                                    {{ form_errors(formAdd.email) }}
+
+                                    {{ form_widget(formAdd.email, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_label(formAdd.phone, "phone"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+                                    {{ form_errors(formAdd.phone) }}
+
+                                    {{ form_widget(formAdd.phone, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <h3>{{ "address"|trans }}</h3>
+                            <div class="form-group">
+
+                                {{ form_label(formAdd.street, "street"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+                                    {{ form_errors(formAdd.street) }}
+
+                                    {{ form_widget(formAdd.street, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_label(formAdd.zipCode, "zipCode"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+                                    {{ form_errors(formAdd.zipCode) }}
+
+                                    {{ form_widget(formAdd.zipCode, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_label(formAdd.city, "city"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+                                    {{ form_errors(formAdd.city) }}
+
+                                    {{ form_widget(formAdd.city, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            {{ form_rest(formAdd) }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                        <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                    </div>
+
+                    {# Close <form> #}
+                    {{ form_end(formAdd) }}
+                </div>
+            </div>
+        </div>
+
+
+        {% set i = 0 %}
+
+        {% for form in forms %}
+            {# Form to update association #}
+            <div class="modal fade" id="modal_update_{{ associations[i].id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">{{ "association"|trans }}</h4>
+                        </div>
+                        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                        <div class="modal-body">
+
+                            <div id="warning_update_{{ associations[i].id }}"></div>
+
+                            <p>
+
+                                {# General errors of the form #}
+                                {{ form_errors(form) }}
+
+                                <h3>{{ "general"|trans }}</h3>
+
+                                {# Manual and exploded generation: #}
+                                <div class="form-group">
+
+                                    {# Label. #}
+                                    {{ form_label(form.name, "name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                    <div class="col-sm-10">
+
+                                        {# Display errors for this field. #}
+                                        {{ form_errors(form.name) }}
+
+                                        {# Input #}
+                                        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    {{ form_label(form.description, "description"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.description) }}
+
+                                        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    {{ form_label(form.urlVideo, "url_video"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.urlVideo) }}
+
+                                        {{ form_widget(form.urlVideo, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    {{ form_label(form.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.website) }}
+
+                                        {{ form_widget(form.website, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    {{ form_label(form.email, "email"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.email) }}
+
+                                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    {{ form_label(form.phone, "phone"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.phone) }}
+
+                                        {{ form_widget(form.phone, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <h3>{{ "address"|trans }}</h3>
+                                <div class="form-group">
+
+                                    {{ form_label(form.street, "street"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.street) }}
+
+                                        {{ form_widget(form.street, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    {{ form_label(form.zipCode, "zipCode"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.zipCode) }}
+
+                                        {{ form_widget(form.zipCode, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                    {{ form_label(form.city, "city"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.city) }}
+
+                                        {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+
+                                {{ form_rest(form) }}
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                            <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                        </div>
+
+                        {# Close <form> #}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+
+
+            {# Form to delete association #}
+            <div class="modal fade" id="modal_delete_{{ associations[i].id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">{{ "delete"|trans }}</h4>
+                        </div>
+                        <form action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" method="POST">
+                            <div class="modal-body">
+
+                                <input type="hidden" name="deleteId" value="{{ associations[i].id }}"/>
+
+                                <p>
+                                    {{ "delete_association_confirmation"|trans({'%name%': associations[i].name}) }}
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "cancel"|trans }}</button>
+                                <button type="submit" class="btn btn-warning">{{ "delete"|trans }}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% set i = i + 1 %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+
+        {# Open a modal dialog if there is a error with a form #}
+        {% set i = 0 %}
+        {% for form in forms %}
+            {% if form.name.vars.errors|length
+                or form.description.vars.errors|length
+                or form.website.vars.errors|length
+                or form.email.vars.errors|length
+                or form.phone.vars.errors|length
+                or form.street.vars.errors|length
+                or form.zipCode.vars.errors|length
+                or form.city.vars.errors|length
+                or form.urlVideo.vars.errors|length
+            %}
+
+                $("#warning_update_{{ associations[i].id }}").attr("class", "alert alert-warning");
+                $("#warning_update_{{ associations[i].id }}").attr("role", "alert");
+                $("#warning_update_{{ associations[i].id }}").text("{{ "error_field"|trans }}");
+
+                $("#modal_update_{{ associations[i].id }}").modal("show");
+            {% endif %}
+            {% set i = i + 1 %}
+        {% endfor %}
+
+        {% if formAdd.name.vars.errors|length
+            or formAdd.description.vars.errors|length
+            or formAdd.website.vars.errors|length
+            or formAdd.email.vars.errors|length
+            or formAdd.phone.vars.errors|length
+            or formAdd.street.vars.errors|length
+            or formAdd.zipCode.vars.errors|length
+            or formAdd.city.vars.errors|length
+            or formAdd.urlVideo.vars.errors|length
+        %}
+
+            $("#warning_add").attr("class", "alert alert-warning");
+            $("#warning_add").attr("role", "alert");
+            $("#warning_add").text("{{ "error_field"|trans }}");
+
+            $("#modal_add").modal("show");
+        {% endif %}
+    </script>
+{% endblock %}

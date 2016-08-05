@@ -1,0 +1,50 @@
+{% extends 'AppBundle:Design:design_admin.html.twig' %}
+
+{% block title %}
+    {{ "users"|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{{ "user"|trans }}</th>
+                <th>{{ "association"|trans }}</th>
+                <th>{{ "email"|trans }}</th>
+                <th>{{ "roles"|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>
+                        {{ user.username }}
+                    </td>
+                    <td>
+                        {% if user.association is not empty %}
+                            {{ user.association.name }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ user.email }}
+                    </td>
+                    <td>
+                        {% if user.roles|length <= 1 %}
+                            {% for role in user.roles %}
+                                {{ role|trans }}
+                            {% endfor %}
+                        {% else %}
+                            <ul>
+                                {% for role in user.roles %}
+                                    <li>{{ role|trans }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

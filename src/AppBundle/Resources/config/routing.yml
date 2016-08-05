@@ -1,3 +1,28 @@
 app_index:
     path:     /
-    defaults: { _controller: AppBundle:Default:index }
+    defaults: { _controller: "AppBundle:Default:index" }
+app_association:
+    path:     /groupe/{id}/{name}
+    defaults: { _controller: "AppBundle:Default:association" }
+    requirements:
+        id: \d+
+app_event:
+    path:     /evenement/{id}/{name}
+    defaults: { _controller: "AppBundle:Default:event" }
+    requirements:
+        id: \d+
+app_admin_index:
+    path:     /admin
+    defaults: { _controller: "AppBundle:Admin:index" }
+app_admin_events:
+    path:     /admin/evenements
+    defaults: { _controller: "AppBundle:Admin:events" }
+app_superadmin_users:
+    path:     /admin/superadmin/utilisateur
+    defaults: { _controller: "AppBundle:SuperAdmin:users" }
+app_superadmin_associations:
+    path:     /admin/superadmin/association
+    defaults: { _controller: "AppBundle:SuperAdmin:associations" }
+app_superadmin_events:
+    path:     /admin/superadmin/evenement
+    defaults: { _controller: "AppBundle:SuperAdmin:events" }

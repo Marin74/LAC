@@ -8,10 +8,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $repoEvent = $em->getRepository("AppBundle:Event");
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name"))
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
 
         $query = $em->createQuery(
             'SELECT e
@@ -23,7 +26,30 @@ class DefaultController extends Controller
         $nextEvents = $query->getResult();
 
         return $this->render('AppBundle:Default:index.html.twig', array(
+            'mainAssociation' => $mainAssociation,
             'nextEvents' => $nextEvents,
+        ));
+    }
+
+    public function associationAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $association = $repoAssociation->find($request->get("id"));
+
+        return $this->render('AppBundle:Default:association.html.twig', array(
+            'association' => $association,
+        ));
+    }
+
+    public function eventAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoEvent = $em->getRepository("AppBundle:Event");
+        $event = $repoEvent->find($request->get("id"));
+
+        return $this->render('AppBundle:Default:event.html.twig', array(
+            'event' => $event,
         ));
     }
 }

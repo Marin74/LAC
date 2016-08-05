@@ -39,9 +39,11 @@ twig:
 
     # Global variables
     globals:
+        app_name: "%app_name%"
         mapbox_access_token: "%mapbox_access_token%"
         map_center: "%map_center%"
         url_source_code: "%url_source_code%"
+        time_zone: "%time_zone%"
 
 # Doctrine Configuration
 doctrine:
@@ -72,3 +74,8 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+fos_user:
+    db_driver:     orm                       # Type of DB to use, here we use Doctrine ORM
+    firewall_name: main
+    user_class:    AppBundle\Entity\User # Class of the entity User we use

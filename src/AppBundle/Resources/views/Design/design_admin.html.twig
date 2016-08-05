@@ -1,0 +1,62 @@
+{% extends "AppBundle:Design:design.html.twig" %}
+
+{% block body %}
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url("app_index") }}">{{ app_name }}</a>
+                <a class="navbar-brand" style="color: greenyellow;">{{ "admin_zone_name"|trans }}</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ path("app_index") }}">{{ "homepage"|trans }}</a></li>
+                    <li><a href="{{ path("fos_user_security_logout") }}">{{ "logout"|trans }}</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="{% if app.request.attributes.get('_route') == "app_admin_index" %}active{% endif %}"><a href="{{ url("app_admin_index") }}">{{ "my_association"|trans }}</a></li>
+                    <li class="{% if app.request.attributes.get('_route') == "app_admin_events" %}active{% endif %}"><a href="{{ url("app_admin_events") }}">{{ "events"|trans }}</a></li>
+                </ul>
+                {% if is_granted("ROLE_ADMIN") %}
+                    <h3>Administration</h3>
+                    <ul class="nav nav-sidebar">
+                        <li class="{% if app.request.attributes.get('_route') == "app_superadmin_users" %}active{% endif %}"><a href="{{ url("app_superadmin_users") }}">{{ "users"|trans }}</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == "app_superadmin_associations" %}active{% endif %}"><a href="{{ url("app_superadmin_associations") }}">{{ "associations"|trans }}</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == "app_superadmin_events" %}active{% endif %}"><a href="{{ url("app_superadmin_events") }}">{{ "events"|trans }}</a></li>
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <h1 class="page-header">{% block title %}{% endblock %}</h1>
+
+                {% for label, flashes in app.session.flashbag.all %}
+                    {% for flash in flashes %}
+                        <div class="alert alert-{{ label }}" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            {{ flash }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- JavaScript placed at the end of the document so the pages load faster -->
+    {% block js %}{% endblock %}
+{% endblock %}
+

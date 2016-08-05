@@ -1,7 +1,73 @@
-app:
-    name: LAC Chablais
 welcome: Bienvenue !
 website_description: LAC Chablais souhaite promouvoir des rencontres entre groupes et citoyens désireux d'agir au sein de leur communauté.
 who_are_we: Qui sommes-nous
-noCurrentEvents: Pas d'évènements pour le moment.
+no_current_events: Pas d'évènements pour le moment.
 details: Détails
+association_unknown: Groupe inconnu
+site_open_source: Site libre de droit
+next_events: Prochains évènements
+coordinates: Coordonnées
+website: Site internet
+address_colon: "Adresse : %address%"
+phone_colon: "Tél. : %phone%"
+organized_by: Organisé par :
+when: Quand ?
+where: Où ?
+log: Espace des associations
+username: Nom d'utilisateur
+password: Mot de passe
+logout: Déconnexion
+login: Connexion
+log_hint: Connectez-vous pour gérer la page de votre groupe.
+come_back_to_homepage: Retour au site
+my_association: Mon groupe
+admin_zone_name: Espace des associations
+members_area: Espace membre
+no_association_assigned: Aucun groupe ne vous est affecté.
+events: Évènements
+save: Sauvegarder
+name: Nom
+description: Description
+email: Email
+url_video: Lien de la vidéo
+phone: Téléphone
+street: Rue
+zipCode: Code postal
+city: Ville
+address: Adresse
+general: Général
+association_form_hint: Toutes les informations ci-dessous seront publiées sur le site.
+association_updated: Les informations ont été mises à jour.
+error_field: Un des champs est incorrect.
+event_created: L'évènement est créé.
+event_updated: L'évènement est mis à jour.
+new_event: Nouvel évènement
+event: Évènement
+start: Début
+end: Fin
+place: Lieu
+place_name: Nom du lieu
+latitude: Latitude
+longitude: Longitude
+close: Fermer
+date: Date
+consult: Consulter
+come_back_to_admin_page: Retour à l'administration
+error_event_dates_order: La date de fin doit être supérieure à la date de début.
+homepage: Accueil
+associations: Groupes
+select_association: Sélectionner un groupe
+association: Groupe
+delete: Supprimer
+delete_event_confirmation: 'Êtes-vous sûr de vouloir supprimer l''évènement "%name%" ? Il sera effacé définitivement.'
+cancel: Annuler
+association_deleted: Le groupe est supprimé.
+delete_association_confirmation: 'Êtes-vous sûr de vouloir supprimer le groupe "%name%" ? Il sera effacé définitivement.'
+group_deleted: Le groupe est supprimé.
+association_created: Le groupe est créé.
+new_association: Nouveau groupe
+users: Utilisateurs
+user: Utilisateur
+roles: Rôles
+ROLE_ADMIN: Administrateur
+ROLE_USER: Utilisateur

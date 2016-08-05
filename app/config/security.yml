@@ -2,8 +2,13 @@
 # http://symfony.com/doc/current/book/security.html
 security:
 
+    encoders:
+        FOS\UserBundle\Model\UserInterface: bcrypt
+
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
+        main:
+            id: fos_user.user_provider.username
         in_memory:
             memory: ~
 
@@ -14,11 +19,29 @@ security:
             security: false
 
         main:
-            anonymous: ~
-            # activate different ways to authenticate
+            pattern: ^/
+            form_login:
+                provider: main
+                csrf_token_generator: security.csrf.token_manager
+                login_path: /login
+                default_target_path: /admin
+            logout:       true
+            anonymous:    true
+            remember_me:
+                secret:   '%secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:    /
+                always_remember_me: true
 
             # http_basic: ~
             # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, role: ROLE_USER }

@@ -1,0 +1,52 @@
+{% extends 'AppBundle:Design:design.html.twig' %}
+
+{% block return %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        {% if app.request.query.has("source") and app.request.query.get("source") == "admin" %}
+            <nav aria-label="...">
+                <ul class="pager">
+                    <li class="previous"><a href="{{ url("app_admin_events") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
+                </ul>
+            </nav>
+        {% endif %}
+
+        <div class="page-header">
+            <h1>{{ event.name }}</h1>
+        </div>
+        <p>{{ "organized_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
+        <p class="lead">{{ event.description }}</p>
+
+        <h2>{{ "when"|trans }}</h2>
+        <p class="lead">
+            {{ event.startTime|date("d/m/Y H:i", time_zone) }} -
+            {% if event.takesLessThanOneDay %}
+                {{ event.endTime|date("H:i", time_zone) }}
+            {% else %}
+                {{ event.endTime|date("d/m/Y H:i", time_zone) }}
+            {% endif %}
+        </p>
+
+        <h2>{{ "where"|trans }}</h2>
+        <p>
+            {% if event.place is not empty %}
+                <strong>{{ event.place }}</strong>
+                    {% if event.fullAddress is not empty %}
+                        <br/>
+                    {% endif %}
+            {% endif %}
+
+            {% if event.fullAddress is not empty %}
+                {{ event.fullAddress }}
+            {% endif %}
+        </p>
+    </div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
+
