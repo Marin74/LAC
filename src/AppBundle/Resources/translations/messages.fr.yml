@@ -4,7 +4,7 @@ who_are_we: Qui sommes-nous
 no_current_events: Pas d'évènements pour le moment.
 details: Détails
 association_unknown: Groupe inconnu
-site_open_source: Site libre de droit
+site_open_source: Site open source
 next_events: Prochains évènements
 coordinates: Coordonnées
 website: Site internet
@@ -71,3 +71,6 @@ user: Utilisateur
 roles: Rôles
 ROLE_ADMIN: Administrateur
 ROLE_USER: Utilisateur
+explanations_open_source: Le code de ce site internet est open source. Cela signifie qu'il peut être utilisé et modifié par quiconque. Le code source est sous licence GPL v3.
+url_source_code: Le code source de l'application est disponible ici :
+github_profile: Profil GitHub

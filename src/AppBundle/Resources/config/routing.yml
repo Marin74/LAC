@@ -1,6 +1,9 @@
 app_index:
     path:     /
     defaults: { _controller: "AppBundle:Default:index" }
+app_license:
+    path:     /licence
+    defaults: { _controller: "AppBundle:Default:license" }
 app_association:
     path:     /groupe/{id}/{name}
     defaults: { _controller: "AppBundle:Default:association" }

@@ -31,6 +31,11 @@ class DefaultController extends Controller
         ));
     }
 
+    public function licenseAction()
+    {
+        return $this->render('AppBundle:Default:license.html.twig');
+    }
+
     public function associationAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
