@@ -47,6 +47,17 @@ class DefaultController extends Controller
         ));
     }
 
+    public function associationsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $associations = $repoAssociation->findBy(array(), array("name" => "ASC"));
+
+        return $this->render('AppBundle:Default:associations.html.twig', array(
+            'associations' => $associations,
+        ));
+    }
+
     public function eventAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();

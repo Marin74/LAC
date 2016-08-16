@@ -13,6 +13,12 @@
         {# Open <form> #}
         {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 
+        {% if app.user.association.picture is not empty %}
+            <p>
+                <img src="{{ asset(app.user.association.getPicturePath()) }}" title="{{ "picture"|trans }}" />
+            </p>
+        {% endif %}
+
         <div class="well well-sm">
             {{ "association_form_hint"|trans }}
         </div>
@@ -41,6 +47,16 @@
             </div>
             <div class="form-group">
 
+                {{ form_label(form.file, "picture"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.file) }}
+
+                    {{ form_widget(form.file, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
                 {{ form_label(form.description, "description"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 
                 <div class="col-sm-10">
@@ -59,26 +75,36 @@
                     {{ form_widget(form.urlVideo, {'attr': {'class': 'form-control'}}) }}
                 </div>
             </div>
-                <div class="form-group">
+            <div class="form-group">
 
-                    {{ form_label(form.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                {{ form_label(form.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 
-                    <div class="col-sm-10">
-                        {{ form_errors(form.website) }}
+                <div class="col-sm-10">
+                    {{ form_errors(form.website) }}
 
-                        {{ form_widget(form.website, {'attr': {'class': 'form-control'}}) }}
-                    </div>
+                    {{ form_widget(form.website, {'attr': {'class': 'form-control'}}) }}
                 </div>
-                <div class="form-group">
+            </div>
+            <div class="form-group">
 
-                    {{ form_label(form.email, "email"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                {{ form_label(form.urlFacebook, "facebook"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 
-                    <div class="col-sm-10">
-                        {{ form_errors(form.email) }}
+                <div class="col-sm-10">
+                    {{ form_errors(form.urlFacebook) }}
 
-                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                    </div>
+                    {{ form_widget(form.urlFacebook, {'attr': {'class': 'form-control'}}) }}
                 </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.email, "email"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.email) }}
+
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
             <div class="form-group">
 
                 {{ form_label(form.phone, "phone"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}

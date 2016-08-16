@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -92,6 +93,20 @@ class Association
     private $urlVideo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="urlFacebook", type="string", length=255, nullable=true)
+     */
+    private $urlFacebook;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="picture", type="string", length=255, nullable=true)
+     */
+    private $picture;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event",mappedBy="association")
      */
     private $events;
@@ -100,6 +115,8 @@ class Association
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\User",mappedBy="association")
      */
     private $owners;
+
+    private $file;
 
 
     /**
@@ -389,6 +406,16 @@ class Association
         return $this->urlVideo;
     }
 
+    public function getUrlFacebook()
+    {
+        return $this->urlFacebook;
+    }
+    
+    public function setUrlFacebook($urlFacebook)
+    {
+        $this->urlFacebook = $urlFacebook;
+    }
+
     public function getEvents()
     {
         return $this->events;
@@ -433,9 +460,73 @@ class Association
         return $address;
     }
 
+    public function getPicture()
+    {
+        return $this->picture;
+    }
+
+    public function setPicture($picture)
+    {
+        $this->picture = $picture;
+    }
+
     public function getOwners()
     {
         return $this->owners;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    public function uploadPicture()
+    {
+        // If there is no file, we do nothing
+        if (null === $this->file) {
+            return false;
+        }
+
+        // Get the original filename
+        $name = $this->file->getClientOriginalName();
+
+        // Moves the picture in the good directory
+        $this->file->move($this->getUploadRootDir(), $name);
+
+        // Rename
+        $mime = mime_content_type($this->getUploadRootDir()."/".$name);
+        $mimeExplode = explode("/", $mime);
+        $filename = "association_".$this->getId().".".$mimeExplode[1];
+        $newPath = $this->getUploadRootDir()."/".$filename;
+        rename($this->getUploadRootDir()."/".$name, $newPath);
+
+        // Saves the filename
+        $this->setPicture($filename);
+        
+        return true;
+    }
+
+    public function getUploadDir()
+    {
+        // Returns the relative path for the twig code
+        return 'upload/img/association';
+    }
+
+    protected function getUploadRootDir()
+    {
+        // Returns the relative page for the PHP code
+        return __DIR__.'/../../../web/'.$this->getUploadDir();
+    }
+
+    public function getPicturePath()
+    {
+        // Returns path + filename
+        return $this->getUploadDir()."/".$this->getPicture();
     }
 }
 

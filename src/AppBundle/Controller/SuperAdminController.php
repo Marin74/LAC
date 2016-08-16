@@ -75,6 +75,8 @@ class SuperAdminController extends Controller
                         if ($event->getStartTime() > $event->getEndTime())
                             $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
                         else {
+                            $event->uploadPicture();
+                            
                             // Save the object event
                             $em->flush();
 
@@ -129,6 +131,8 @@ class SuperAdminController extends Controller
                 if ($formAdd->isValid()) {
                     $em->persist($newAssociation);
                     $em->flush();
+                    
+                    $newAssociation->uploadPicture();
 
                     $request->getSession()->getFlashBag()->add('success', $translator->trans("association_created"));
                 }
@@ -172,6 +176,8 @@ class SuperAdminController extends Controller
                     if ($form->isValid()) {
 
                         if ($form->isValid()) {
+                            
+                            $association->uploadPicture();
                             $em->flush();
 
                             $request->getSession()->getFlashBag()->add('success', $translator->trans("association_updated"));

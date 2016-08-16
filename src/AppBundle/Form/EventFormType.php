@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,36 +23,21 @@ class EventFormType extends AbstractType
         $timeZoneDisplayed = "Europe/Paris";
         
         $builder
-            ->add('name',           TextType::class, array(
-                'required' => true
-            ))
-            ->add('startTime',      DateTimeType::class, array('required' => true, 'widget' => 'single_text', 'view_timezone' => $timeZoneDisplayed, 'format' => 'dd-MM-yyyy HH:mm', 'attr' => [
+            ->add('name',           TextType::class)
+            ->add('startTime',      DateTimeType::class, array('widget' => 'single_text', 'view_timezone' => $timeZoneDisplayed, 'format' => 'dd-MM-yyyy HH:mm', 'attr' => [
                 'class' => 'form-control input-inline form_datetime',
             ]))
-            ->add('endTime',        DateTimeType::class, array('required' => true, 'widget' => 'single_text', 'view_timezone' => $timeZoneDisplayed, 'format' => 'dd-MM-yyyy HH:mm', 'attr' => [
+            ->add('endTime',        DateTimeType::class, array('widget' => 'single_text', 'view_timezone' => $timeZoneDisplayed, 'format' => 'dd-MM-yyyy HH:mm', 'attr' => [
                 'class' => 'form-control input-inline form_datetime',
             ]))
-            ->add('description',    TextareaType::class, array(
-                'required' => true
-            ))
-            ->add('place',          TextType::class, array(
-                'required' => false,
-            ))
-            ->add('street',         TextType::class, array(
-                'required' => false,
-            ))
-            ->add('zipCode',        TextType::class, array(
-                'required' => false,
-            ))
-            ->add('city',           TextType::class, array(
-                'required' => false,
-            ))
-            ->add('latitude',       NumberType::class, array(
-                'required' => true,
-            ))
-            ->add('longitude',      NumberType::class, array(
-                'required' => true,
-            ))
+            ->add('description',    TextareaType::class)
+            ->add('place',          TextType::class)
+            ->add('street',         TextType::class)
+            ->add('zipCode',        TextType::class)
+            ->add('city',           TextType::class)
+            ->add('latitude',       NumberType::class)
+            ->add('longitude',      NumberType::class)
+            ->add('file',           FileType::class)
         ;
     }
     

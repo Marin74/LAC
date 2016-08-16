@@ -3,10 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Event;
-use AppBundle\Entity\User;
 use AppBundle\Form\AssociationFormType;
 use AppBundle\Form\EventFormType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,6 +21,8 @@ class AdminController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+
+                $user->getAssociation()->uploadPicture();
                 $em->flush();
 
                 $request->getSession()->getFlashBag()->add('success', $translator->trans("association_updated"));
@@ -61,6 +61,8 @@ class AdminController extends Controller
                 else {
                     $em->persist($newEvent);
                     $em->flush();
+                    
+                    $newEvent->uploadPicture();
 
                     $newEvent = new Event();
                     $formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
@@ -90,6 +92,8 @@ class AdminController extends Controller
                         if ($event->getStartTime() > $event->getEndTime())
                             $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
                         else {
+                            $event->uploadPicture();
+                            
                             // Save the object event
                             $em->flush();
 

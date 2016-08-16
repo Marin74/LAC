@@ -49,3 +49,6 @@
 
 # .idea folder
 /.idea/
+
+# upload folder
+/web/upload/

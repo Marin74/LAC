@@ -79,6 +79,14 @@
                         </div>
                         <div class="form-group">
 
+                            {{ form_label(formAdd.file, "picture"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.file) }}
+                                {{ form_widget(formAdd.file) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+
                             {{ form_label(formAdd.association, "association"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.association) }}
@@ -182,8 +190,10 @@
         {% set i = 0 %}
 
         {% for form in forms %}
+            
+            {% set event = events[i] %}
             {# Form to update event #}
-            <div class="modal fade" id="modal_update_{{ events[i].id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal fade" id="modal_update_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -193,11 +203,17 @@
                         {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
                         <div class="modal-body">
 
-                            <div id="warning_update_{{ events[i].id }}"></div>
+                            <div id="warning_update_{{ event.id }}"></div>
+
+                            {% if event.picture is not empty %}
+                                <p class="center">
+                                    <img src="{{ asset(event.getPicturePath()) }}" title="{{ "picture"|trans }}" />
+                                </p>
+                            {% endif %}
 
                             <p>
 
-                                <input type="hidden" name="eventId" value="{{ events[i].id }}"/>
+                                <input type="hidden" name="eventId" value="{{ event.id }}"/>
 
                                 {# General errors of the form #}
                                 {{ form_errors(form) }}
@@ -215,6 +231,14 @@
 
                                     {# Input #}
                                     {{ form_widget(form.name) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_label(form.file, "picture"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                <div class="col-sm-10">
+                                    {{ form_errors(form.file) }}
+                                    {{ form_widget(form.file) }}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -321,7 +345,7 @@
 
 
             {# Form to delete event #}
-            <div class="modal fade" id="modal_delete_{{ events[i].id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal fade" id="modal_delete_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -331,10 +355,10 @@
                         <form action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" method="POST">
                             <div class="modal-body">
 
-                                <input type="hidden" name="deleteId" value="{{ events[i].id }}"/>
+                                <input type="hidden" name="deleteId" value="{{ event.id }}"/>
 
                                 <p>
-                                    {{ "delete_event_confirmation"|trans({'%name%': events[i].name}) }}
+                                    {{ "delete_event_confirmation"|trans({'%name%': event.name}) }}
                                 </p>
                             </div>
                             <div class="modal-footer">
@@ -370,13 +394,16 @@
                 or form.city.vars.errors|length
                 or form.latitude.vars.errors|length
                 or form.longitude.vars.errors|length
+                or form.file.vars.errors|length
             %}
+        
+                {% set event = events[i] %}
 
-                $("#warning_update_{{ events[i].id }}").attr("class", "alert alert-warning");
-                $("#warning_update_{{ events[i].id }}").attr("role", "alert");
-                $("#warning_update_{{ events[i].id }}").text("{{ "error_field"|trans }}");
+                $("#warning_update_{{ event.id }}").attr("class", "alert alert-warning");
+                $("#warning_update_{{ event.id }}").attr("role", "alert");
+                $("#warning_update_{{ event.id }}").text("{{ "error_field"|trans }}");
 
-                $("#modal_update_{{ events[i].id }}").modal("show");
+                $("#modal_update_{{ event.id }}").modal("show");
             {% endif %}
             {% set i = i + 1 %}
         {% endfor %}
@@ -392,6 +419,7 @@
         or formAdd.city.vars.errors|length
         or formAdd.latitude.vars.errors|length
         or formAdd.longitude.vars.errors|length
+        or formAdd.file.vars.errors|length
         %}
 
             $("#warning_add").attr("class", "alert alert-warning");

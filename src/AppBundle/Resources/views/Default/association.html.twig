@@ -56,6 +56,12 @@
                             <a href="{{ association.website }}">{{ "website"|trans }}</a>
                         </li>
                     {% endif %}
+
+                    {% if association.urlFacebook is not empty %}
+                        <li>
+                            <a href="{{ association.urlFacebook }}">{{ "facebook"|trans }}</a>
+                        </li>
+                    {% endif %}
                 </ul>
             {% endif %}
 

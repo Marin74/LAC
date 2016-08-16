@@ -4,6 +4,9 @@ app_index:
 app_license:
     path:     /licence
     defaults: { _controller: "AppBundle:Default:license" }
+app_associations:
+    path:     /groupe
+    defaults: { _controller: "AppBundle:Default:associations" }
 app_association:
     path:     /groupe/{id}/{name}
     defaults: { _controller: "AppBundle:Default:association" }

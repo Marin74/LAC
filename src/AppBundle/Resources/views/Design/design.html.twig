@@ -12,6 +12,11 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{{ url("app_index") }}">{{ app_name }}</a>
+                {% if association is defined and association.picture is not empty %}
+                    <img class="navbar-brand" src="{{ asset(association.picturePath) }}"/>
+                {% elseif event is defined and event.picture is not empty %}
+                    <img class="navbar-brand" src="{{ asset(event.picturePath) }}"/>
+                {% endif %}
                 <a class="navbar-brand" style="color: greenyellow;">
                     {% block title %}{% endblock %}
                 </a>

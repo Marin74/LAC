@@ -1,5 +1,5 @@
 welcome: Bienvenue !
-website_description: LAC Chablais souhaite promouvoir des rencontres entre groupes et citoyens désireux d'agir au sein de leur communauté.
+website_description: LAC Chablais (Liaison-Actions Citoyennes Chablais) souhaite promouvoir des rencontres entre groupes et citoyens désireux d'agir au sein de leur communauté.
 who_are_we: Qui sommes-nous
 no_current_events: Pas d'évènements pour le moment.
 details: Détails
@@ -74,3 +74,6 @@ ROLE_USER: Utilisateur
 explanations_open_source: Le code de ce site internet est open source. Cela signifie qu'il peut être utilisé et modifié par quiconque. Le code source est sous licence GPL v3.
 url_source_code: Le code source de l'application est disponible ici :
 github_profile: Profil GitHub
+picture: Image
+facebook: Facebook
+quizz: Quizz

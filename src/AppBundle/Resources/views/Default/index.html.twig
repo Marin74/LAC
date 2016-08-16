@@ -7,7 +7,11 @@
             <h1>{{ "welcome"|trans }}</h1>
             <p>{{ "website_description"|trans }}</p>
             {% if mainAssociation is not null %}
-                <p><a class="btn btn-primary btn-lg" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}" role="button">{{ "who_are_we"|trans }} &raquo;</a></p>
+                <p>
+                    <a class="btn btn-primary btn-lg" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}" role="button">{{ "who_are_we"|trans }} &raquo;</a>
+                    <a class="btn btn-primary btn-lg" href="{{ url("app_associations") }}" role="button">{{ "associations"|trans }} &raquo;</a>
+                    <a class="btn btn-primary btn-lg" href="#" role="button">{{ "quizz"|trans }} &raquo;</a>
+                </p>
             {% endif %}
         </div>
     </div>
