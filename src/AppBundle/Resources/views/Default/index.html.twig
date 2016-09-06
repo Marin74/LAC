@@ -33,6 +33,7 @@
                                 {{ event.endTime|date("d/m/Y H:i", time_zone) }}
                             {% endif %}
                         </h3>
+                        <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
                         <p>
                             {% if event.description|length < 200 %}
                                 {{ event.description }}

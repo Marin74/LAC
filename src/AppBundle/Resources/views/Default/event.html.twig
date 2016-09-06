@@ -14,7 +14,7 @@
         <div class="page-header">
             <h1>{{ event.name }}</h1>
         </div>
-        <p>{{ "organized_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
+        <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
         <p class="lead">{{ event.description }}</p>
 
         <h2>{{ "when"|trans }}</h2>
@@ -40,10 +40,29 @@
                 {{ event.fullAddress }}
             {% endif %}
         </p>
+        <div id="mapid" style="height: 500px;"></div>
     </div>
 {% endblock %}
 
 {% block js %}
+    <script type="application/javascript">
 
+        var mymap = L.map('mapid').setView([{{ map_center }}], 11);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            id: 'mapbox.streets'
+        }).addTo(mymap);
+
+        var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(mymap);
+        marker.bindPopup('{% if event.place is not empty %}<strong>{{ event.place }}</strong>{% endif %}'+
+                '{% if event.street is not empty %}<br/>{{ event.street }}{% endif %}'+
+                '{% if event.zipCode is not empty %}<br/>{{ event.zipCode }}{% if event.city is not empty %} {{ event.city }}{% endif %}{% endif %}'+
+                '{% if event.zipCode is empty and event.city is not empty %}<br/>{{ event.city }}{% endif %}'
+        );
+    </script>
 {% endblock %}
 

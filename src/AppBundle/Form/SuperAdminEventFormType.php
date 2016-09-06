@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -34,6 +35,9 @@ class SuperAdminEventFormType extends AbstractType
                 'choice_translation_domain' => 'messages',
                 'placeholder'               => 'select_association',
                 'attr'                      => ['class' => 'form-control',],
+                'query_builder'             => function(EntityRepository $repository) {
+                    return $repository->createQueryBuilder('u')->orderBy('u.name', 'ASC');
+                },
             ))
             ->add('startTime',      DateTimeType::class, array('widget' => 'single_text', 'view_timezone' => $timeZoneDisplayed, 'format' => 'dd-MM-yyyy HH:mm', 'attr' => [
                 'class' => 'form-control input-inline form_datetime',

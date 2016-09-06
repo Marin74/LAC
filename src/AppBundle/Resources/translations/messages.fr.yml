@@ -10,7 +10,7 @@ coordinates: Coordonnées
 website: Site internet
 address_colon: "Adresse : %address%"
 phone_colon: "Tél. : %phone%"
-organized_by: Organisé par :
+proposed_by: Proposé par :
 when: Quand ?
 where: Où ?
 log: Espace des associations

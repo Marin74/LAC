@@ -53,7 +53,7 @@
 
                     {% if association.website is not empty %}
                         <li>
-                            <a href="{{ association.website }}">{{ "website"|trans }}</a>
+                            <a href="{{ association.website }}" target="_blank">{{ "website"|trans }}</a>
                         </li>
                     {% endif %}
 
@@ -93,7 +93,7 @@
                     </div>
                 </div>
 
-                <div id="mapid" class="col-md-12" style="min-width: 310px; height: 500px; max-width: 100%; margin: 0 auto"></div>
+                <div id="mapid" style="height: 500px;"></div>
             {% endif %}
         {% endif %}
     </div>

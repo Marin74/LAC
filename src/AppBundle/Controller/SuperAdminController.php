@@ -135,6 +135,10 @@ class SuperAdminController extends Controller
                     $newAssociation->uploadPicture();
 
                     $request->getSession()->getFlashBag()->add('success', $translator->trans("association_created"));
+
+                    // Empty the form
+                    $newAssociation = new Association();
+                    $formAdd = $this->get('form.factory')->createBuilder(AssociationFormType::class, $newAssociation)->getForm();
                 }
                 else
                     $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
