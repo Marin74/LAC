@@ -526,6 +526,10 @@ class Association
     public function getPicturePath()
     {
         // Returns path + filename
+
+        if(empty($this->getPicture()))
+            return null;
+        
         return $this->getUploadDir()."/".$this->getPicture();
     }
 }

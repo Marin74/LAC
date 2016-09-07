@@ -113,6 +113,13 @@ class Event
      */
     private $association;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="website", type="string", length=255, nullable=true)
+     */
+    private $website;
+
     private $file;
 
 
@@ -451,6 +458,30 @@ class Event
         return $this->association;
     }
 
+    /**
+     * Set website
+     *
+     * @param string $website
+     *
+     * @return Event
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+
+        return $this;
+    }
+
+    /**
+     * Get website
+     *
+     * @return string
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
     public function takesLessThanOneDay() {
         $oneDayLater = clone $this->getStartTime();
         $oneDayLater->add(new \DateInterval("PT24H"));
@@ -535,6 +566,10 @@ class Event
     public function getPicturePath()
     {
         // Returns path + filename
+        
+        if(empty($this->getPicture()))
+            return null;
+        
         return $this->getUploadDir()."/".$this->getPicture();
     }
 }

@@ -113,6 +113,14 @@
                                 {{ form_widget(formAdd.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
                             </div>
                         </div>
+                        <div class="form-group">
+
+                            {{ form_label(formAdd.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.website) }}
+                                {{ form_widget(formAdd.website, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
                         <h3>{{ "place"|trans }}</h3>
                         <div class="form-group">
 
@@ -257,6 +265,14 @@
                                         {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
                                     </div>
                                 </div>
+                                <div class="form-group">
+
+                                    {{ form_label(form.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.website) }}
+                                        {{ form_widget(form.website, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
                                 <h3>{{ "place"|trans }}</h3>
                                 <div class="form-group">
 
@@ -344,6 +360,7 @@
                 or form.startTime.vars.errors|length
                 or form.endTime.vars.errors|length
                 or form.description.vars.errors|length
+                or form.website.vars.errors|length
                 or form.place.vars.errors|length
                 or form.name.vars.errors|length
                 or form.street.vars.errors|length
@@ -369,6 +386,7 @@
             or formAdd.startTime.vars.errors|length
             or formAdd.endTime.vars.errors|length
             or formAdd.description.vars.errors|length
+            or formAdd.website.vars.errors|length
             or formAdd.place.vars.errors|length
             or formAdd.name.vars.errors|length
             or formAdd.street.vars.errors|length

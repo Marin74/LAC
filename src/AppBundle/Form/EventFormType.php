@@ -31,6 +31,7 @@ class EventFormType extends AbstractType
                 'class' => 'form-control input-inline form_datetime',
             ]))
             ->add('description',    TextareaType::class)
+            ->add('website',        UrlType::class)
             ->add('place',          TextType::class)
             ->add('street',         TextType::class)
             ->add('zipCode',        TextType::class)

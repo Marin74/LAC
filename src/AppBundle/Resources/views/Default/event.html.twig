@@ -15,6 +15,11 @@
             <h1>{{ event.name }}</h1>
         </div>
         <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
+
+        {% if event.website is not empty %}
+            <p><a href="{{ event.website }}" target="_blank">{{ "website"|trans }}</a></p>
+        {% endif %}
+
         <p class="lead">{{ event.description }}</p>
 
         <h2>{{ "when"|trans }}</h2>
@@ -47,7 +52,7 @@
 {% block js %}
     <script type="application/javascript">
 
-        var mymap = L.map('mapid').setView([{{ map_center }}], 11);
+        var map = L.map('mapid').setView([{{ map_center }}], 11);
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
             maxZoom: 18,
@@ -55,9 +60,12 @@
             '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
             'Imagery © <a href="http://mapbox.com">Mapbox</a>',
             id: 'mapbox.streets'
-        }).addTo(mymap);
+        }).addTo(map);
 
-        var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(mymap);
+        // Prevent the zoom when we scroll the webpage
+        map.scrollWheelZoom.disable();
+
+        var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
         marker.bindPopup('{% if event.place is not empty %}<strong>{{ event.place }}</strong>{% endif %}'+
                 '{% if event.street is not empty %}<br/>{{ event.street }}{% endif %}'+
                 '{% if event.zipCode is not empty %}<br/>{{ event.zipCode }}{% if event.city is not empty %} {{ event.city }}{% endif %}{% endif %}'+

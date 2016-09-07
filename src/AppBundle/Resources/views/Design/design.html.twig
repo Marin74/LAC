@@ -33,15 +33,15 @@
     {% block content %}{% endblock %}
 
     <div class="container">
-
-        <hr>
-        <footer>
-            <p><a href="{{ path("app_license") }}">{{ "site_open_source"|trans }}</a></p>
-        </footer>
     </div> <!-- /container -->
+
+    <footer class="bs-docs-footer">
+        <div class="container">
+            <p><a href="{{ path("app_license") }}">{{ "site_open_source"|trans }}</a></p>
+        </div>
+    </footer>
 
     <!-- ================================================== -->
     <!-- JavaScript placed at the end of the document so the pages load faster -->
     {% block js %}{% endblock %}
 {% endblock %}
-

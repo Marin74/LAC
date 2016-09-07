@@ -48,6 +48,9 @@ class SuperAdminEventFormType extends AbstractType
             ->add('description',    TextareaType::class, array(
                 'attr'                      => ['class' => 'form-control', 'rows' => 10],
             ))
+            ->add('website',        UrlType::class, array(
+                'attr'                      => ['class' => 'form-control',],
+            ))
             ->add('place',          TextType::class, array(
                 'attr'                      => ['class' => 'form-control',],
             ))

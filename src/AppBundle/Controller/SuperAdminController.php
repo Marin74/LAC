@@ -123,26 +123,23 @@ class SuperAdminController extends Controller
 
         // Add form
         if ($request->isMethod('POST') && empty($associationIdToUpdate)) {
-
+            
             $formAdd->handleRequest($request);
 
             if ($formAdd->isValid()) {
+                $em->persist($newAssociation);
+                $em->flush();
 
-                if ($formAdd->isValid()) {
-                    $em->persist($newAssociation);
-                    $em->flush();
-                    
-                    $newAssociation->uploadPicture();
+                $newAssociation->uploadPicture();
 
-                    $request->getSession()->getFlashBag()->add('success', $translator->trans("association_created"));
+                $request->getSession()->getFlashBag()->add('success', $translator->trans("association_created"));
 
-                    // Empty the form
-                    $newAssociation = new Association();
-                    $formAdd = $this->get('form.factory')->createBuilder(AssociationFormType::class, $newAssociation)->getForm();
-                }
-                else
-                    $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+                // Empty the form
+                $newAssociation = new Association();
+                $formAdd = $this->get('form.factory')->createBuilder(AssociationFormType::class, $newAssociation)->getForm();
             }
+            else
+                $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
         }
 
         // Delete request
@@ -179,16 +176,13 @@ class SuperAdminController extends Controller
 
                     if ($form->isValid()) {
 
-                        if ($form->isValid()) {
-                            
-                            $association->uploadPicture();
-                            $em->flush();
+                        $association->uploadPicture();
+                        $em->flush();
 
-                            $request->getSession()->getFlashBag()->add('success', $translator->trans("association_updated"));
-                        }
-                        else
-                            $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+                        $request->getSession()->getFlashBag()->add('success', $translator->trans("association_updated"));
                     }
+                    else
+                        $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
                 }
             }
 

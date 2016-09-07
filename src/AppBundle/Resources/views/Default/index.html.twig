@@ -18,35 +18,68 @@
 
     <div class="container">
         <h1>Prochains évènements</h1>
-        {% if nextEvents|length == 0 %}
+    </div>
+
+    {% if nextEvents|length == 0 %}
+        <div class="container">
             <p>{{ "no_current_events"|trans }}</p>
-        {% else %}
-            <div class="row">
+        </div>
+    {% else %}
+        <div id="carousel-next_events" class="carousel slide" data-ride="carousel">
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+
+                {% set index = 0 %}
                 {% for event in nextEvents %}
-                    <div class="col-md-4">
-                        <h2>{{ event.name }}</h2>
-                        <h3>
-                            {{ event.startTime|date("d/m/Y H:i", time_zone) }} -
-                            {% if event.takesLessThanOneDay %}
-                                {{ event.endTime|date("H:i", time_zone) }}
-                            {% else %}
-                                {{ event.endTime|date("d/m/Y H:i", time_zone) }}
+
+                    {% if index%3 == 0 %}
+
+                        <div class="item {% if index == 0 %}active{% endif %}">
+                        <div class="row">
+                    {% endif %}
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="thumbnail">
+                            {% if event.picturePath is not empty %}
+                                <img src="{{ asset(event.picturePath) }}" title="{{ event.name }}">
+                            {% elseif event.association.picturePath is not empty %}
+                                <img src="{{ asset(event.association.picturePath) }}" title="{{ event.name }}">
                             {% endif %}
-                        </h3>
-                        <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
-                        <p>
-                            {% if event.description|length < 200 %}
-                                {{ event.description }}
-                            {% else %}
-                                {{ event.description|slice(0, 200) ~ "..." }}
-                            {% endif %}
-                        </p>
-                        <p><a class="btn btn-default" href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}" role="button">{{ "details"|trans }} &raquo;</a></p>
+                            <div class="caption">
+                                <h3>{{ event.name }}</h3>
+                                <h4>
+                                    {{ event.startTime|date("d/m/Y H:i", time_zone) }} -
+                                    {% if event.takesLessThanOneDay %}
+                                        {{ event.endTime|date("H:i", time_zone) }}
+                                    {% else %}
+                                        {{ event.endTime|date("d/m/Y H:i", time_zone) }}
+                                    {% endif %}
+                                </h4>
+                                <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
+                                <p>
+                                    {% if event.description|length < 200 %}
+                                        {{ event.description }}
+                                    {% else %}
+                                        {{ event.description|slice(0, 200) ~ "..." }}
+                                    {% endif %}
+                                </p>
+                                <p><a class="btn btn-default" href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}" role="button">{{ "details"|trans }} &raquo;</a></p>
+                            </div>
+                        </div>
                     </div>
+
+                    {% if index%3 == 2 or loop.index >= nextEvents|length %}
+
+                        </div>
+                        </div>
+                    {% endif %}
+
+                    {% set index = index + 1 %}
                 {% endfor %}
             </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 
     <div id="mapid" class="col-md-12" style="min-width: 310px; height: 500px; max-width: 100%; margin: 0 auto"></div>
 {% endblock %}
@@ -54,7 +87,7 @@
 {% block js %}
     <script type="application/javascript">
 
-        var mymap = L.map('mapid').setView([{{ map_center }}], 11);
+        var map = L.map('mapid').setView([{{ map_center }}], 11);
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
             maxZoom: 18,
@@ -62,10 +95,13 @@
             '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
             'Imagery © <a href="http://mapbox.com">Mapbox</a>',
             id: 'mapbox.streets'
-        }).addTo(mymap);
+        }).addTo(map);
+
+        // Prevent the zoom when we scroll the webpage
+        map.scrollWheelZoom.disable();
 
         {% for event in nextEvents %}
-            var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(mymap);
+            var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
             /*var link = $("<strong>{{ event.name }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}").click(function() {
 
                 location.href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}";
