@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,7 +39,7 @@ class Association
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=100,
-     *     max="500"
+     *     max="2000"
      * )
      */
     private $description;
@@ -108,6 +109,7 @@ class Association
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event",mappedBy="association")
+     * @OrderBy({"startTime" = "ASC"})
      */
     private $events;
 

@@ -3,13 +3,30 @@
 {% block content %}
     <div class="container">
         <h1>{{ "associations"|trans }}</h1>
-        <ul>
+        {#<ul>
             {% for association in associations %}
                 <li>
                     <a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl}) }}">{{ association.name }}</a>
                 </li>
             {% endfor %}
-        </ul>
+        </ul>#}
+
+
+        <!-- Wrapper for slides -->
+        <div class="row">
+
+            {% set colors = ["#2ca25f", "#e34a33", "#43a2ca", "#dd1c77"] %}
+
+            {% for association in associations %}
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail" style="background-color: {{ colors[loop.index0%(colors|length)] }};">
+                        <img src="{{ asset(association.picturePath) }}" title="{{ association.name }}">
+                        <h3 class="center white">{{ association.name }}</h3>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
 

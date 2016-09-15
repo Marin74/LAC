@@ -66,9 +66,7 @@
             {% endif %}
 
             {% if association.nextEvents|length > 0 %}
-                <div class="container">
-                    <h1>{{ "next_events"|trans }}</h1>
-                </div>
+                <h1>{{ "next_events"|trans }}</h1>
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner" role="listbox">
 
@@ -91,11 +89,22 @@
                                 <div class="caption">
                                     <h3>{{ event.name }}</h3>
                                     <h4>
-                                        {{ event.startTime|date("d/m/Y H:i", time_zone) }} -
+                                        {% set dateFormat = "d M H:i" %}
+
+                                        {% if event.startTime|date("Y") != "now"|date("Y") %}
+                                            {% set dateFormat = "d M Y H:i" %}
+                                        {% endif %}
+
+                                        {{ event.startTime|date(dateFormat, time_zone) }} -
                                         {% if event.takesLessThanOneDay %}
                                             {{ event.endTime|date("H:i", time_zone) }}
                                         {% else %}
-                                            {{ event.endTime|date("d/m/Y H:i", time_zone) }}
+
+                                            {% set dateFormat = "d M H:i" %}
+                                            {% if event.endTime|date("Y") != "now"|date("Y") %}
+                                                {% set dateFormat = "d M Y H:i" %}
+                                            {% endif %}
+                                            {{ event.endTime|date(dateFormat, time_zone) }}
                                         {% endif %}
                                     </h4>
                                     <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
@@ -120,11 +129,13 @@
                         {% set index = index + 1 %}
                     {% endfor %}
                 </div>
-
-                <div id="mapid" style="height: 500px;"></div>
             {% endif %}
         {% endif %}
     </div>
+
+    {% if association is not null and association.nextEvents|length > 0 %}
+        <div id="mapid" style="height: 500px;"></div>
+    {% endif %}
 {% endblock %}
 
 {% block js %}
