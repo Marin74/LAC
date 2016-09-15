@@ -24,11 +24,22 @@
 
         <h2>{{ "when"|trans }}</h2>
         <p class="lead">
-            {{ event.startTime|date("d/m/Y H:i", time_zone) }} -
+            {% set dateFormat = "d M H:i" %}
+
+            {% if event.startTime|date("Y") != "now"|date("Y") %}
+                {% set dateFormat = "d M Y H:i" %}
+            {% endif %}
+
+            {{ event.startTime|date(dateFormat, time_zone) }} -
             {% if event.takesLessThanOneDay %}
                 {{ event.endTime|date("H:i", time_zone) }}
             {% else %}
-                {{ event.endTime|date("d/m/Y H:i", time_zone) }}
+
+                {% set dateFormat = "d M H:i" %}
+                {% if event.endTime|date("Y") != "now"|date("Y") %}
+                    {% set dateFormat = "d M Y H:i" %}
+                {% endif %}
+                {{ event.endTime|date(dateFormat, time_zone) }}
             {% endif %}
         </p>
 
@@ -45,14 +56,14 @@
                 {{ event.fullAddress }}
             {% endif %}
         </p>
-        <div id="mapid" style="height: 500px;"></div>
     </div>
+    <div id="mapid" style="height: 500px;"></div>
 {% endblock %}
 
 {% block js %}
     <script type="application/javascript">
 
-        var map = L.map('mapid').setView([{{ map_center }}], 11);
+        var map = L.map('mapid').setView([{{ event.latitude }}, {{ event.longitude }}], 11);
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
             maxZoom: 18,

@@ -37,7 +37,7 @@
 
                     {% if index%3 == 0 %}
 
-                        <div class="item {% if index == 0 %}active{% endif %}">
+                        <div class="item{#{% if index == 0 %}active{% endif %}"#} >
                         <div class="row">
                     {% endif %}
 
@@ -70,13 +70,6 @@
                                     {% endif %}
                                 </h4>
                                 <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
-                                <p>
-                                    {% if event.description|length < 200 %}
-                                        {{ event.description }}
-                                    {% else %}
-                                        {{ event.description|slice(0, 200) ~ "..." }}
-                                    {% endif %}
-                                </p>
                                 <p><a class="btn btn-default" href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}" role="button">{{ "details"|trans }} &raquo;</a></p>
                             </div>
                         </div>
@@ -100,7 +93,11 @@
 {% block js %}
     <script type="application/javascript">
 
-        var map = L.map('mapid').setView([{{ map_center }}], 11);
+        {% if nextEvents|length != 1 %}
+            var map = L.map('mapid').setView([{{ map_center }}], 11);
+        {% else %}
+            var map = L.map('mapid').setView([{{ nextEvents[0].latitude }}, {{ nextEvents[0].longitude }}], 11);
+        {% endif %}
 
         L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
             maxZoom: 18,
@@ -113,6 +110,8 @@
         // Prevent the zoom when we scroll the webpage
         map.scrollWheelZoom.disable();
 
+        var markers = [];
+
         {% for event in nextEvents %}
             var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
             /*var link = $("<strong>{{ event.name }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}").click(function() {
@@ -122,6 +121,12 @@
             marker.bindPopup(link);*/
 
             marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
+
+            markers.push([{{ event.latitude }}, {{ event.longitude }}]);
         {% endfor %}
+
+        {% if nextEvents|length > 1 %}
+            map.fitBounds(markers, { padding: [20, 20] });
+        {% endif %}
     </script>
 {% endblock %}
