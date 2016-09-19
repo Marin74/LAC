@@ -77,3 +77,8 @@ github_profile: Profil GitHub
 picture: Image
 facebook: Facebook
 quizz: Quizz
+new_user: Nouvel utilisateur
+user_created: L'utilisateur est créé.
+user_updated: L'utilisateur est mis à jour.
+user_deleted: L'utilisateur est supprimé.
+delete_user_confirmation: 'Êtes-vous sûr de vouloir supprimer l''utilisateur "%name%" ? Il sera effacé définitivement.'

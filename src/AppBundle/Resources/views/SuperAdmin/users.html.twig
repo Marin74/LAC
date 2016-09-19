@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block content %}
+<p>
+    <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_user"|trans }}</a>
+</p>
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
@@ -13,13 +16,14 @@
                 <th>{{ "association"|trans }}</th>
                 <th>{{ "email"|trans }}</th>
                 <th>{{ "roles"|trans }}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for user in users %}
                 <tr>
                     <td>
-                        {{ user.username }}
+                        <a data-toggle="modal" data-target="#modal_update_{{ user.id }}" id="a_update_{{ user.id }}">{{ user.username }}</a>
                     </td>
                     <td>
                         {% if user.association is not empty %}
@@ -42,9 +46,115 @@
                             </ul>
                         {% endif %}
                     </td>
+                    <td>
+                        <a data-toggle="modal" data-target="#modal_delete_{{ user.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+
+    {# Form to add user #}
+    <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{ "user"|trans }}</h4>
+                </div>
+                {{ form_start(formAdd, {'attr': {'class': 'form-horizontal'}}) }}
+                <div class="modal-body">
+
+                    <div id="warning_add"></div>
+
+                    <p>
+
+                        {# General errors of the form #}
+                        {{ form_errors(formAdd) }}
+
+                        {{ form_rest(formAdd) }}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                    <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                </div>
+
+                {# Close <form> #}
+                {{ form_end(formAdd) }}
+            </div>
+        </div>
+    </div>
+
+
+    {% set i = 0 %}
+
+    {% for form in forms %}
+        {% set user = users[i] %}
+
+        {# Form to update user #}
+        <div class="modal fade" id="modal_update_{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ "user"|trans }}</h4>
+                    </div>
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                    <div class="modal-body">
+
+                        <div id="warning_update_{{ user.id }}"></div>
+
+                        <p>
+
+                            <input type="hidden" name="userId" value="{{ user.id }}"/>
+
+                            {# General errors of the form #}
+                            {{ form_errors(form) }}
+
+                            {{ form_rest(form) }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                        <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                    </div>
+
+                    {# Close <form> #}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+
+
+        {# Form to delete user #}
+        <div class="modal fade" id="modal_delete_{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ "delete"|trans }}</h4>
+                    </div>
+                    <form action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" method="POST">
+                        <div class="modal-body">
+
+                            <input type="hidden" name="deleteId" value="{{ user.id }}"/>
+
+                            <p>
+                                {{ "delete_user_confirmation"|trans({'%name%': user.username}) }}
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "cancel"|trans }}</button>
+                            <button type="submit" class="btn btn-warning">{{ "delete"|trans }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% set i = i + 1 %}
+    {% endfor %}
 {% endblock %}
 

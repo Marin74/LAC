@@ -4,8 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Association;
 use AppBundle\Entity\Event;
+use AppBundle\Entity\User;
 use AppBundle\Form\AssociationFormType;
 use AppBundle\Form\SuperAdminEventFormType;
+use AppBundle\Form\UserFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -98,15 +100,83 @@ class SuperAdminController extends Controller
         ));
     }
 
-    public function usersAction()
+    public function usersAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $translator = $this->get("translator");
         $repoUser = $em->getRepository("AppBundle:User");
+        $newUser = new User();
+        $formAdd = $this->get('form.factory')->createBuilder(UserFormType::class, $newUser)->getForm();
+
+        $userIdToUpdate = $request->get("userId");
+        $deleteId = $request->get("deleteId");
+
+        // Add form
+        if ($request->isMethod('POST') && empty($userIdToUpdate)) {
+
+            $formAdd->handleRequest($request);
+
+            if ($formAdd->isValid()) {
+                $em->persist($newUser);
+                $em->flush();
+
+                $request->getSession()->getFlashBag()->add('success', $translator->trans("user_created"));
+
+                // Empty the form
+                $newUser = new User();
+                $formAdd = $this->get('form.factory')->createBuilder(UserFormType::class, $newUser)->getForm();
+            }
+            else
+                $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+        }
+
+        // Delete request
+        if ($request->isMethod('POST') && !empty($deleteId)) {
+
+            $user = $repoUser->find($deleteId);
+
+            if($user != null) {
+
+                $em->remove($user);
+                $em->flush();
+                $request->getSession()->getFlashBag()->add('success', $translator->trans("user_deleted"));
+            }
+        }
 
         $users = $repoUser->findBy(array(), array("username" => "ASC"));
 
+        $forms = array();
+        foreach($users as $user) {
+            $formBuilder = $this->get('form.factory')->createBuilder(UserFormType::class, $user);
+
+            $form = $formBuilder->getForm();
+
+            if ($request->isMethod('POST')) {
+
+                if(!empty($userIdToUpdate) && $userIdToUpdate == $user->getId()) {
+
+                    $form->handleRequest($request);// Set new data into the form
+
+                    if ($form->isValid()) {
+
+                        $em->flush();
+
+                        $request->getSession()->getFlashBag()->add('success', $translator->trans("user_updated"));
+                    }
+                    else
+                        $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+                }
+            }
+
+            $formView = $form->createView();
+
+            $forms[] = $formView;
+        }
+
         return $this->render('AppBundle:SuperAdmin:users.html.twig', array(
             "users" => $users,
+            "formAdd" => $formAdd->createView(),
+            "forms" => $forms,
         ));
     }
 
