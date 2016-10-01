@@ -20,11 +20,25 @@
             {% for association in associations %}
 
                 <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail" style="background-color: {{ colors[loop.index0%(colors|length)] }};">
+                    <div class="thumbnail" style="background-color: {{ colors[loop.index0%(colors|length)] }}; height: 200px;">
                         {% if association.picture is not empty %}
-                        	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl}) }}"><img src="{{ asset(association.picturePath) }}" title="{{ association.name }}"></a>
+                        	<!-- <a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl}) }}"><img src="{{ asset(association.picturePath) }}" title="{{ association.name }}"></a>
+                        -->
+                        	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}">
+                                <div class="img-association" style="
+                    				background-image: url('{{ asset(association.picturePath) }}');
+                    				position: relative;
+                    				float: center;
+                    				background-position: 50% 50%;
+                    				background-size:     contain;">
+                                </div>
+                            </a>
+                        	<h4 class="white" style="text-align: center;">{{ association.name }}</h4>
+                        {% else %}
+                        	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}" style="text-decoration: none;">
+                        		<h4 class="white" style="text-align: center;">{{ association.name }}</h4>
+                    		</a>
                         {% endif %}
-                        <h3 class="center white">{{ association.name }}</h3>
                     </div>
                 </div>
             {% endfor %}
