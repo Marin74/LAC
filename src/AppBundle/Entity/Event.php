@@ -395,6 +395,9 @@ class Event
      */
     public function getCity()
     {
+    	if(!empty($this->city))
+    		return strtoupper($this->city);
+    	
         return $this->city;
     }
 

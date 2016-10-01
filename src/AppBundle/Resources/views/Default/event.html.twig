@@ -20,7 +20,7 @@
             <p><a href="{{ event.website }}" target="_blank">{{ "website"|trans }}</a></p>
         {% endif %}
 
-        <p class="lead">{{ event.description }}</p>
+        <p class="lead">{{ event.description|nl2br }}</p>
 
         <h2>{{ "when"|trans }}</h2>
         <p class="lead">

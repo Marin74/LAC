@@ -34,17 +34,11 @@
                         {{ user.email }}
                     </td>
                     <td>
-                        {% if user.roles|length <= 1 %}
-                            {% for role in user.roles %}
-                                {{ role|trans }}
-                            {% endfor %}
-                        {% else %}
                             <ul>
                                 {% for role in user.roles %}
                                     <li>{{ role|trans }}</li>
                                 {% endfor %}
                             </ul>
-                        {% endif %}
                     </td>
                     <td>
                         <a data-toggle="modal" data-target="#modal_delete_{{ user.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>

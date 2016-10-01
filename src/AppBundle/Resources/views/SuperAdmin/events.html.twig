@@ -5,182 +5,346 @@
 {% endblock %}
 
 {% block content %}
-    {% if app.user.association is not null %}
-        <p>
-            <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_event"|trans }}</a>
-        </p>
+    <p>
+        <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_event"|trans }}</a>
+    </p>
 
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ "event"|trans }}</th>
+                <th>{{ "date"|trans }}</th>
+                <th>{{ "association"|trans }}</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for event in events %}
                 <tr>
-                    <th>{{ "event"|trans }}</th>
-                    <th>{{ "date"|trans }}</th>
-                    <th>{{ "association"|trans }}</th>
-                    <th></th>
-                    <th></th>
+                    <td><a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a></td>
+                    <td>{{ event.startTime|date("d/m/Y") }}</td>
+                    <td>
+                        <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl, "source": "superAdmin"}) }}">
+                            {{ event.association.name }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "admin"}) }}">{{ "consult"|trans }}</a>
+                    </td>
+                    <td>
+                        <a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                    </td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for event in events %}
-                    <tr>
-                        <td><a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a></td>
-                        <td>{{ event.startTime|date("d/m/Y") }}</td>
-                        <td>
-                            <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl, "source": "superAdmin"}) }}">
-                                {{ event.association.name }}
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "admin"}) }}">{{ "consult"|trans }}</a>
-                        </td>
-                        <td>
-                            <a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    {# Form to add event #}
+    <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{ "event"|trans }}</h4>
+                </div>
+                {{ form_start(formAdd, {'attr': {'class': 'form-horizontal'}}) }}
+                <div class="modal-body">
+
+                    <div id="warning_add"></div>
+
+                    <p>
+
+                        {# General errors of the form #}
+                        {{ form_errors(formAdd) }}
+
+                        {# Manual and exploded generation: #}
+                    <div class="form-group">
+
+                        {# Label. #}
+                        {{ form_label(formAdd.name, "name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                        <div class="col-sm-10">
+
+                            {# Display errors for this field. #}
+                            {{ form_errors(formAdd.name) }}
+
+                            {# Input #}
+                            {{ form_widget(formAdd.name) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.file, "picture"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.file) }}
+                            {{ form_widget(formAdd.file) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.association, "association"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.association) }}
+                            {{ form_widget(formAdd.association) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.startTime, "start"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.startTime) }}
+                            {{ form_widget(formAdd.startTime) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.endTime, "end"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.endTime) }}
+                            {{ form_widget(formAdd.endTime) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.description, "description"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.description) }}
+                            {{ form_widget(formAdd.description) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.website) }}
+                            {{ form_widget(formAdd.website, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                    </div>
+                    <h3>{{ "place"|trans }}</h3>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.place, "place_name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.place) }}
+                            {{ form_widget(formAdd.place) }}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.street, "street"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.street) }}
+                            {{ form_widget(formAdd.street) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.zipCode, "zipCode"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.zipCode) }}
+
+                            {{ form_widget(formAdd.zipCode) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.city, "city"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.city) }}
+
+                            {{ form_widget(formAdd.city) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.latitude, "latitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.latitude) }}
+
+                            {{ form_widget(formAdd.latitude) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        {{ form_label(formAdd.longitude, "longitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                        <div class="col-sm-10">
+                            {{ form_errors(formAdd.longitude) }}
+
+                            {{ form_widget(formAdd.longitude) }}
+                        </div>
+                    </div>
+
+                    {{ form_rest(formAdd) }}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                    <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                </div>
+
+                {# Close <form> #}
+                {{ form_end(formAdd) }}
+            </div>
         </div>
+    </div>
 
 
-        {# Form to add event #}
-        <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    {% set i = 0 %}
+
+    {% for form in forms %}
+        
+        {% set event = events[i] %}
+        {# Form to update event #}
+        <div class="modal fade" id="modal_update_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel">{{ "event"|trans }}</h4>
                     </div>
-                    {{ form_start(formAdd, {'attr': {'class': 'form-horizontal'}}) }}
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
                     <div class="modal-body">
 
-                        <div id="warning_add"></div>
+                        <div id="warning_update_{{ event.id }}"></div>
+
+                        {% if event.picture is not empty %}
+                            <p class="center">
+                                <img src="{{ asset(event.getPicturePath()) }}" title="{{ "picture"|trans }}" class="fit" />
+                            </p>
+                        {% endif %}
 
                         <p>
 
+                            <input type="hidden" name="eventId" value="{{ event.id }}"/>
+
                             {# General errors of the form #}
-                            {{ form_errors(formAdd) }}
+                            {{ form_errors(form) }}
 
                             {# Manual and exploded generation: #}
                         <div class="form-group">
 
                             {# Label. #}
-                            {{ form_label(formAdd.name, "name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.name, "name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 
                             <div class="col-sm-10">
 
                                 {# Display errors for this field. #}
-                                {{ form_errors(formAdd.name) }}
+                                {{ form_errors(form.name) }}
 
                                 {# Input #}
-                                {{ form_widget(formAdd.name) }}
+                                {{ form_widget(form.name) }}
                             </div>
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.file, "picture"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.file, "picture"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.file) }}
-                                {{ form_widget(formAdd.file) }}
+                                {{ form_errors(form.file) }}
+                                {{ form_widget(form.file) }}
                             </div>
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.association, "association"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.association, "association"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.association) }}
-                                {{ form_widget(formAdd.association) }}
+                                {{ form_errors(form.association) }}
+                                {{ form_widget(form.association) }}
                             </div>
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.startTime, "start"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.startTime, "start"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.startTime) }}
-                                {{ form_widget(formAdd.startTime) }}
+                                {{ form_errors(form.startTime) }}
+                                {{ form_widget(form.startTime) }}
                             </div>
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.endTime, "end"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.endTime, "end"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.endTime) }}
-                                {{ form_widget(formAdd.endTime) }}
+                                {{ form_errors(form.endTime) }}
+                                {{ form_widget(form.endTime) }}
                             </div>
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.description, "description"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.description, "description"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.description) }}
-                                {{ form_widget(formAdd.description) }}
+                                {{ form_errors(form.description) }}
+                                {{ form_widget(form.description) }}
                             </div>
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.website) }}
-                                {{ form_widget(formAdd.website, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_errors(form.website) }}
+                                {{ form_widget(form.website, {'attr': {'class': 'form-control'}}) }}
                             </div>
                         </div>
                         <h3>{{ "place"|trans }}</h3>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.place, "place_name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.place, "place_name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.place) }}
-                                {{ form_widget(formAdd.place) }}
+                                {{ form_errors(form.place) }}
+                                {{ form_widget(form.place) }}
                             </div>
                         </div>
                         <hr>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.street, "street"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.street, "street"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.street) }}
-                                {{ form_widget(formAdd.street) }}
+                                {{ form_errors(form.street) }}
+
+                                {{ form_widget(form.street) }}
                             </div>
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.zipCode, "zipCode"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.zipCode, "zipCode"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.zipCode) }}
+                                {{ form_errors(form.zipCode) }}
 
-                                {{ form_widget(formAdd.zipCode) }}
+                                {{ form_widget(form.zipCode) }}
                             </div>
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.city, "city"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.city, "city"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.city) }}
+                                {{ form_errors(form.city) }}
 
-                                {{ form_widget(formAdd.city) }}
+                                {{ form_widget(form.city) }}
                             </div>
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.latitude, "latitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.latitude, "latitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.latitude) }}
+                                {{ form_errors(form.latitude) }}
 
-                                {{ form_widget(formAdd.latitude) }}
+                                {{ form_widget(form.latitude) }}
                             </div>
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.longitude, "longitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(form.longitude, "longitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
-                                {{ form_errors(formAdd.longitude) }}
+                                {{ form_errors(form.longitude) }}
 
-                                {{ form_widget(formAdd.longitude) }}
+                                {{ form_widget(form.longitude) }}
                             </div>
                         </div>
 
-                        {{ form_rest(formAdd) }}
+                        {{ form_rest(form) }}
                         </p>
                     </div>
                     <div class="modal-footer">
@@ -189,206 +353,40 @@
                     </div>
 
                     {# Close <form> #}
-                    {{ form_end(formAdd) }}
+                    {{ form_end(form) }}
                 </div>
             </div>
         </div>
 
 
-        {% set i = 0 %}
-
-        {% for form in forms %}
-            
-            {% set event = events[i] %}
-            {# Form to update event #}
-            <div class="modal fade" id="modal_update_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">{{ "event"|trans }}</h4>
-                        </div>
-                        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+        {# Form to delete event #}
+        <div class="modal fade" id="modal_delete_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ "delete"|trans }}</h4>
+                    </div>
+                    <form action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" method="POST">
                         <div class="modal-body">
 
-                            <div id="warning_update_{{ event.id }}"></div>
-
-                            {% if event.picture is not empty %}
-                                <p class="center">
-                                    <img src="{{ asset(event.getPicturePath()) }}" title="{{ "picture"|trans }}" />
-                                </p>
-                            {% endif %}
+                            <input type="hidden" name="deleteId" value="{{ event.id }}"/>
 
                             <p>
-
-                                <input type="hidden" name="eventId" value="{{ event.id }}"/>
-
-                                {# General errors of the form #}
-                                {{ form_errors(form) }}
-
-                                {# Manual and exploded generation: #}
-                            <div class="form-group">
-
-                                {# Label. #}
-                                {{ form_label(form.name, "name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-
-                                <div class="col-sm-10">
-
-                                    {# Display errors for this field. #}
-                                    {{ form_errors(form.name) }}
-
-                                    {# Input #}
-                                    {{ form_widget(form.name) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                {{ form_label(form.file, "picture"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.file) }}
-                                    {{ form_widget(form.file) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                {{ form_label(form.association, "association"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.association) }}
-                                    {{ form_widget(form.association) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                {{ form_label(form.startTime, "start"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.startTime) }}
-                                    {{ form_widget(form.startTime) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                {{ form_label(form.endTime, "end"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.endTime) }}
-                                    {{ form_widget(form.endTime) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                {{ form_label(form.description, "description"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.description) }}
-                                    {{ form_widget(form.description) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                {{ form_label(form.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.website) }}
-                                    {{ form_widget(form.website, {'attr': {'class': 'form-control'}}) }}
-                                </div>
-                            </div>
-                            <h3>{{ "place"|trans }}</h3>
-                            <div class="form-group">
-
-                                {{ form_label(form.place, "place_name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.place) }}
-                                    {{ form_widget(form.place) }}
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="form-group">
-
-                                {{ form_label(form.street, "street"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.street) }}
-
-                                    {{ form_widget(form.street) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                {{ form_label(form.zipCode, "zipCode"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.zipCode) }}
-
-                                    {{ form_widget(form.zipCode) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                {{ form_label(form.city, "city"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.city) }}
-
-                                    {{ form_widget(form.city) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                {{ form_label(form.latitude, "latitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.latitude) }}
-
-                                    {{ form_widget(form.latitude) }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-
-                                {{ form_label(form.longitude, "longitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                <div class="col-sm-10">
-                                    {{ form_errors(form.longitude) }}
-
-                                    {{ form_widget(form.longitude) }}
-                                </div>
-                            </div>
-
-                            {{ form_rest(form) }}
+                                {{ "delete_event_confirmation"|trans({'%name%': event.name}) }}
                             </p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
-                            <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "cancel"|trans }}</button>
+                            <button type="submit" class="btn btn-warning">{{ "delete"|trans }}</button>
                         </div>
-
-                        {# Close <form> #}
-                        {{ form_end(form) }}
-                    </div>
+                    </form>
                 </div>
             </div>
+        </div>
 
-
-            {# Form to delete event #}
-            <div class="modal fade" id="modal_delete_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">{{ "delete"|trans }}</h4>
-                        </div>
-                        <form action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" method="POST">
-                            <div class="modal-body">
-
-                                <input type="hidden" name="deleteId" value="{{ event.id }}"/>
-
-                                <p>
-                                    {{ "delete_event_confirmation"|trans({'%name%': event.name}) }}
-                                </p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "cancel"|trans }}</button>
-                                <button type="submit" class="btn btn-warning">{{ "delete"|trans }}</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            {% set i = i + 1 %}
-        {% endfor %}
-    {% endif %}
+        {% set i = i + 1 %}
+    {% endfor %}
 {% endblock %}
 
 {% block js %}

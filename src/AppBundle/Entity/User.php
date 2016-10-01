@@ -13,6 +13,8 @@ use FOS\UserBundle\Model\User as BaseUser;
  */
 class User extends BaseUser
 {
+    const ROLE_ADMIN = 'ROLE_ADMIN';// ROLE_USER and ROLE_SUPER_ADMIN already exist in the UserInterface class
+    
     /**
      * @var int
      *

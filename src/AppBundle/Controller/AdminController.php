@@ -40,72 +40,74 @@ class AdminController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get("translator");
-        $repoEvent = $em->getRepository("AppBundle:Event");
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $newEvent = new Event();
         $formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
+        $events = array();
+        $forms = array();
 
         $eventIdToUpdate = $request->get("eventId");
-
-        if ($request->isMethod('POST') && empty($eventIdToUpdate)) {
-
-            if($user->getAssociation() != null)
-                $newEvent->setAssociation($user->getAssociation());
-
-            $formAdd->handleRequest($request);
-
-            if ($formAdd->isValid()) {
-
-                if ($newEvent->getStartTime() > $newEvent->getEndTime())
-                    $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
-                else {
-                    $em->persist($newEvent);
-                    $em->flush();
-                    
-                    $newEvent->uploadPicture();
-
-                    $newEvent = new Event();
-                    $formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
-
-                    $request->getSession()->getFlashBag()->add('success', $translator->trans("event_created"));
-                }
-            }
-        }
         
-        $events = $user->getAssociation()->getEvents();
-
-        $forms = array();
-        foreach($events as $event) {
-            $formBuilder = $this->get('form.factory')->createBuilder(EventFormType::class, $event);
-
-            $form = $formBuilder->getForm();
-
-
-            if ($request->isMethod('POST')) {
-
-                if(!empty($eventIdToUpdate) && $eventIdToUpdate == $event->getId()) {
-
-                    $form->handleRequest($request);// Set new data into the form
-
-                    if ($form->isValid()) {
-
-                        if ($event->getStartTime() > $event->getEndTime())
-                            $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
-                        else {
-                            $event->uploadPicture();
-                            
-                            // Save the object event
-                            $em->flush();
-
-                            $request->getSession()->getFlashBag()->add('success', $translator->trans("event_updated"));
-                        }
-                    }
-                }
-            }
-
-            $formView = $form->createView();
-            
-            $forms[] = $formView;
+        if($user->getAssociation() != null) {
+        	
+        	if ($request->isMethod('POST') && empty($eventIdToUpdate)) {
+        	
+        		$newEvent->setAssociation($user->getAssociation());
+        	
+        		$formAdd->handleRequest($request);
+        	
+        		if ($formAdd->isValid()) {
+        	
+        			if ($newEvent->getStartTime() > $newEvent->getEndTime())
+        				$request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
+        				else {
+        					$em->persist($newEvent);
+        					$em->flush();
+        	
+        					$newEvent->uploadPicture();
+        	
+        					$newEvent = new Event();
+        					$formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
+        	
+        					$request->getSession()->getFlashBag()->add('success', $translator->trans("event_created"));
+        				}
+        		}
+        	}
+        	
+        	$events = $user->getAssociation()->getEvents();
+        	
+        	foreach($events as $event) {
+        		$formBuilder = $this->get('form.factory')->createBuilder(EventFormType::class, $event);
+        	
+        		$form = $formBuilder->getForm();
+        	
+        	
+        		if ($request->isMethod('POST')) {
+        	
+        			if(!empty($eventIdToUpdate) && $eventIdToUpdate == $event->getId()) {
+        	
+        				$form->handleRequest($request);// Set new data into the form
+        	
+        				if ($form->isValid()) {
+        	
+        					if ($event->getStartTime() > $event->getEndTime())
+        						$request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
+        						else {
+        							$event->uploadPicture();
+        	
+        							// Save the object event
+        							$em->flush();
+        	
+        							$request->getSession()->getFlashBag()->add('success', $translator->trans("event_updated"));
+        						}
+        				}
+        			}
+        		}
+        	
+        		$formView = $form->createView();
+        	
+        		$forms[] = $formView;
+        	}
         }
 
         return $this->render('AppBundle:Admin:events.html.twig', array(

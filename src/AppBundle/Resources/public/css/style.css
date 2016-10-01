@@ -18,3 +18,16 @@ body{
 .white{
     color: white;
 }
+.fit {
+	max-width: 100%;
+}
+.img {
+    position: relative;
+    float: center;
+    width:  100%;
+    height: 300px;
+    background-position: 50% 50%;
+    background-repeat:   no-repeat;
+    background-size:     cover;
+    overflow:hidden;
+}

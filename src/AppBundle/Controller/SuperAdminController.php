@@ -117,6 +117,9 @@ class SuperAdminController extends Controller
             $formAdd->handleRequest($request);
 
             if ($formAdd->isValid()) {
+            	// Activate the account
+            	$newUser->setEnabled(true);
+            	
                 $em->persist($newUser);
                 $em->flush();
 

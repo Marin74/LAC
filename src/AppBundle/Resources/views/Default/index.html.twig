@@ -37,14 +37,14 @@
 
                     {% if index%3 == 0 %}
 
-                        <div class="item{#{% if index == 0 %}active{% endif %}"#} >
+                        <div class="item {% if index == 0 %}active{% endif %}" >
                         <div class="row">
                     {% endif %}
 
                     <div class="col-sm-6 col-md-4">
                         <div class="thumbnail">
                             {% if event.picturePath is not empty %}
-                                <img src="{{ asset(event.picturePath) }}" title="{{ event.name }}">
+                            	<div class="img" style="background-image:url('{{ asset(event.picturePath) }}');"></div>
                             {% elseif event.association.picturePath is not empty %}
                                 <img src="{{ asset(event.association.picturePath) }}" title="{{ event.name }}">
                             {% endif %}
