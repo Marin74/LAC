@@ -1,3 +1,6 @@
+:root {
+    --main-color: #2780e3;
+}
 .center{
     margin:0 auto;
     text-align: center;
@@ -6,8 +9,26 @@
     margin-top: 40px;
     padding-top: 30px;
     padding-bottom: 30px;
-    color: #99979c;
-    background-color: #2780e3;
+    background-color: var(--main-color);
+}
+.navbar-inverse{
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+}
+.navbar, .bs-docs-footer{
+	background-image: url('../img/pattern.png');
+}
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a{
+	color: white;
+}
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form, .navbar-inverse .navbar-toggle{
+	border-color: white;
+}
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover{
+	background-color: white;
+}
+.navbar-inverse .navbar-toggle:hover .icon-bar{
+	background-color: var(--main-color);
 }
 .bs-docs-footer a{
     color: white;
@@ -21,6 +42,23 @@ body{
 .fit {
 	max-width: 100%;
 }
+.picture-form {
+	max-height: 100px;
+}
+.picture-element{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	max-height: 250px;
+	box-shadow: 1px 1px 12px #555;
+}
+.navbar-inverse .title-element, .navbar-inverse .title-element:focus, .navbar-inverse .title-element:hover{
+	color: greenyellow;
+}
+.map{
+	height: 400px;
+}
+
+
 .img {
     position: relative;
     float: center;
@@ -30,4 +68,14 @@ body{
     background-repeat:   no-repeat;
     background-size:     cover;
     overflow:hidden;
+}
+.css {
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%)) no-repeat;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(59%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.65)))) no-repeat;
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%)) no-repeat;
+  background: -o-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%)) no-repeat;
+  background: -ms-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%)) no-repeat;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%)) no-repeat;
+  height: 494px;
+  width: 620px;
 }

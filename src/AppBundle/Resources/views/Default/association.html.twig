@@ -1,6 +1,5 @@
 {% extends 'AppBundle:Design:design.html.twig' %}
 
-
 {% block title %}
     {% if association is not null %}
         {{ association.name }}
@@ -9,26 +8,41 @@
 
 {% block content %}
     <div class="container">
-        {% if app.request.query.has("source") and app.request.query.get("source") == "superAdmin" %}
-            <nav aria-label="...">
-                <ul class="pager">
-                    <li class="previous"><a href="{{ url("app_superadmin_events") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
-                </ul>
-            </nav>
+        {% if app.request.query.has("source") %}
+            {% if app.request.query.get("source") == "super_admin_associations" %}
+                <nav aria-label="...">
+                    <ul class="pager">
+                        <li class="previous"><a href="{{ url("app_superadmin_associations") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
+                    </ul>
+                </nav>
+            {% elseif app.request.query.get("source") == "super_admin_events" %}
+                <nav aria-label="...">
+                    <ul class="pager">
+                        <li class="previous"><a href="{{ url("app_superadmin_events") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
+                    </ul>
+                </nav>
+            {% endif %}
         {% endif %}
 
         {% if association is null %}
             <h1 class="page-header">{{ "association_unknown"|trans }}</h1>
         {% else %}
+			
+    		<p class="center">
+    	        {% if association.picture is not empty %}
+                	<img src="{{ asset(association.picturePath) }}" class="fit picture-element"/>
+                {% endif %}
+                <h3 class="center">{{ association.name }}</h3>
+            </p>
 
             {% if association.urlVideo is not empty %}
                 <div class="center">
-                    <iframe width="80%" height="315" src="{{ association.urlVideo }}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+                    <iframe width="90%" height="315" src="{{ association.urlVideo }}?autoplay=1" frameborder="0" allowfullscreen></iframe>
                 </div>
             {% endif %}
 
             {% if association.description is not empty %}
-                <p class="lead">
+                <p>
                     {{ association.description|nl2br }}
                 </p>
             {% endif %}
@@ -36,7 +50,7 @@
             {% if association.fullAddress is not empty
                 or association.website is not empty
             %}
-                <h1>{{ "coordinates"|trans }}</h1>
+                <h4>{{ "coordinates"|trans }}</h4>
                 <ul>
                     {% if association.fullAddress is not empty %}
 
@@ -66,7 +80,7 @@
             {% endif %}
 
             {% if association.nextEvents|length > 0 %}
-                <h1>{{ "next_events"|trans }}</h1>
+                <h4>{{ "next_events"|trans }}</h4>
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner" role="listbox">
 
@@ -79,39 +93,7 @@
                             <div class="row">
                         {% endif %}
 
-                        <div class="col-sm-6 col-md-4">
-                            <div class="thumbnail">
-                                {% if event.picturePath is not empty %}
-                                    <img src="{{ asset(event.picturePath) }}" title="{{ event.name }}">
-                                {% elseif event.association.picturePath is not empty %}
-                                    <img src="{{ asset(event.association.picturePath) }}" title="{{ event.name }}">
-                                {% endif %}
-                                <div class="caption">
-                                    <h3>{{ event.name }}</h3>
-                                    <h4>
-                                        {% set dateFormat = "d M H:i" %}
-
-                                        {% if event.startTime|date("Y") != "now"|date("Y") %}
-                                            {% set dateFormat = "d M Y H:i" %}
-                                        {% endif %}
-
-                                        {{ event.startTime|date(dateFormat, time_zone) }} -
-                                        {% if event.takesLessThanOneDay %}
-                                            {{ event.endTime|date("H:i", time_zone) }}
-                                        {% else %}
-
-                                            {% set dateFormat = "d M H:i" %}
-                                            {% if event.endTime|date("Y") != "now"|date("Y") %}
-                                                {% set dateFormat = "d M Y H:i" %}
-                                            {% endif %}
-                                            {{ event.endTime|date(dateFormat, time_zone) }}
-                                        {% endif %}
-                                    </h4>
-                                    <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
-                                    <p><a class="btn btn-default" href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}" role="button">{{ "details"|trans }} &raquo;</a></p>
-                                </div>
-                            </div>
-                        </div>
+                        {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
 
                         {% if index%3 == 2 or loop.index >= association.nextEvents|length %}
 
@@ -127,41 +109,43 @@
     </div>
 
     {% if association is not null and association.nextEvents|length > 0 %}
-        <div id="mapid" style="height: 500px;"></div>
+        <div id="mapid" class="map"></div>
     {% endif %}
 {% endblock %}
 
 {% block js %}
     <script type="application/javascript">
 
-        {% if association.nextEvents|length != 1 %}
-            var map = L.map('mapid').setView([{{ map_center }}], 11);
-        {% else %}
-            var map = L.map('mapid').setView([{{ association.nextEvents[0].latitude }}, {{ association.nextEvents[0].longitude }}], 11);
-        {% endif %}
-
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
-            maxZoom: 18,
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            id: 'mapbox.streets'
-        }).addTo(map);
-
-        // Prevent the zoom when we scroll the webpage
-        map.scrollWheelZoom.disable();
-
-        var markers = [];
-
-        {% for event in association.nextEvents %}
-            var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
-            marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
-
-            markers.push([{{ event.latitude }}, {{ event.longitude }}]);
-        {% endfor %}
-
-        {% if association.nextEvents|length > 1 %}
-            map.fitBounds(markers, { padding: [20, 20] });
+    	{% if association is not null %}
+            {% if association.nextEvents|length != 1 %}
+                var map = L.map('mapid').setView([{{ map_center }}], 11);
+            {% else %}
+                var map = L.map('mapid').setView([{{ association.nextEvents[0].latitude }}, {{ association.nextEvents[0].longitude }}], 11);
+            {% endif %}
+    
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
+                maxZoom: 18,
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                id: 'mapbox.streets'
+            }).addTo(map);
+    
+            // Prevent the zoom when we scroll the webpage
+            map.scrollWheelZoom.disable();
+    
+            var markers = [];
+    
+            {% for event in association.nextEvents %}
+                var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
+                marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
+    
+                markers.push([{{ event.latitude }}, {{ event.longitude }}]);
+            {% endfor %}
+    
+            {% if association.nextEvents|length > 1 %}
+                map.fitBounds(markers, { padding: [20, 20] });
+            {% endif %}
         {% endif %}
     </script>
 {% endblock %}

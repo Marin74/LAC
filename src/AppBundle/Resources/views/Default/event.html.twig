@@ -1,87 +1,115 @@
 {% extends 'AppBundle:Design:design.html.twig' %}
 
+{% block title %}
+    {% if event is not null %}
+        {{ event.name }}
+    {% endif %}
+{% endblock %}
+
 {% block content %}
-
     <div class="container">
-        {% if app.request.query.has("source") and app.request.query.get("source") == "admin" %}
-            <nav aria-label="...">
-                <ul class="pager">
-                    <li class="previous"><a href="{{ url("app_admin_events") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
-                </ul>
-            </nav>
-        {% endif %}
-
-        <div class="page-header">
-            <h1>{{ event.name }}</h1>
-        </div>
-        <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
-
-        {% if event.website is not empty %}
-            <p><a href="{{ event.website }}" target="_blank">{{ "website"|trans }}</a></p>
-        {% endif %}
-
-        <p class="lead">{{ event.description|nl2br }}</p>
-
-        <h2>{{ "when"|trans }}</h2>
-        <p class="lead">
-            {% set dateFormat = "d M H:i" %}
-
-            {% if event.startTime|date("Y") != "now"|date("Y") %}
-                {% set dateFormat = "d M Y H:i" %}
+        {% if app.request.query.has("source") %}
+            {% if app.request.query.get("source") == "admin_events" %}
+                <nav aria-label="...">
+                    <ul class="pager">
+                        <li class="previous"><a href="{{ url("app_admin_events") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
+                    </ul>
+                </nav>
+            {% elseif app.request.query.get("source") == "super_admin_events" %}
+                <nav aria-label="...">
+                    <ul class="pager">
+                        <li class="previous"><a href="{{ url("app_superadmin_events") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
+                    </ul>
+                </nav>
             {% endif %}
+        {% endif %}
 
-            {{ event.startTime|date(dateFormat, time_zone) }} -
-            {% if event.takesLessThanOneDay %}
-                {{ event.endTime|date("H:i", time_zone) }}
-            {% else %}
-
+        {% if event is null %}
+            <h1 class="page-header">{{ "event_unknown"|trans }}</h1>
+        {% else %}
+        
+    		<p class="center">
+    	        {% if event.picture is not empty %}
+                	<img src="{{ asset(event.picturePath) }}" class="fit picture-element"/>
+            	{% elseif event.association.picture is not empty %}
+                	<img src="{{ asset(event.association.picturePath) }}" class="fit picture-element"/>
+                {% endif %}
+                <h3 class="center">{{ event.name }}</h3>
+            </p>
+            
+            <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
+    
+            {% if event.website is not empty %}
+                <p><a href="{{ event.website }}" target="_blank">{{ "website"|trans }}</a></p>
+            {% endif %}
+    
+            <p">{{ event.description|nl2br }}</p>
+    
+            <h4>{{ "when"|trans }}</h4>
+            <p>
                 {% set dateFormat = "d M H:i" %}
-                {% if event.endTime|date("Y") != "now"|date("Y") %}
+    
+                {% if event.startTime|date("Y") != "now"|date("Y") %}
                     {% set dateFormat = "d M Y H:i" %}
                 {% endif %}
-                {{ event.endTime|date(dateFormat, time_zone) }}
-            {% endif %}
-        </p>
-
-        <h2>{{ "where"|trans }}</h2>
-        <p>
-            {% if event.place is not empty %}
-                <strong>{{ event.place }}</strong>
-                    {% if event.fullAddress is not empty %}
-                        <br/>
+    
+                {{ event.startTime|date(dateFormat, time_zone) }} -
+                {% if event.takesLessThanOneDay %}
+                    {{ event.endTime|date("H:i", time_zone) }}
+                {% else %}
+    
+                    {% set dateFormat = "d M H:i" %}
+                    {% if event.endTime|date("Y") != "now"|date("Y") %}
+                        {% set dateFormat = "d M Y H:i" %}
                     {% endif %}
-            {% endif %}
-
-            {% if event.fullAddress is not empty %}
-                {{ event.fullAddress }}
-            {% endif %}
-        </p>
+                    {{ event.endTime|date(dateFormat, time_zone) }}
+                {% endif %}
+            </p>
+    
+            <h4>{{ "where"|trans }}</h4>
+            <p>
+                {% if event.place is not empty %}
+                    <strong>{{ event.place }}</strong>
+                        {% if event.fullAddress is not empty %}
+                            <br/>
+                        {% endif %}
+                {% endif %}
+    
+                {% if event.fullAddress is not empty %}
+                    {{ event.fullAddress }}
+                {% endif %}
+            </p>
+        {% endif %}
     </div>
-    <div id="mapid" style="height: 500px;"></div>
+    {% if event is not null %}
+    	<div id="mapid" class="map"></div>
+    {% endif %}
 {% endblock %}
 
 {% block js %}
     <script type="application/javascript">
 
-        var map = L.map('mapid').setView([{{ event.latitude }}, {{ event.longitude }}], 11);
-
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
-            maxZoom: 18,
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            id: 'mapbox.streets'
-        }).addTo(map);
-
-        // Prevent the zoom when we scroll the webpage
-        map.scrollWheelZoom.disable();
-
-        var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
-        marker.bindPopup('{% if event.place is not empty %}<strong>{{ event.place }}</strong>{% endif %}'+
-                '{% if event.street is not empty %}<br/>{{ event.street }}{% endif %}'+
-                '{% if event.zipCode is not empty %}<br/>{{ event.zipCode }}{% if event.city is not empty %} {{ event.city }}{% endif %}{% endif %}'+
-                '{% if event.zipCode is empty and event.city is not empty %}<br/>{{ event.city }}{% endif %}'
-        );
+    	{% if event is not null %}
+            var map = L.map('mapid').setView([{{ event.latitude }}, {{ event.longitude }}], 11);
+    
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
+                maxZoom: 18,
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                id: 'mapbox.streets'
+            }).addTo(map);
+    
+            // Prevent the zoom when we scroll the webpage
+            map.scrollWheelZoom.disable();
+    
+            var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
+            marker.bindPopup('{% if event.place is not empty %}<strong>{{ event.place }}</strong>{% endif %}'+
+                    '{% if event.street is not empty %}<br/>{{ event.street }}{% endif %}'+
+                    '{% if event.zipCode is not empty %}<br/>{{ event.zipCode }}{% if event.city is not empty %} {{ event.city }}{% endif %}{% endif %}'+
+                    '{% if event.zipCode is empty and event.city is not empty %}<br/>{{ event.city }}{% endif %}'
+            );
+        {% endif %}
     </script>
 {% endblock %}
 

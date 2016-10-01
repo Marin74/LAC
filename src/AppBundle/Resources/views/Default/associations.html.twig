@@ -21,7 +21,9 @@
 
                 <div class="col-sm-6 col-md-4">
                     <div class="thumbnail" style="background-color: {{ colors[loop.index0%(colors|length)] }};">
-                        <a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl}) }}"><img src="{{ asset(association.picturePath) }}" title="{{ association.name }}"></a>
+                        {% if association.picture is not empty %}
+                        	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl}) }}"><img src="{{ asset(association.picturePath) }}" title="{{ association.name }}"></a>
+                        {% endif %}
                         <h3 class="center white">{{ association.name }}</h3>
                     </div>
                 </div>

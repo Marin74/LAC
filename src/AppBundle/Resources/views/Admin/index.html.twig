@@ -14,7 +14,7 @@
         {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 
         {% if app.user.association.picture is not empty %}
-            <p>
+            <p class="center">
                 <img src="{{ asset(app.user.association.getPicturePath()) }}" title="{{ "picture"|trans }}" />
             </p>
         {% endif %}

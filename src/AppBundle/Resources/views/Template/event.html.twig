@@ -1,0 +1,57 @@
+<div class="col-sm-6 col-md-4">
+    <div class="thumbnail">
+    	{% set picturePath = "" %}
+    	
+        {% if event.picturePath is not empty %}
+            {% set picturePath = event.picturePath %}
+        {% elseif event.association.picturePath is not empty %}
+            {% set picturePath = event.association.picturePath %}
+        {% endif %}
+        
+		<a href="{{ url("app_event", {"id": event.id, "name": event.nameForURl}) }}">
+            <div class="img" style="
+				background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(59%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.65))), url('{{ asset(picturePath) }}') no-repeat;
+				background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
+				background: -o-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
+				background: -ms-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
+				background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
+				position: relative;
+				float: center;
+				background-position: 50% 50%;
+				background-size:     cover;">
+				
+            	<div style="position: absolute; bottom: 5%;
+                            left: 5%;
+                            right: 5%;
+                            width: 100%;
+                            height:10%;">
+                     
+                    {% set dateFormat = "d M H:i" %}
+        
+        			<span class="white">
+                        {% if event.startTime|date("Y") != "now"|date("Y") %}
+                            {% set dateFormat = "d M Y H:i" %}
+                        {% endif %}
+            
+                        {{ event.startTime|date(dateFormat, time_zone) }} -
+                        {% if event.takesLessThanOneDay %}
+                            {{ event.endTime|date("H:i", time_zone) }}
+                        {% else %}
+            
+                            {% set dateFormat = "d M H:i" %}
+                            {% if event.endTime|date("Y") != "now"|date("Y") %}
+                                {% set dateFormat = "d M Y H:i" %}
+                            {% endif %}
+                            {{ event.endTime|date(dateFormat, time_zone) }}
+                        {% endif %}
+                    </span><br/>
+                    <strong class="white">{{ event.name }}</strong>
+            	</div>
+            </div>
+        </a>
+        <div class="caption">
+            {{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a>
+        </div>
+    </div>
+</div>
