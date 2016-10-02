@@ -13,7 +13,8 @@
                 </button>
                 <a class="navbar-brand" href="{{ url("app_index") }}">{{ app_name }}</a>
                 <a class="navbar-brand title-element">
-                    {% block title %}{% endblock %}
+                    {# On mobiles the title is above the elements below #}
+                    {% if is_mobile() == false %}{% block title %}{% endblock %}{% endif %}
                 </a>
 
             </div>

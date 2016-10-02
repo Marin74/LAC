@@ -90,3 +90,6 @@ body{
   height: 494px;
   width: 620px;
 }
+.display-none {
+	display: none;
+}

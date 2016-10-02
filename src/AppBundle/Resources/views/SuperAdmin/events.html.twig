@@ -51,7 +51,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">{{ "event"|trans }}</h4>
                 </div>
-                {{ form_start(formAdd, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_start(formAdd, {'attr': {'class': 'form-horizontal', 'id': 'form_add'}}) }}
                 <div class="modal-body">
 
                     <div id="warning_add"></div>
@@ -160,7 +160,7 @@
                             {{ form_widget(formAdd.city) }}
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group display-none">
 
                         {{ form_label(formAdd.latitude, "latitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                         <div class="col-sm-10">
@@ -169,7 +169,7 @@
                             {{ form_widget(formAdd.latitude) }}
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group display-none">
 
                         {{ form_label(formAdd.longitude, "longitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                         <div class="col-sm-10">
@@ -184,7 +184,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
-                    <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                    <button type="button" class="btn btn-success" id="form_add_button_submit" onClick="getLocation('form_add');" data-loading-text="{{ "loading"|trans }}">{{ "save"|trans }}</button>
                 </div>
 
                 {# Close <form> #}
@@ -207,7 +207,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel">{{ "event"|trans }}</h4>
                     </div>
-                    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'form_update_'~event.id}}) }}
                     <div class="modal-body">
 
                         <div id="warning_update_{{ event.id }}"></div>
@@ -325,7 +325,7 @@
                                 {{ form_widget(form.city) }}
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group display-none">
 
                             {{ form_label(form.latitude, "latitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
@@ -334,7 +334,7 @@
                                 {{ form_widget(form.latitude) }}
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group display-none">
 
                             {{ form_label(form.longitude, "longitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
@@ -349,7 +349,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
-                        <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                        <button type="button" class="btn btn-success" id="form_add_button_submit" onClick="getLocation('form_update_{{ event.id }}');" data-loading-text="{{ "loading"|trans }}">{{ "save"|trans }}</button>
                     </div>
 
                     {# Close <form> #}
@@ -444,5 +444,70 @@
 
             $("#modal_add").modal("show");
         {% endif %}
+
+
+        function getLocation(formName) {
+			
+            // Set submit button in loading mode
+			$('#'+formName+'_button_submit').button('loading');
+
+            // Get address
+			var address = '';
+
+			var place = $("#"+formName+" #super_admin_event_form_place").val().trim();
+			var street = $("#"+formName+" #super_admin_event_form_street").val().trim();
+			var zipCode = $("#"+formName+" #super_admin_event_form_zipCode").val().trim();
+			var city = $("#"+formName+" #super_admin_event_form_city").val().trim();
+			
+			if(street) {
+				address = street;
+			}
+			else if(place) {
+				address = place;
+			}
+
+			if(zipCode)
+				address += " " + zipCode;
+			if(city)
+				address += " " + city;
+			
+        	// Send request
+        	$.ajax({
+                type: "GET",
+                url: 'http://api-adresse.data.gouv.fr/search/?q='+address,
+                dataType: 'json',
+                success: function(response){
+
+					// Send a request to the API to get the coordinates (lat/lng) of the place.
+					// An error is displayed if the request fails, if there is no result
+					// or if the places returned don't have a good match score. 
+					
+					if("features" in response
+							&& response["features"].length > 0
+							&& "geometry" in response["features"][0]
+							&& "coordinates" in response["features"][0]["geometry"]
+							&& response["features"][0]["geometry"]["coordinates"].length > 1
+							&& "properties" in response["features"][0]
+							&& "score" in response["features"][0]["properties"]
+							&& response["features"][0]["properties"]["score"] > 0.70
+					){
+						// Set lat/lng in the field and submit the form
+						var coordinates = response["features"][0]["geometry"]["coordinates"];
+
+						$("#"+formName+" #super_admin_event_form_longitude").val(coordinates[0]);
+						$("#"+formName+" #super_admin_event_form_latitude").val(coordinates[1]);
+
+						$("#"+formName).submit();
+					}
+					else {
+
+						// Remove the loading mode on the submit button
+						$('#'+formName+'_button_submit').button('reset');
+						
+						alert("{{ "error_getting_location"|trans }}");
+					}
+                }
+			});
+        }
     </script>
 {% endblock %}

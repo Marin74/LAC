@@ -27,29 +27,28 @@
             <p>{{ "no_current_events"|trans }}</p>
         </div>
     {% else %}
-        <div id="carousel-next_events" class="carousel slide" data-ride="carousel">
+    
+    	<div id="carousel-next-events" class="carousel slide">
 
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
 
-                {% set index = 0 %}
                 {% for event in nextEvents %}
 
-                    {% if index%3 == 0 %}
+                    {% if loop.index0%3 == 0 %}
 
-                        <div class="item {% if index == 0 %}active{% endif %}" >
+                        <div class="item {% if loop.index0 == 0 %}active{% endif %}" >
                         <div class="row">
                     {% endif %}
 
                     {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
 
-                    {% if index%3 == 2 or loop.index >= nextEvents|length %}
+                    {% if loop.index0%3 == 2 or loop.index >= nextEvents|length %}
 
                         </div>
                         </div>
                     {% endif %}
 
-                    {% set index = index + 1 %}
                 {% endfor %}
             </div>
         </div>
@@ -60,6 +59,10 @@
 
 {% block js %}
     <script type="application/javascript">
+
+    $(function() {
+    	$(".carousel").carousel('pause');
+        });
 
         {% if nextEvents|length != 1 %}
             var map = L.map('mapid').setView([{{ map_center }}], 11);
