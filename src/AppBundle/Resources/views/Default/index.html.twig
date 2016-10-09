@@ -27,7 +27,7 @@
             <p>{{ "no_current_events"|trans }}</p>
         </div>
     {% else %}
-    
+    	
     	<div id="carousel-next-events" class="carousel slide">
 
             <!-- Wrapper for slides -->
@@ -51,6 +51,16 @@
 
                 {% endfor %}
             </div>
+
+            <!-- Controls -->
+            <a class="left carousel-control" role="button" onClick="carouselPrev();">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" role="button" onClick="carouselNext();">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
     {% endif %}
 
@@ -60,9 +70,22 @@
 {% block js %}
     <script type="application/javascript">
 
-    $(function() {
-    	$(".carousel").carousel('pause');
+        $(function() {
+        	$("#carousel-next-events").carousel('pause');
+
+        	// Stops the carousel after the sliding effect
+        	$("#carousel-next-events").on('slid.bs.carousel', function () {
+        		$("#carousel-next-events").carousel('pause');
+            });
         });
+
+        function carouselNext() {
+        	$("#carousel-next-events").carousel('next');
+        }
+
+        function carouselPrev() {
+        	$("#carousel-next-events").carousel('prev');
+        }
 
         {% if nextEvents|length != 1 %}
             var map = L.map('mapid').setView([{{ map_center }}], 11);
@@ -97,7 +120,7 @@
         {% endfor %}
 
         {% if nextEvents|length > 1 %}
-            map.fitBounds(markers, { padding: [20, 20] });
+            map.fitBounds(markers, { padding: [40, 40] });
         {% endif %}
     </script>
 {% endblock %}

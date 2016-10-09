@@ -37,6 +37,9 @@ class SuperAdminController extends Controller
                 else {
                     $em->persist($newEvent);
                     $em->flush();
+                    
+                    $newEvent->uploadPicture();
+                    $em->flush();
 
                     $newEvent = new Event();
                     $formAdd = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $newEvent)->getForm();
@@ -58,7 +61,7 @@ class SuperAdminController extends Controller
             }
         }
         
-        $events = $repoEvent->findBy(array(), array("id" => "DESC"));
+        $events = $repoEvent->findBy(array(), array("startTime" => "DESC"));
 
         $forms = array();
         foreach($events as $event) {
@@ -204,6 +207,7 @@ class SuperAdminController extends Controller
                 $em->flush();
 
                 $newAssociation->uploadPicture();
+                $em->flush();
 
                 $request->getSession()->getFlashBag()->add('success', $translator->trans("association_created"));
 

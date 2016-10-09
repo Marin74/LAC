@@ -63,6 +63,9 @@ class AdminController extends Controller
         				else {
         					$em->persist($newEvent);
         					$em->flush();
+        					
+                    		$newEvent->uploadPicture();
+                    		$em->flush();
         	
         					$newEvent->uploadPicture();
         	
