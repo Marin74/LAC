@@ -28,24 +28,8 @@
                             width: 90%;
                             height:17%;">
                      
-                    {% set dateFormat = "d M H:i" %}
-        
         			<span class="white">
-                        {% if event.startTime|date("Y") != "now"|date("Y") %}
-                            {% set dateFormat = "d M Y H:i" %}
-                        {% endif %}
-            
-                        {{ event.startTime|date(dateFormat, time_zone) }} -
-                        {% if event.takesLessThanOneDay %}
-                            {{ event.endTime|date("H:i", time_zone) }}
-                        {% else %}
-            
-                            {% set dateFormat = "d M H:i" %}
-                            {% if event.endTime|date("Y") != "now"|date("Y") %}
-                                {% set dateFormat = "d M Y H:i" %}
-                            {% endif %}
-                            {{ event.endTime|date(dateFormat, time_zone) }}
-                        {% endif %}
+                        {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}
                     </span><br/>
                     <strong class="white">{{ event.name }}</strong>
             	</div>

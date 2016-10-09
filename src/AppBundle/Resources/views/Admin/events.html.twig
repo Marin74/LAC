@@ -28,7 +28,7 @@
                     {% for event in events %}
                         <tr id="tr_{{ event.id }}">
                             <td><a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a></td>
-                            <td>{{ event.startTime|date("d/m/Y") }}</td>
+                            <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
                             <td>
                                 {% if event.place is not empty %}
                                     {{ event.place }}

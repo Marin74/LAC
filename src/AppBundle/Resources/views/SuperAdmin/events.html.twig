@@ -24,7 +24,7 @@
             {% for event in events %}
                 <tr>
                     <td><a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a></td>
-                    <td>{{ event.startTime|date("d/m/Y") }}</td>
+                    <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
                     <td>
                         <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl, "source": "super_admin_events"}) }}">
                             {{ event.association.name }}
@@ -470,7 +470,7 @@
 				address += " " + zipCode;
 			if(city)
 				address += " " + city;
-			
+
         	// Send request
         	$.ajax({
                 type: "GET",

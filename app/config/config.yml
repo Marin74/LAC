@@ -44,6 +44,7 @@ twig:
         map_center: "%map_center%"
         url_source_code: "%url_source_code%"
         time_zone: "%time_zone%"
+        locale: "%locale%"
 
 # Doctrine Configuration
 doctrine:
@@ -79,3 +80,10 @@ fos_user:
     db_driver:     orm                       # Type of DB to use, here we use Doctrine ORM
     firewall_name: main
     user_class:    AppBundle\Entity\User # Class of the entity User we use
+    
+# Services
+services:
+    twig.extension.intl:
+       class: Twig_Extensions_Extension_Intl
+       tags:
+           - { name: twig.extension }
