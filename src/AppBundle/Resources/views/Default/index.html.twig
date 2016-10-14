@@ -53,14 +53,16 @@
             </div>
 
             <!-- Controls -->
-            <a class="left carousel-control" role="button" onClick="carouselPrev();">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="right carousel-control" role="button" onClick="carouselNext();">
-                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
+            {% if nextEvents|length > 3 %}
+                <a class="left carousel-control" role="button" onClick="carouselPrev();">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" role="button" onClick="carouselNext();">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            {% endif %}
         </div>
     {% endif %}
 

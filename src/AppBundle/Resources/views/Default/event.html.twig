@@ -30,9 +30,13 @@
         
     		<p class="center">
     	        {% if event.picture is not empty %}
-                	<img src="{{ asset(event.picturePath) }}" class="fit picture-element"/>
+                	<a href="{{ asset(event.picturePath) }}">
+                		<img src="{{ asset(event.picturePath) }}" class="fit picture-element"/>
+            		</a>
             	{% elseif event.association.picture is not empty %}
-                	<img src="{{ asset(event.association.picturePath) }}" class="fit picture-element"/>
+            		<a href="{{ asset(event.association.picturePath) }}">
+                		<img src="{{ asset(event.association.picturePath) }}" class="fit picture-element"/>
+                	</a>
                 {% endif %}
                 <h3 class="center">{{ event.name }}</h3>
             </p>

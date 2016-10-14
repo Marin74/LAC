@@ -30,7 +30,9 @@
 			
     		<p class="center">
     	        {% if association.picture is not empty %}
-                	<img src="{{ asset(association.picturePath) }}" class="fit picture-element"/>
+                	<a href="{{ asset(association.picturePath) }}">
+                		<img src="{{ asset(association.picturePath) }}" class="fit picture-element"/>
+            		</a>
                 {% endif %}
                 <h3 class="center">{{ association.name }}</h3>
             </p>

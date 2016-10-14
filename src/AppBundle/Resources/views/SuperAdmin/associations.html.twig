@@ -43,7 +43,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">{{ "association"|trans }}</h4>
                 </div>
-                {{ form_start(formAdd, {'attr': {'class': 'form-horizontal'}}) }}
+                {{ form_start(formAdd, {'attr': {'class': 'form-horizontal', 'id': 'form_add'}}) }}
                 <div class="modal-body">
 
                     <div id="warning_add"></div>
@@ -88,6 +88,8 @@
                                 {{ form_errors(formAdd.description) }}
 
                                 {{ form_widget(formAdd.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
+                    
+            					<p class="nb_characters_description"></p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -200,7 +202,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel">{{ "association"|trans }}</h4>
                     </div>
-                    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'form_update_'~association.id}}) }}
                     <div class="modal-body">
 
                         <div id="warning_update_{{ association.id }}"></div>
@@ -253,6 +255,8 @@
                                     {{ form_errors(form.description) }}
 
                                     {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
+                    
+            						<p class="nb_characters_description"></p>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -431,5 +435,34 @@
 
             $("#modal_add").modal("show");
         {% endif %}
+
+		{% if app.user.association != null %}
+    		$(function() {
+    
+    			countNbCharacters("form_add");
+    		    
+        		$("#form_add #association_form_description").on('keyup', function(event) {
+        			countNbCharacters("form_add");
+        		});
+
+        		{% for association in associations %}
+					countNbCharacters("form_update_{{ association.id }}");
+    		    	
+            		$("#form_update_{{ association.id }} #association_form_description").on('keyup', function(event) {
+            			countNbCharacters("form_update_{{ association.id }}");
+            		});
+        		{% endfor %}
+    		});
+    
+    		function countNbCharacters(formId) {
+    
+    			var currentString = $("#"+formId+" #association_form_description").val();
+    		    var nb = currentString.length;
+    			var text = "{{ "nb_characters_description"|trans }}";
+    			text = text.replace("XXX", nb);
+    			
+    			$("#"+formId+" .nb_characters_description").text(text);
+    		}
+		{% endif %}
     </script>
 {% endblock %}

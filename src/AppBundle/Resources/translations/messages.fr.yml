@@ -85,3 +85,4 @@ user_deleted: L'utilisateur est supprimé.
 delete_user_confirmation: 'Êtes-vous sûr de vouloir supprimer l''utilisateur "%name%" ? Il sera effacé définitivement.'
 loading: Chargement...
 error_getting_location: "Position géographique non trouvée. Vérifiez que les coordonnées du lieu sont complètes."
+nb_characters_description: XXX/2000 caractères
