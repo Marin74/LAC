@@ -103,6 +103,12 @@
                     '{% if event.zipCode is not empty %}<br/>{{ event.zipCode }}{% if event.city is not empty %} {{ event.city }}{% endif %}{% endif %}'+
                     '{% if event.zipCode is empty and event.city is not empty %}<br/>{{ event.city }}{% endif %}'
             );
+            marker.on('mouseover', function (e) {
+                this.openPopup();
+            });
+            marker.on('mouseout', function (e) {
+                this.closePopup();
+            });
         {% endif %}
     </script>
 {% endblock %}

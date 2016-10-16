@@ -152,7 +152,17 @@
             {% for event in association.nextEvents %}
                 var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
                 marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
-    
+
+                marker.on('mouseover', function (e) {
+                    this.openPopup();
+                });
+                marker.on('mouseout', function (e) {
+                    this.closePopup();
+                });
+                marker.on('click', function (e) {
+                    location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}'
+                });
+                
                 markers.push([{{ event.latitude }}, {{ event.longitude }}]);
             {% endfor %}
     
