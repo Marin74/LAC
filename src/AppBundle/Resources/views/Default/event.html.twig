@@ -98,6 +98,7 @@
     
             var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
             marker.bindPopup('{% if event.place is not empty %}<strong>{{ event.place }}</strong>{% endif %}'+
+                    '<br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>'+
                     '{% if event.street is not empty %}<br/>{{ event.street }}{% endif %}'+
                     '{% if event.zipCode is not empty %}<br/>{{ event.zipCode }}{% if event.city is not empty %} {{ event.city }}{% endif %}{% endif %}'+
                     '{% if event.zipCode is empty and event.city is not empty %}<br/>{{ event.city }}{% endif %}'
