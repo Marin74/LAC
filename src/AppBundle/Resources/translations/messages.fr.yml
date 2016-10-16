@@ -86,3 +86,12 @@ delete_user_confirmation: 'Êtes-vous sûr de vouloir supprimer l''utilisateur "
 loading: Chargement...
 error_getting_location: "Position géographique non trouvée. Vérifiez que les coordonnées du lieu sont complètes."
 nb_characters_description: XXX/2000 caractères
+document: Document
+documents: Documents
+add: Ajouter
+unknown_error: Une erreur inconnue est survenue.
+document_added: Le document est ajouté.
+document_form_hint: Les documents peuvent être téléchargés par les internautes quand ils consultent la page du groupe.
+delete_document_confirmation: 'Êtes-vous sûr de vouloir supprimer le document "%name%" ? Il sera effacé définitivement.'
+document_deleted: Le document est supprimé.
+event_deleted: 'L''évènement est supprimé.'

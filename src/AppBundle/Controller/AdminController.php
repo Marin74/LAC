@@ -7,6 +7,8 @@ use AppBundle\Form\AssociationFormType;
 use AppBundle\Form\EventFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Form\DocumentFormType;
+use AppBundle\Entity\Document;
 
 class AdminController extends Controller
 {
@@ -14,25 +16,92 @@ class AdminController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get("translator");
+        $repoDocument = $em->getRepository("AppBundle:Document");
+        $appName = $this->container->getParameter("app_name");
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $form = $this->get('form.factory')->createBuilder(AssociationFormType::class, $user->getAssociation())->getForm();
+        $formDocument = null;
+        $newDocument = null;
+        
+        $deleteId = $request->get("deleteId");
+        
+        // If the user is the owner of the admin association, he can add document (other associations can't)
+        if($user->getAssociation() != null
+        		&& !empty($appName)
+        		&& $user->getAssociation()->getName() == $appName) {
+        	
+        	$newDocument = new Document();
+        	$newDocument->setAssociation($user->getAssociation());
+        	$formDocument = $this->get('form.factory')->createBuilder(DocumentFormType::class, $newDocument)->getForm();
+        }
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
 
-            if ($form->isValid()) {
-
-                $user->getAssociation()->uploadPicture();
-                $em->flush();
-
-                $request->getSession()->getFlashBag()->add('success', $translator->trans("association_updated"));
+            // Manage association form
+            if($form->isSubmitted()) {
+	            if ($form->isValid()) {
+	
+	                $user->getAssociation()->uploadPicture();
+	                $em->flush();
+	                
+	                $em->refresh($user);
+	
+	                $request->getSession()->getFlashBag()->add('success', $translator->trans("association_updated"));
+	            }
+	            else
+	                $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
             }
-            else
-                $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+            
+            // Manage document form
+            if($formDocument != null) {
+            	$formDocument->handleRequest($request);
+            	
+            	if($formDocument->isSubmitted()) {
+            		if ($formDocument->isValid()) {
+            			
+            			// Upload the document
+          				$em->persist($newDocument);
+            			$res = $newDocument->upload();
+            			
+            			if($res) {
+	           				$request->getSession()->getFlashBag()->add('success', $translator->trans("document_added"));
+			                
+			                // Reinit the form
+			                $newDocument = new Document();
+			                $newDocument->setAssociation($user->getAssociation());
+			                $formDocument = $this->get('form.factory')->createBuilder(DocumentFormType::class, $newDocument)->getForm();
+            			}
+           				else {
+           					$em->remove($newDocument);
+	           				$request->getSession()->getFlashBag()->add('warning', $translator->trans("unknown_error"));
+           				}
+           				
+            			$em->flush();
+            		}
+            		else
+	                	$request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+            	}
+            }
+            
+
+
+            // Delete request
+            if ($request->isMethod('POST') && !empty($deleteId)) {
+            	 
+            	$document = $repoDocument->find($deleteId);
+            	 
+            	if($document != null && $user->getAssociation() != null && $document->getAssociation()->getId() == $user->getAssociation()->getId()) {
+            		$em->remove($document);
+            		$em->flush();
+            		$request->getSession()->getFlashBag()->add('success', $translator->trans("document_deleted"));
+            	}
+            }
         }
 
         return $this->render('AppBundle:Admin:index.html.twig', array(
             "form" => $form->createView(),
+        	"formDocument" => $form == null ? null: $formDocument->createView(),
         ));
     }
 
@@ -40,6 +109,7 @@ class AdminController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get("translator");
+        $repoEvent = $em->getRepository("AppBundle:Event");
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $newEvent = new Event();
         $formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
@@ -47,6 +117,7 @@ class AdminController extends Controller
         $forms = array();
 
         $eventIdToUpdate = $request->get("eventId");
+        $deleteId = $request->get("deleteId");
         
         if($user->getAssociation() != null) {
         	
@@ -76,6 +147,18 @@ class AdminController extends Controller
         				}
         		}
         	}
+	        
+	        // Delete request
+	        if ($request->isMethod('POST') && !empty($deleteId)) {
+	            
+	            $event = $repoEvent->find($deleteId);
+	            
+	            if($event != null) {
+	                $em->remove($event);
+	                $em->flush();
+	                $request->getSession()->getFlashBag()->add('success', $translator->trans("event_deleted"));
+	            }
+	        }
         	
         	$events = $user->getAssociation()->getEvents();
         	

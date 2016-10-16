@@ -80,6 +80,17 @@
                     {% endif %}
                 </ul>
             {% endif %}
+            
+            {% if association.documents|length > 0 %}
+            	<h4>{{ "documents"|trans }}</h4>
+            	<ul>
+            		{% for document in association.documents %}
+            			<li>
+            				<a href="{{ asset(document.path) }}">{{ document.name }}</a>
+            			</li>
+            		{% endfor %}
+            	</ul>
+            {% endif %}
 
             {% if association.nextEvents|length > 0 %}
                 <h4>{{ "next_events"|trans }}</h4>

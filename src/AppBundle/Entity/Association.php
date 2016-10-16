@@ -4,8 +4,8 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OrderBy;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Association
@@ -117,6 +117,12 @@ class Association
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\User",mappedBy="association")
      */
     private $owners;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Document",mappedBy="association")
+     * @ORM\OrderBy({"name": "asc"})
+     */
+    private $documents;
 
     private $file;
 
@@ -475,6 +481,11 @@ class Association
     public function getOwners()
     {
         return $this->owners;
+    }
+
+    public function getDocuments()
+    {
+        return $this->documents;
     }
 
     public function getFile()

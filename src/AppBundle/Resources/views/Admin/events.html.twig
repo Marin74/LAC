@@ -22,6 +22,7 @@
                     <th>{{ "date"|trans }}</th>
                     <th>{{ "place"|trans }}</th>
                     <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -38,6 +39,9 @@
                             </td>
                             <td>
                                 <a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "admin_events"}) }}">{{ "consult"|trans }}</a>
+                            </td>
+                            <td>
+                            	<a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -193,11 +197,10 @@
         </div>
 
 
-        {% set i = 0 %}
 
         {# Forms to update events #}
         {% for form in forms %}
-            {% set event = events[i] %}
+            {% set event = events[loop.index0] %}
 
             <div class="modal fade" id="modal_update_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
@@ -346,9 +349,35 @@
                     </div>
                 </div>
             </div>
-
-            {% set i = i + 1 %}
+            
+            
+            {# Form to delete event #}
+            <div class="modal fade" id="modal_delete_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">{{ "delete"|trans }}</h4>
+                        </div>
+                        <form action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" method="POST">
+                            <div class="modal-body">
+    
+                                <input type="hidden" name="deleteId" value="{{ event.id }}"/>
+    
+                                <p>
+                                    {{ "delete_event_confirmation"|trans({'%name%': event.name}) }}
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "cancel"|trans }}</button>
+                                <button type="submit" class="btn btn-warning">{{ "delete"|trans }}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
+        
     {% endif %}
 {% endblock %}
 
