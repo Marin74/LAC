@@ -120,6 +120,37 @@ class Event
      */
     private $website;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="searchVolunteers", type="boolean", nullable=false)
+     * @Assert\NotNull()
+     */
+    private $searchVolunteers = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="published", type="boolean", nullable=false)
+     * @Assert\NotNull()
+     */
+    private $published = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="free", type="boolean", nullable=false)
+     * @Assert\NotNull()
+     */
+    private $free = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="pricing", type="string", length=255, nullable=true)
+     */
+    private $pricing;
+
     private $file;
 
 
@@ -159,7 +190,7 @@ class Event
 
     public function getNameForUrl()
     {
-        $name = "evenement";
+        $name = "action";
 
         if (!empty($this->getName())) {
             $name = $this->getName();
@@ -225,6 +256,11 @@ class Event
             $name = str_replace("Ç", "c", $name);
             $name = str_replace("Æ", "ae", $name);
             $name = str_replace("Œ", "oe", $name);
+            
+            while(strpos($name, "--") !== false) {
+            	
+            	$name = str_replace("--", "-", $name);
+            }
         }
 
         return $name;
@@ -473,6 +509,59 @@ class Event
         $this->website = $website;
 
         return $this;
+    }
+
+    public function setSearchVolunteers($searchVolunteers)
+    {
+        $this->searchVolunteers = $searchVolunteers;
+
+        return $this;
+    }
+
+    public function getSearchVolunteers()
+    {
+        return $this->searchVolunteers;
+    }
+
+    public function setPublished($published)
+    {
+        $this->published = $published;
+
+        return $this;
+    }
+
+    public function isPublished()
+    {
+        return $this->published;
+    }
+
+    public function setFree($free)
+    {
+        $this->free = $free;
+
+        return $this;
+    }
+
+    public function getFree()
+    {
+        return $this->free;
+    }
+
+    public function setPricing($pricing)
+    {
+        $this->pricing = $pricing;
+
+        return $this;
+    }
+
+    public function getPricing()
+    {
+        return $this->pricing;
+    }
+
+    public function getQuizzScores()
+    {
+        return $this->quizzScores;
     }
 
     /**

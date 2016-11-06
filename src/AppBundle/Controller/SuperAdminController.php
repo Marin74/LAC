@@ -10,6 +10,8 @@ use AppBundle\Form\SuperAdminEventFormType;
 use AppBundle\Form\UserFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\QuizScore;
+use AppBundle\Form\QuizScoreFormType;
 
 class SuperAdminController extends Controller
 {
@@ -35,6 +37,11 @@ class SuperAdminController extends Controller
                 if ($newEvent->getStartTime() > $newEvent->getEndTime())
                     $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
                 else {
+        					
+   					// Erase pricing field if it's free
+       				if($newEvent->getFree())
+        				$newEvent->setPricing(null);
+        			
                     $em->persist($newEvent);
                     $em->flush();
                     
@@ -80,10 +87,19 @@ class SuperAdminController extends Controller
                         if ($event->getStartTime() > $event->getEndTime())
                             $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
                         else {
+        					
+       						// Erase pricing field if it's free
+        					if($event->getFree())
+        						$event->setPricing(null);
+        					
                             $event->uploadPicture();
                             
                             // Save the object event
                             $em->flush();
+                            
+
+                            $formBuilder = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $event);
+                            $form = $formBuilder->getForm();
 
                             $request->getSession()->getFlashBag()->add('success', $translator->trans("event_updated"));
                         }
@@ -132,8 +148,6 @@ class SuperAdminController extends Controller
                 $newUser = new User();
                 $formAdd = $this->get('form.factory')->createBuilder(UserFormType::class, $newUser)->getForm();
             }
-            else
-                $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
         }
 
         // Delete request
@@ -215,8 +229,6 @@ class SuperAdminController extends Controller
                 $newAssociation = new Association();
                 $formAdd = $this->get('form.factory')->createBuilder(AssociationFormType::class, $newAssociation)->getForm();
             }
-            else
-                $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
         }
 
         // Delete request
@@ -273,5 +285,100 @@ class SuperAdminController extends Controller
             "forms" => $forms,
             "associations" => $associations,
         ));
+    }
+
+    public function quizScoresAction(Request $request)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$translator = $this->get("translator");
+    	$repoQuizScore = $em->getRepository("AppBundle:QuizScore");
+    	$newQuizScore = new QuizScore();
+    	$formAdd = $this->get('form.factory')->createBuilder(QuizScoreFormType::class, $newQuizScore)->getForm();
+    
+    	$quizScoreIdToUpdate = $request->get("quizScoreId");
+    	$deleteId = $request->get("deleteId");
+    
+    	// Add form
+    	if ($request->isMethod('POST') && empty($quizScoreIdToUpdate)) {
+    
+    		$formAdd->handleRequest($request);
+    
+    		if ($formAdd->isValid()) {
+    			
+    			// Check if the association doesn't have already a score for the associated quiz category
+    			$doubloon = $repoQuizScore->findOneBy(array("association" => $newQuizScore->getAssociation(), "quizCategory" => $newQuizScore->getQuizCategory()));
+    			
+    			if($doubloon != null)
+    				$request->getSession()->getFlashBag()->add('warning', $translator->trans("quiz_score_already_exists"));
+    			else {
+    				$em->persist($newQuizScore);
+    				$em->flush();
+    				
+    				$request->getSession()->getFlashBag()->add('success', $translator->trans("quiz_score_created"));
+    				
+    				// Empty the form
+    				$newQuizScore = new QuizScore();
+    				$formAdd = $this->get('form.factory')->createBuilder(QuizScoreFormType::class, $newQuizScore)->getForm();
+    			}
+    		}
+    	}
+    
+    	// Delete request
+    	if ($request->isMethod('POST') && !empty($deleteId)) {
+    
+    		$quizScore = $repoQuizScore->find($deleteId);
+    
+    		if($quizScore != null) {
+    
+    			$em->remove($quizScore);
+    			$em->flush();
+    			$request->getSession()->getFlashBag()->add('success', $translator->trans("quiz_score_deleted"));
+    		}
+    	}
+    
+    	$quizScores = $repoQuizScore->findBy(array(), array("association" => "ASC", "quizCategory" => "ASC"));
+    
+    	$forms = array();
+    	foreach($quizScores as $quizScore) {
+    		$formBuilder = $this->get('form.factory')->createBuilder(QuizScoreFormType::class, $quizScore);
+    
+    		$form = $formBuilder->getForm();
+    
+    		if ($request->isMethod('POST')) {
+    
+    			if(!empty($quizScoreIdToUpdate) && $quizScoreIdToUpdate == $quizScore->getId()) {
+    
+    				$form->handleRequest($request);// Set new data into the form
+    
+    				if ($form->isValid()) {
+    					// Check if the association doesn't have already a score for the associated quiz category
+    					$doubloon = $repoQuizScore->findOneBy(array("association" => $quizScore->getAssociation(), "quizCategory" => $quizScore->getQuizCategory()));
+    					 
+    					if($doubloon != null && $doubloon->getId() != $quizScore->getId()) {
+
+    						$request->getSession()->getFlashBag()->add('warning', $translator->trans("quiz_score_already_exists"));
+    						$em->refresh($quizScore);
+    					}
+    					else {
+    						$em->flush();
+    						
+    						$request->getSession()->getFlashBag()->add('success', $translator->trans("quiz_score_updated"));
+    					}
+    				}
+    				else
+    					$request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+    			}
+    		}
+    
+    		$formView = $form->createView();
+    
+    		$forms[] = $formView;
+    	}
+    
+    	return $this->render('AppBundle:SuperAdmin:quiz_scores.html.twig', array(
+			"formAdd" => $formAdd->createView(),
+			"forms" => $forms,
+			"quizScores" => $quizScores,
+    	));
     }
 }

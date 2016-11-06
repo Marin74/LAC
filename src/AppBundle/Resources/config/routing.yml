@@ -5,15 +5,21 @@ app_license:
     path:     /licence
     defaults: { _controller: "AppBundle:Default:license" }
 app_associations:
-    path:     /groupe
+    path:     /acteurs
     defaults: { _controller: "AppBundle:Default:associations" }
+app_quiz:
+    path:     /quizz
+    defaults: { _controller: "AppBundle:Default:quiz" }
+app_quiz_result:
+    path:     /quizz/resultats
+    defaults: { _controller: "AppBundle:Default:quizResult" }
 app_association:
-    path:     /groupe/{id}/{name}
+    path:     /acteur/{id}/{name}
     defaults: { _controller: "AppBundle:Default:association" }
     requirements:
         id: \d+
 app_event:
-    path:     /evenement/{id}/{name}
+    path:     /action/{id}/{name}
     defaults: { _controller: "AppBundle:Default:event" }
     requirements:
         id: \d+
@@ -21,14 +27,21 @@ app_admin_index:
     path:     /admin
     defaults: { _controller: "AppBundle:Admin:index" }
 app_admin_events:
-    path:     /admin/evenements
+    path:     /admin/actions
     defaults: { _controller: "AppBundle:Admin:events" }
+app_admin_calendar:
+    path:     /admin/calendrier
+    defaults: { _controller: "AppBundle:Admin:calendar" }
 app_superadmin_users:
     path:     /admin/superadmin/utilisateur
     defaults: { _controller: "AppBundle:SuperAdmin:users" }
 app_superadmin_associations:
-    path:     /admin/superadmin/association
+    path:     /admin/superadmin/acteur
     defaults: { _controller: "AppBundle:SuperAdmin:associations" }
 app_superadmin_events:
-    path:     /admin/superadmin/evenement
+    path:     /admin/superadmin/action
     defaults: { _controller: "AppBundle:SuperAdmin:events" }
+app_superadmin_quiz_scores:
+    path:     /admin/superadmin/quizz
+    defaults: { _controller: "AppBundle:SuperAdmin:quizScores" }
+

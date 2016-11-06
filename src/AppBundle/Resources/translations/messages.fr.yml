@@ -1,12 +1,11 @@
-welcome: Bienvenue !
-website_description: LAC Chablais (Liaison-Actions Citoyennes Chablais) souhaite promouvoir des rencontres entre groupes et citoyens désireux d'agir au sein de leur communauté.
+welcome: Découvrez
 who_are_we: Qui sommes-nous
-no_current_events: Pas d'évènements pour le moment.
+no_current_events: Pas d'actions pour le moment.
 details: Détails
-association_unknown: L'association n'existe pas.
-event_unknown: L'évènement n'existe pas.
+association_unknown: L'acteur n'existe pas.
+event_unknown: L'action n'existe pas.
 site_open_source: Site open source
-next_events: Prochains évènements
+next_events: Prochaines actions
 coordinates: Coordonnées
 website: Site internet
 address_colon: "Adresse : %address%"
@@ -14,7 +13,7 @@ phone_colon: "Tél. : %phone%"
 proposed_by: "Proposé par :"
 when: Quand ?
 where: Où ?
-log: Espace des associations
+log: Espace Acteurs
 username: Nom d'utilisateur
 password: Mot de passe
 logout: Déconnexion
@@ -22,8 +21,7 @@ login: Connexion
 log_hint: Connectez-vous pour gérer la page de votre groupe.
 come_back_to_homepage: Retour au site
 my_association: Mon groupe
-admin_zone_name: Espace des associations
-members_area: Espace membre
+members_area: Espace Acteurs
 no_association_assigned: Aucun groupe ne vous est affecté.
 events: Évènements
 save: Sauvegarder
@@ -56,7 +54,7 @@ consult: Consulter
 come_back_to_admin_page: Retour à l'administration
 error_event_dates_order: La date de fin doit être supérieure à la date de début.
 homepage: Accueil
-associations: Groupes
+associations: Acteurs
 select_association: Sélectionner un groupe
 association: Groupe
 delete: Supprimer
@@ -64,7 +62,6 @@ delete_event_confirmation: 'Êtes-vous sûr de vouloir supprimer l''évènement 
 cancel: Annuler
 association_deleted: Le groupe est supprimé.
 delete_association_confirmation: 'Êtes-vous sûr de vouloir supprimer le groupe "%name%" ? Il sera effacé définitivement.'
-group_deleted: Le groupe est supprimé.
 association_created: Le groupe est créé.
 new_association: Nouveau groupe
 users: Utilisateurs
@@ -77,7 +74,6 @@ url_source_code: "Le code source de l'application est disponible ici :"
 github_profile: Profil GitHub
 picture: Image
 facebook: Facebook
-quizz: Quizz
 new_user: Nouvel utilisateur
 user_created: L'utilisateur est créé.
 user_updated: L'utilisateur est mis à jour.
@@ -95,3 +91,58 @@ document_form_hint: Les documents peuvent être téléchargés par les internaut
 delete_document_confirmation: 'Êtes-vous sûr de vouloir supprimer le document "%name%" ? Il sera effacé définitivement.'
 document_deleted: Le document est supprimé.
 event_deleted: 'L''évènement est supprimé.'
+free: Gratuit
+paying: Payant
+pricing_hint: Prix (si payant)
+pricing: Entrée
+search_volunteers: Besoin de volontaires
+search_volunteers_hint: Indiquez si vous avez besoin de volontaires pour organiser l'évènement.
+search_volunteers_message: '%name% recherche des volontaires pour aider à l''organisation de l''action.'
+publish: Publier
+publish_hint: Si vous décochez ce bouton, l'évènement ne sera pas visible par les internautes mais il apparaîtra dans le calendrier commun aux associations. Ils verront que vous allez potentiellement organiser un évènement à cette date.
+event_set: Fixé
+planned: Prévu
+calendar: Calendrier
+calendar_of_events_planned: Calendrier des actions fixées et prévues
+calendar_hint: Le calendrier liste les actions fixées ou prévues par les associations afin de mieux vous organiser dans la planification de vos évènements.
+contacts: Contacts
+event_website: "Site internet de l'action"
+welcome_message: Bienvenue sur le site de Liaison des Actions Citoyennes dans le Chablais !
+local_associations: Les Acteurs du Chablais
+interesting_events: Les Actions qui vous motivent
+quiz: Quizz
+new_quiz_score: Nouveau résultat
+quiz_score: Résultat
+quiz_category: Catégorie
+quiz_score_created: Le résultat est créé.
+quiz_score_updated: Le résultat est mis à jour.
+quiz_score_deleted: Le résultat est supprimé.
+quiz_category_environment: Agir pour le respect de la nature, limiter les pollutions et dégradations de notre environnement
+quiz_category_environment_hint: Respect de la nature
+quiz_category_share_ideas: Échanger et développer des idées vers un monde et une économie plus justes
+quiz_category_share_ideas_hint: Échanger
+quiz_category_help_people: Aider les autres, se mobiliser contre les injustices
+quiz_category_help_people_hint: Injustices
+quiz_category_consumption: Consommer mieux pour promouvoir une production locale/bio/durable
+quiz_category_consumption_hint: Consommer mieux
+quiz_category_international: S'engager dans des actions d'entr'aide à l'international
+quiz_category_international_hint: Entr'aide
+quiz_question: Qu'est-ce qui vous intéresse ou vous donne envie d'agir ?
+quiz_hint: Choisissez de une à trois (maximum) des propositions suivantes.
+quiz_hint_2: Une fois votre choix fait, validez et vous obtiendrez la liste des acteurs qui vous correspondent.
+select_quiz_category: Sélectionner une catégorie
+select_score: Sélectionner un résultat
+score_exactly: Correspond tout à fait
+score_moderately: Correspond dans une moindre mesure
+score_vaguely: Correspond vaguement
+delete_quiz_score_confirmation: 'Êtes-vous sûr de vouloir supprimer ce résultat ? Il sera effacé définitivement.'
+quiz_score_already_exists: Un résultat existe déjà pour ce groupe et cette catégorie.
+search: Rechercher
+quiz_result: Résultat du Quizz
+quiz_categories_selected: Les Catégories choisies
+quiz_return: Retour au Quizz
+associations_finded: Les Acteurs qui vous correspondent
+no_association_finded: Pour le moment aucun acteur ne vous correspond.
+
+
+

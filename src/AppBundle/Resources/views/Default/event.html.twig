@@ -1,11 +1,5 @@
 {% extends 'AppBundle:Design:design.html.twig' %}
 
-{% block title %}
-    {% if event is not null %}
-        {{ event.name }}
-    {% endif %}
-{% endblock %}
-
 {% block content %}
     <div class="container">
         {% if app.request.query.has("source") %}
@@ -41,6 +35,12 @@
                 <h3 class="center">{{ event.name }}</h3>
             </p>
             
+            {% if event.searchVolunteers %}
+            	<div class="alert alert-success" role="alert">
+                    {{ "search_volunteers_message"|trans({"%name%": event.association.name}) }}
+                </div>
+            {% endif %}
+            
             <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
     
             {% if event.website is not empty %}
@@ -58,7 +58,18 @@
                     {{ event.endTime|localizeddate("full", "short", locale, time_zone) }}
                 {% endif %}
             </p>
-    
+            
+            <h4>{{ "pricing"|trans }}</h4>
+            <p>
+                {% if event.free %}
+                	{{ "free"|trans }}
+                {% else %}
+                	<strong>{{ "paying"|trans }}</strong>
+                	<br/>
+                    {{ event.pricing }}
+                {% endif %}
+    		</p>
+    		
             <h4>{{ "where"|trans }}</h4>
             <p>
                 {% if event.place is not empty %}

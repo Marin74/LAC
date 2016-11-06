@@ -38,7 +38,9 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "admin_events"}) }}">{{ "consult"|trans }}</a>
+                            	{% if event.published %}
+                                	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "admin_events"}) }}">{{ "consult"|trans }}</a>
+                            	{% endif %}
                             </td>
                             <td>
                             	<a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
@@ -72,7 +74,7 @@
                         <div class="form-group">
 
                             {# Label. #}
-                            {{ form_label(formAdd.name, "name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.name, "name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 
                             <div class="col-sm-10">
 
@@ -85,7 +87,7 @@
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.file, "picture"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.file, "picture", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.file) }}
@@ -95,7 +97,7 @@
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.startTime, "start"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.startTime, "start", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.startTime) }}
                                 {{ form_widget(formAdd.startTime) }}
@@ -103,7 +105,7 @@
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.endTime, "end"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.endTime, "end", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.endTime) }}
                                 {{ form_widget(formAdd.endTime) }}
@@ -111,7 +113,7 @@
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.description, "description"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.description, "description", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.description) }}
                                 {{ form_widget(formAdd.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
@@ -121,25 +123,51 @@
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.website, "website", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.website) }}
                                 {{ form_widget(formAdd.website, {'attr': {'class': 'form-control'}}) }}
                             </div>
                         </div>
+                        <div class="form-group">
+
+                            {{ form_label(formAdd.free, "free", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.free) }}
+                                {{ form_widget(formAdd.free, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            {{ form_label(formAdd.pricing, "pricing_hint", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.pricing) }}
+                                {{ form_widget(formAdd.pricing, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            {{ form_label(formAdd.searchVolunteers, "search_volunteers", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.searchVolunteers) }}
+                                {{ form_widget(formAdd.searchVolunteers, {'attr': {'class': 'form-control'}}) }}
+                                
+                                <p class="well well-sm">{{ "search_volunteers_hint"|trans }}</p>
+                            </div>
+                        </div>
+                        <hr>
                         <h3>{{ "place"|trans }}</h3>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.place, "place_name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.place, "place_name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.place) }}
                                 {{ form_widget(formAdd.place, {'attr': {'class': 'form-control'}}) }}
                             </div>
                         </div>
-                        <hr>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.street, "street"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.street, "street", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.street) }}
                                 {{ form_widget(formAdd.street, {'attr': {'class': 'form-control'}}) }}
@@ -147,7 +175,7 @@
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.zipCode, "zipCode"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.zipCode, "zipCode", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.zipCode) }}
 
@@ -156,7 +184,7 @@
                         </div>
                         <div class="form-group">
 
-                            {{ form_label(formAdd.city, "city"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.city, "city", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.city) }}
 
@@ -165,7 +193,7 @@
                         </div>
                         <div class="form-group display-none">
 
-                            {{ form_label(formAdd.latitude, "latitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.latitude, "latitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.latitude) }}
 
@@ -174,11 +202,22 @@
                         </div>
                         <div class="form-group display-none">
 
-                            {{ form_label(formAdd.longitude, "longitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            {{ form_label(formAdd.longitude, "longitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.longitude) }}
 
                                 {{ form_widget(formAdd.longitude, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+
+                            {{ form_label(formAdd.published, "publish", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.published) }}
+                                {{ form_widget(formAdd.published, {'attr': {'class': 'form-control'}}) }}
+                                
+                                <p class="well well-sm">{{ "publish_hint"|trans }}</p>
                             </div>
                         </div>
 
@@ -225,7 +264,7 @@
                                 <div class="form-group">
 
                                     {# Label. #}
-                                    {{ form_label(form.name, "name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.name, "name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 
                                     <div class="col-sm-10">
 
@@ -238,7 +277,7 @@
                                 </div>
                                 <div class="form-group">
 
-                                    {{ form_label(form.file, "picture"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.file, "picture", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
 
                                     <div class="col-sm-10">
                                         {{ form_errors(form.file) }}
@@ -248,7 +287,7 @@
                                 </div>
                                 <div class="form-group">
 
-                                    {{ form_label(form.startTime, "start"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.startTime, "start", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
                                         {{ form_errors(form.startTime) }}
                                         {{ form_widget(form.startTime) }}
@@ -256,7 +295,7 @@
                                 </div>
                                 <div class="form-group">
 
-                                    {{ form_label(form.endTime, "end"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.endTime, "end", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
                                         {{ form_errors(form.endTime) }}
                                         {{ form_widget(form.endTime) }}
@@ -264,7 +303,7 @@
                                 </div>
                                 <div class="form-group">
 
-                                    {{ form_label(form.description, "description"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.description, "description", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
                                         {{ form_errors(form.description) }}
                                         {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
@@ -274,25 +313,51 @@
                                 </div>
                                 <div class="form-group">
 
-                                    {{ form_label(form.website, "website"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.website, "website", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
                                         {{ form_errors(form.website) }}
                                         {{ form_widget(form.website, {'attr': {'class': 'form-control'}}) }}
                                     </div>
                                 </div>
+                                <div class="form-group">
+        
+                                    {{ form_label(form.free, "free", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.free) }}
+                                        {{ form_widget(form.free, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+        
+                                    {{ form_label(form.pricing, "pricing", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.pricing) }}
+                                        {{ form_widget(form.pricing, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+        
+                                    {{ form_label(form.searchVolunteers, "search_volunteers", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.searchVolunteers) }}
+                                        {{ form_widget(form.searchVolunteers, {'attr': {'class': 'form-control'}}) }}
+                                        
+                                        <p class="well well-sm">{{ "search_volunteers_hint"|trans }}</p>
+                                    </div>
+                                </div>
+                                <hr>
                                 <h3>{{ "place"|trans }}</h3>
                                 <div class="form-group">
 
-                                    {{ form_label(form.place, "place_name"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.place, "place_name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
                                         {{ form_errors(form.place) }}
                                         {{ form_widget(form.place, {'attr': {'class': 'form-control'}}) }}
                                     </div>
                                 </div>
-                                <hr>
                                 <div class="form-group">
 
-                                    {{ form_label(form.street, "street"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.street, "street", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
                                         {{ form_errors(form.street) }}
 
@@ -301,7 +366,7 @@
                                 </div>
                                 <div class="form-group">
 
-                                    {{ form_label(form.zipCode, "zipCode"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.zipCode, "zipCode", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
                                         {{ form_errors(form.zipCode) }}
 
@@ -310,7 +375,7 @@
                                 </div>
                                 <div class="form-group">
 
-                                    {{ form_label(form.city, "city"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.city, "city", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
                                         {{ form_errors(form.city) }}
 
@@ -319,7 +384,7 @@
                                 </div>
                                 <div class="form-group display-none">
 
-                                    {{ form_label(form.latitude, "latitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.latitude, "latitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
                                         {{ form_errors(form.latitude) }}
 
@@ -328,11 +393,22 @@
                                 </div>
                                 <div class="form-group display-none">
 
-                                    {{ form_label(form.longitude, "longitude"|trans, {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    {{ form_label(form.longitude, "longitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
                                         {{ form_errors(form.longitude) }}
 
                                         {{ form_widget(form.longitude, {'attr': {'class': 'form-control'}}) }}
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+        
+                                    {{ form_label(form.published, "publish", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                                    <div class="col-sm-10">
+                                        {{ form_errors(form.published) }}
+                                        {{ form_widget(form.published, {'attr': {'class': 'form-control'}}) }}
+                                        
+                                        <p class="well well-sm">{{ "publish_hint"|trans }}</p>
                                     </div>
                                 </div>
 
@@ -394,6 +470,9 @@
                 or form.endTime.vars.errors|length
                 or form.description.vars.errors|length
                 or form.website.vars.errors|length
+                or form.searchVolunteers.vars.errors|length
+                or form.free.vars.errors|length
+                or form.pricing.vars.errors|length
                 or form.place.vars.errors|length
                 or form.name.vars.errors|length
                 or form.street.vars.errors|length
@@ -401,6 +480,7 @@
                 or form.city.vars.errors|length
                 or form.latitude.vars.errors|length
                 or form.longitude.vars.errors|length
+                or form.published.vars.errors|length
                 or form.file.vars.errors|length
             %}
 
@@ -420,6 +500,9 @@
             or formAdd.endTime.vars.errors|length
             or formAdd.description.vars.errors|length
             or formAdd.website.vars.errors|length
+            or formAdd.searchVolunteers.vars.errors|length
+            or formAdd.free.vars.errors|length
+            or formAdd.pricing.vars.errors|length
             or formAdd.place.vars.errors|length
             or formAdd.name.vars.errors|length
             or formAdd.street.vars.errors|length
@@ -427,6 +510,7 @@
             or formAdd.city.vars.errors|length
             or formAdd.latitude.vars.errors|length
             or formAdd.longitude.vars.errors|length
+            or formAdd.published.vars.errors|length
             or formAdd.file.vars.errors|length
         %}
 

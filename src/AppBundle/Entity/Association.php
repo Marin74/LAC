@@ -124,6 +124,12 @@ class Association
      */
     private $documents;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuizScore",mappedBy="association")
+     * @ORM\OrderBy({"score": "desc"})
+     */
+    private $quizScores;
+
     private $file;
 
 
@@ -163,7 +169,7 @@ class Association
 
     public function getNameForUrl()
     {
-        $name = "evenement";
+        $name = "acteur";
 
         if (!empty($this->getName())) {
             $name = $this->getName();
@@ -229,6 +235,11 @@ class Association
             $name = str_replace("Ç", "c", $name);
             $name = str_replace("Æ", "ae", $name);
             $name = str_replace("Œ", "oe", $name);
+            
+            while(strpos($name, "--") !== false) {
+            	
+            	$name = str_replace("--", "-", $name);
+            }
         }
 
         return $name;
@@ -435,7 +446,7 @@ class Association
         $now = new \DateTime();
 
         foreach($this->getEvents() as $event) {
-            if($now < $event->getEndTime())
+            if($now < $event->getEndTime() && $event->isPublished())
                 $nextEvents[] = $event;
         }
 
@@ -486,6 +497,11 @@ class Association
     public function getDocuments()
     {
         return $this->documents;
+    }
+
+    public function getQuizScores()
+    {
+        return $this->quizScores;
     }
 
     public function getFile()

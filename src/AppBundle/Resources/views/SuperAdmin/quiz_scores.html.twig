@@ -1,0 +1,244 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+    {{ "associations"|trans }}
+{% endblock %}
+
+{% block content %}
+    <p>
+        <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_quiz_score"|trans }}</a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ "quiz_score"|trans }}</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for quizScore in quizScores %}
+                    <tr>
+                        <td><a data-toggle="modal" data-target="#modal_update_{{ quizScore.id }}" id="a_update_{{ quizScore.id }}">{{ quizScore.association.name ~ " - " ~ (quizScore.quizCategory.name~"_hint")|trans }}</a></td>
+                        <td>
+                            <a data-toggle="modal" data-target="#modal_delete_{{ quizScore.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    {# Form to add a score #}
+    <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{ "quiz_score"|trans }}</h4>
+                </div>
+                {{ form_start(formAdd, {'attr': {'class': 'form-horizontal', 'id': 'form_add'}}) }}
+                <div class="modal-body">
+
+                    <div id="warning_add"></div>
+
+                    <p>
+
+                        {# General errors of the form #}
+                        {{ form_errors(formAdd) }}
+
+                        {# Manual and exploded generation: #}
+                        <div class="form-group">
+
+                            {# Label. #}
+                            {{ form_label(formAdd.association, "association", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                            <div class="col-sm-10">
+
+                                {# Display errors for this field. #}
+                                {{ form_errors(formAdd.association) }}
+
+                                {# Input #}
+                                {{ form_widget(formAdd.association, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            {{ form_label(formAdd.quizCategory, "quiz_category", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.quizCategory) }}
+
+                                {{ form_widget(formAdd.quizCategory, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            {{ form_label(formAdd.score, "quiz_score", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.score) }}
+
+                                {{ form_widget(formAdd.score, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+
+                        {{ form_rest(formAdd) }}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                    <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                </div>
+
+                {# Close <form> #}
+                {{ form_end(formAdd) }}
+            </div>
+        </div>
+    </div>
+
+
+    {% set i = 0 %}
+
+    {% for form in forms %}
+        {% set quizScore = quizScores[i] %}
+
+        {# Form to update a score #}
+        <div class="modal fade" id="modal_update_{{ quizScore.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ "association"|trans }}</h4>
+                    </div>
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'form_update_'~quizScore.id}}) }}
+                    <div class="modal-body">
+
+                        <div id="warning_update_{{ quizScore.id }}"></div>
+
+                        <p>
+
+                            <input type="hidden" name="quizScoreId" value="{{ quizScore.id }}"/>
+
+                            {# General errors of the form #}
+                            {{ form_errors(form) }}
+
+                            {# Manual and exploded generation: #}
+                            <div class="form-group">
+
+                                {# Label. #}
+                                {{ form_label(form.association, "association", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+
+                                    {# Display errors for this field. #}
+                                    {{ form_errors(form.association) }}
+
+                                    {# Input #}
+                                    {{ form_widget(form.association, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_label(form.quizCategory, "quiz_category", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+                                    {{ form_errors(form.quizCategory) }}
+
+                                    {{ form_widget(form.quizCategory, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                {{ form_label(form.score, "quiz_score", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+                                    {{ form_errors(form.score) }}
+
+                                    {{ form_widget(form.score, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            {{ form_rest(form) }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                        <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                    </div>
+
+                    {# Close <form> #}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+
+
+        {# Form to delete a score #}
+        <div class="modal fade" id="modal_delete_{{ quizScore.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ "delete"|trans }}</h4>
+                    </div>
+                    <form action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" method="POST">
+                        <div class="modal-body">
+
+                            <input type="hidden" name="deleteId" value="{{ quizScore.id }}"/>
+
+                            <p>
+                                {{ "delete_quiz_score_confirmation"|trans }}
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "cancel"|trans }}</button>
+                            <button type="submit" class="btn btn-warning">{{ "delete"|trans }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% set i = i + 1 %}
+    {% endfor %}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+
+        {# Open a modal dialog if there is a error with a form #}
+        {% set i = 0 %}
+        {% for form in forms %}
+            {% if form.association.vars.errors|length
+                or form.quizCategory.vars.errors|length
+                or form.score.vars.errors|length
+            %}
+
+                {% set quizScore = quizScores[i] %}
+
+                $("#warning_update_{{ quizScore.id }}").attr("class", "alert alert-warning");
+                $("#warning_update_{{ quizScore.id }}").attr("role", "alert");
+                $("#warning_update_{{ quizScore.id }}").text("{{ "error_field"|trans }}");
+
+                $("#modal_update_{{ quizScore.id }}").modal("show");
+            {% endif %}
+            {% set i = i + 1 %}
+        {% endfor %}
+
+        {% if formAdd.association.vars.errors|length
+            or formAdd.quizCategory.vars.errors|length
+            or formAdd.score.vars.errors|length
+        %}
+
+            $("#warning_add").attr("class", "alert alert-warning");
+            $("#warning_add").attr("role", "alert");
+            $("#warning_add").text("{{ "error_field"|trans }}");
+
+            $("#modal_add").modal("show");
+        {% endif %}
+    </script>
+{% endblock %}

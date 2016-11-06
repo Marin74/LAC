@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class SuperAdminEventFormType extends AbstractType
 {
@@ -32,18 +33,24 @@ class SuperAdminEventFormType extends AbstractType
                 'class'                     => 'AppBundle:Association',
                 'choice_label'              => 'name',
                 'multiple'                  => false,
-                'choice_translation_domain' => 'messages',
                 'placeholder'               => 'select_association',
                 'attr'                      => ['class' => 'form-control',],
                 'query_builder'             => function(EntityRepository $repository) {
                     return $repository->createQueryBuilder('u')->orderBy('u.name', 'ASC');
                 },
             ))
-            ->add('startTime',      DateTimeType::class, array('widget' => 'single_text', 'view_timezone' => $timeZoneDisplayed, 'format' => 'dd-MM-yyyy HH:mm', 'attr' => [
-                'class' => 'form-control input-inline form_datetime',
+            ->add('startTime',      DateTimeType::class, array(
+           		'widget' => 'single_text',
+            	'view_timezone' => $timeZoneDisplayed,
+            	'format' => 'dd-MM-yyyy HH:mm', 'attr' => [
+                	'class' => 'form-control input-inline form_datetime',
             ]))
-            ->add('endTime',        DateTimeType::class, array('widget' => 'single_text', 'view_timezone' => $timeZoneDisplayed, 'format' => 'dd-MM-yyyy HH:mm', 'attr' => [
-                'class' => 'form-control input-inline form_datetime',
+            ->add('endTime',        DateTimeType::class, array(
+            	'widget' => 'single_text',
+            	'view_timezone' => $timeZoneDisplayed,
+           		'format' => 'dd-MM-yyyy HH:mm',
+           		'attr' => [
+               		'class' => 'form-control input-inline form_datetime',
             ]))
             ->add('description',    TextareaType::class, array(
                 'attr'                      => ['class' => 'form-control', 'rows' => 10],
@@ -70,6 +77,18 @@ class SuperAdminEventFormType extends AbstractType
                 'attr'                      => ['class' => 'form-control',],
             ))
             ->add('file',           FileType::class, array(
+                'attr'                      => ['class' => 'form-control',],
+            ))
+            ->add('free',				CheckboxType::class, array(
+                'attr'                      => ['class' => 'form-control',],
+            ))
+            ->add('pricing',			TextType::class, array(
+                'attr'                      => ['class' => 'form-control',],
+            ))
+            ->add('searchVolunteers',	CheckboxType::class, array(
+                'attr'                      => ['class' => 'form-control',],
+            ))
+            ->add('published',			CheckboxType::class, array(
                 'attr'                      => ['class' => 'form-control',],
             ))
         ;

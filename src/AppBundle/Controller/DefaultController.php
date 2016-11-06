@@ -19,6 +19,7 @@ class DefaultController extends Controller
             'SELECT e
             FROM AppBundle:Event e
             WHERE e.endTime > :now
+        	AND e.published = true
             ORDER BY e.startTime ASC'
         )->setParameter('now', new \DateTime());
 
@@ -61,10 +62,80 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $repoEvent = $em->getRepository("AppBundle:Event");
-        $event = $repoEvent->find($request->get("id"));
+        $event = $repoEvent->findOneBy(array("id" => $request->get("id"), "published" => true));
 
         return $this->render('AppBundle:Default:event.html.twig', array(
             'event' => $event,
         ));
+    }
+    
+    public function quizAction(Request $request)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$repoQuizCategory = $em->getRepository("AppBundle:QuizCategory");
+    	$quizCategories = $repoQuizCategory->findBy(array(), array("order" => "ASC"));
+    
+    	return $this->render('AppBundle:Default:quiz.html.twig', array(
+    		'quizCategories' => $quizCategories,
+    	));
+    }
+    
+    public function quizResultAction(Request $request)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$repoQuizCategory = $em->getRepository("AppBundle:QuizCategory");
+    	$repoQuizScores = $em->getRepository("AppBundle:QuizScore");
+    	$repoAssociation = $em->getRepository("AppBundle:Association");
+    	$input = $request->get("categories");
+    	$quizCategories = array();
+    	$quizCategoriesNames = array();
+    	$associationsSelected = array();
+    	$associations = array();
+    	
+    	if(!empty($input)) {
+    		$names = explode(",", $input);
+    		
+    		foreach($names as $name) {
+
+    			$category = $repoQuizCategory->findOneByName($name);
+    			
+    			if($category != null) {
+    				$quizCategories[] = $category;
+    				$quizCategoriesNames[] = $category->getName();
+    				
+    				$scores = $repoQuizScores->findBy(array("quizCategory" => $category));
+    				
+    				foreach($scores as $score) {
+    					
+    					if($score->getScore() > 0) {
+    						
+    						// Add the association if it's not already in the list and add the score
+    						if(array_key_exists($score->getAssociation()->getName(), $associationsSelected))
+    							$associationsSelected[$score->getAssociation()->getName()] += $score->getScore();
+    						else {
+    							$associationsSelected[$score->getAssociation()->getName()] = $score->getScore();
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+    	
+    	//die(var_dump($associationsSelected));
+    	arsort($associationsSelected);
+    	
+    	foreach($associationsSelected as $associationSelected => $value) {
+    		
+    		$association = $repoAssociation->findOneByName($associationSelected);
+    		
+    		if($association != null)
+    			$associations[] = $association;
+    	}
+    
+    	return $this->render('AppBundle:Default:quiz_result.html.twig', array(
+    		'quizCategories'		=> $quizCategories,
+    		'quizCategoriesNames'	=> $quizCategoriesNames,
+    		'associations'			=> $associations
+    	));
     }
 }

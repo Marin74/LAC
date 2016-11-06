@@ -19,7 +19,6 @@ class UserFormType extends AbstractType
                 'class'                     => 'AppBundle:Association',
                 'choice_label'              => 'name',
                 'multiple'                  => false,
-                'choice_translation_domain' => 'messages',
                 'placeholder'               => 'select_association',
                 'attr'                      => ['class' => 'form-control',],
                 'query_builder'             => function(EntityRepository $repository) {

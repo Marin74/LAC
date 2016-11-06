@@ -11,7 +11,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{{ url("app_index") }}">{{ app_name }}</a>
-                <a class="navbar-brand" style="color: greenyellow;">{{ "admin_zone_name"|trans }}</a>
+                <a class="navbar-brand" style="color: greenyellow;">{{ "members_area"|trans }}</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -30,6 +30,7 @@
                     {% if app.user.association != null %}
                     	<li class="{% if app.request.attributes.get('_route') == "app_admin_events" %}active{% endif %}"><a href="{{ url("app_admin_events") }}">{{ "events"|trans }}</a></li>
                 	{% endif %}
+                    <li class="{% if app.request.attributes.get('_route') == "app_admin_calendar" %}active{% endif %}"><a href="{{ url("app_admin_calendar") }}">{{ "calendar"|trans }}</a></li>
                 </ul>
                 {% if is_granted("ROLE_ADMIN") %}
                     <h3>Administration</h3>
@@ -37,6 +38,7 @@
                         <li class="{% if app.request.attributes.get('_route') == "app_superadmin_users" %}active{% endif %}"><a href="{{ url("app_superadmin_users") }}">{{ "users"|trans }}</a></li>
                         <li class="{% if app.request.attributes.get('_route') == "app_superadmin_associations" %}active{% endif %}"><a href="{{ url("app_superadmin_associations") }}">{{ "associations"|trans }}</a></li>
                         <li class="{% if app.request.attributes.get('_route') == "app_superadmin_events" %}active{% endif %}"><a href="{{ url("app_superadmin_events") }}">{{ "events"|trans }}</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == "app_superadmin_quiz_scores" %}active{% endif %}"><a href="{{ url("app_superadmin_quiz_scores") }}">{{ "quiz"|trans }}</a></li>
                     </ul>
                 {% endif %}
             </div>

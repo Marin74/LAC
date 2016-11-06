@@ -1,0 +1,95 @@
+{% extends 'AppBundle:Design:design.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <center>
+        	<h2>{{ "quiz_question"|trans }}</h2>
+    		<p>
+    			{{ "quiz_hint"|trans }}<br/>
+    			{{ "quiz_hint_2"|trans }}
+    		</p>
+		</center>
+		
+		<div class="row">
+    		{% for quizCategory in quizCategories %}
+    			<div class="col-sm-6 col-md-4">
+    				<center>
+    					<img src="{{ asset("upload/img/quiz/"~quizCategory.name~".svg") }}" id="icon_{{ quizCategory.name }}" style="height: 150px; opacity: 0.5;" onClick="select('{{ quizCategory.name }}');"/>
+    					<h5>{{ quizCategory.name|trans }}</h5>
+    				</center>
+    			</div>
+    			
+    			<!-- TODO Gérer quand c'est sur 2 colonnes -->
+    			{% if loop.index == 3 %}
+    				<div class="clearfix"></div>
+    			{% endif %}
+    		{% endfor %}
+		</div>
+		
+		<center>
+			<button class="btn btn-success btn-lg" role="button" onClick="search();">{{ "search"|trans }}</button>
+		</center>
+		
+		<form method="POST" action="{{ url("app_quiz_result") }}" id="formSearch">
+			<input type="hidden" id="inputCategories" name="categories" value=""/>
+		</form>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+
+	var tabCategoriesSelected = [];
+
+	function remove(valueToDelete) {
+
+		var index = 0;
+		var indexToDelete = -1;
+		
+		tabCategoriesSelected.forEach(
+			function(value){
+
+				if(value == valueToDelete)
+					indexToDelete = index;
+				
+				index++;
+			}
+	    );
+
+	    if(indexToDelete != -1)
+	    	tabCategoriesSelected.splice(indexToDelete, 1);
+	}
+
+	function select(quizCategory) {
+		
+		var icon = $("#icon_"+quizCategory);
+
+		if(icon.css("opacity") == 1) {
+
+			icon.css("opacity", 0.5);
+			remove(quizCategory);
+			isSelected = false;
+		}
+		else if(tabCategoriesSelected.length < 3) {
+
+			icon.css("opacity", 1);
+			remove(quizCategory);
+			tabCategoriesSelected.push(quizCategory);
+			isSelected = true;
+		}
+	}
+
+	function search() {
+		var form = $("#formSearch");
+		var field = $("#inputCategories");
+
+		if(tabCategoriesSelected.length > 0) {
+			
+			field.val(tabCategoriesSelected);
+			
+			form.submit();
+		}
+	}
+</script>
+{% endblock %}
+

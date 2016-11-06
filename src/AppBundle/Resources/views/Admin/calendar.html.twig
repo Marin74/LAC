@@ -1,0 +1,60 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+{{ "calendar_of_events_planned"|trans }}
+{% endblock %}
+
+{% block content %}
+
+<div class="well well-sm">
+    {{ "calendar_hint"|trans }}
+</div>
+
+{% if events|length > 0 %}
+	
+	{% set lastEvent = events[0] %}
+	
+    {% for event in events %}
+    	
+    	{% if loop.index == 1 or event.startTime|date("Y-m-d") != lastEvent.startTime|date("Y-m-d") %}
+    		
+    		<h4>{{ event.startTime|localizeddate("full", "none", locale, time_zone) }}</h4>
+    		
+    	{% endif %}
+    	
+    	<div class="well well-sm">
+			{% if event.published %}
+				<span class="label label-success">{{ "event_set"|trans }}</span>
+			{% else %}
+				<span class="label label-warning">{{ "planned"|trans }}</span>
+			{% endif %}
+
+			<strong id="event_{{ event.id }}" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="
+                {{ event.startTime|localizeddate("full", "short", locale, time_zone) }} -
+                {% if event.takesLessThanOneDay %}
+                    {{ event.endTime|localizeddate("none", "short", locale, time_zone) }}
+                {% else %}
+                    {{ event.endTime|localizeddate("full", "short", locale, time_zone) }}
+                {% endif %}
+			">{{ event.name }}</strong>
+
+			<em> - {{ event.association.name }}</em>
+    	</div>
+    	
+    {% endfor %}
+{% endif %}
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+	{% for event in events %}
+		$("#event_{{ event.id }}").mouseover(function() {
+			$('#event_{{ event.id }}').popover('show')
+		});
+
+		$("#event_{{ event.id }}").mouseout(function() {
+			$('#event_{{ event.id }}').popover('hide')
+		});
+	{% endfor %}
+</script>
+{% endblock %}

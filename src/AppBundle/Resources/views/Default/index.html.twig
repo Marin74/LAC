@@ -2,24 +2,26 @@
 
 {% block content %}
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
+    <div class="jumbotron" style="margin-top: -30px;">
         <div class="container">
-            <h1>{{ "welcome"|trans }}</h1>
-            <p>{{ "website_description"|trans }}</p>
-            {% if mainAssociation is not null %}
-                <table class="center" style="width: 100%; table-layout: fixed;">
-                    <tr>
-                        <td><a class="btn btn-primary btn-lg" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}" role="button">{{ "who_are_we"|trans }} &raquo;</a></td>
-                        <td><a class="btn btn-primary btn-lg" href="{{ url("app_associations") }}" role="button">{{ "associations"|trans }} &raquo;</a></td>
-                        <td><a class="btn btn-primary btn-lg" href="#" role="button">{{ "quizz"|trans }} &raquo;</a></td>
-                    </tr>
-                </table>
-            {% endif %}
+            <center><h1>{{ "welcome"|trans }}</h1></center>
+            <table class="center" style="width: 100%; table-layout: fixed;">
+                <tr>
+                    <td>
+                    	<a href="{{ url("app_associations") }}"><img src="{{ asset("bundles/app/img/btn-associations.svg") }}"/></a>
+                    	<h3 class="main-color">{{ "local_associations"|trans }}</h3>
+                    </td>
+                    <td>
+                    	<a href="{{ url("app_quiz") }}"><img src="{{ asset("bundles/app/img/btn-quiz.svg") }}"/></a>
+                    	<h3 class="main-color">{{ "interesting_events"|trans }}</h3>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 
     <div class="container">
-        <h1>Prochains évènements</h1>
+        <h1>{{ "next_events"|trans }}</h1>
     </div>
 
     {% if nextEvents|length == 0 %}
@@ -64,9 +66,83 @@
                 </a>
             {% endif %}
         </div>
+        
+        {% for event in nextEvents %}
+			
+            {# Searching volunteers hint #}
+            {% if event.searchVolunteers %}
+                <div class="modal fade" id="modal_search_volunteers_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">{{ "search_volunteers"|trans }}</h4>
+                            </div>
+                            <div class="modal-body">
+                            	<p>
+                            		{{ "search_volunteers_message"|trans({"%name%": event.association.name}) }}
+                            	</p>
+                            	
+                            	{% set association = event.association %}
+                            	
+                            	{% if association.fullAddress is not empty
+                                    or association.phone is not empty
+                                    or association.website is not empty
+                                    or association.urlFacebook is not empty
+                                    or event.website is not empty
+                                %}
+                            		<h5>{{ "contacts"|trans }}</h5>
+                                    <ul>
+                                        {% if association.fullAddress is not empty %}
+                    
+                                            <li>
+                                                {{ "address_colon"|trans({"%address%": association.fullAddress }) }}
+                                            </li>
+                                        {% endif %}
+                    
+                                        {% if association.phone is not empty %}
+                                            <li>
+                                                {{ "phone_colon"|trans({"%phone%": association.phone }) }}
+                                            </li>
+                                        {% endif %}
+                    
+                                        {% if association.website is not empty %}
+                                            <li>
+                                                <a href="{{ association.website }}" target="_blank">{{ "website"|trans }}</a>
+                                            </li>
+                                        {% endif %}
+                    
+                                        {% if association.urlFacebook is not empty %}
+                                            <li>
+                                                <a href="{{ association.urlFacebook }}" target="_blank">{{ "facebook"|trans }}</a>
+                                            </li>
+                                        {% endif %}
+                    
+                                        {% if event.website is not empty %}
+                                            <li>
+                                                <a href="{{ event.website }}" target="_blank">{{ "event_website"|trans }}</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
     {% endif %}
 
     <div id="mapid" class="col-md-12 map fit" style="min-width: 310px;"></div>
+    
+    {% if mainAssociation is not null %}
+        <p class="center">
+        	<a class="btn btn-primary btn-lg" style="margin-top: 20px;" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}" role="button">{{ "who_are_we"|trans }} &raquo;</a>
+        </p>
+    {% endif %}
 {% endblock %}
 
 {% block js %}

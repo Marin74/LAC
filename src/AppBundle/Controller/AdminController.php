@@ -131,20 +131,23 @@ class AdminController extends Controller
         	
         			if ($newEvent->getStartTime() > $newEvent->getEndTime())
         				$request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
-        				else {
-        					$em->persist($newEvent);
-        					$em->flush();
-        					
-                    		$newEvent->uploadPicture();
-                    		$em->flush();
-        	
-        					$newEvent->uploadPicture();
-        	
-        					$newEvent = new Event();
-        					$formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
-        	
-        					$request->getSession()->getFlashBag()->add('success', $translator->trans("event_created"));
-        				}
+        			else {
+        				
+        				// Erase pricing field if it's free
+        				if($newEvent->getFree())
+       						$newEvent->setPricing(null);
+       					
+        				$em->persist($newEvent);
+        				$em->flush();
+        				
+                   		$newEvent->uploadPicture();
+                   		$em->flush();
+        
+       					$newEvent = new Event();
+       					$formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
+       	
+       					$request->getSession()->getFlashBag()->add('success', $translator->trans("event_created"));
+       				}
         		}
         	}
 	        
@@ -179,10 +182,18 @@ class AdminController extends Controller
         					if ($event->getStartTime() > $event->getEndTime())
         						$request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
         						else {
+        					
+        							// Erase pricing field if it's free
+        							if($event->getFree())
+        								$event->setPricing(null);
+        							
         							$event->uploadPicture();
         	
         							// Save the object event
         							$em->flush();
+
+        							$formBuilder = $this->get('form.factory')->createBuilder(EventFormType::class, $event);
+        							$form = $formBuilder->getForm();
         	
         							$request->getSession()->getFlashBag()->add('success', $translator->trans("event_updated"));
         						}
@@ -201,5 +212,23 @@ class AdminController extends Controller
             "forms" => $forms,
             "events" => $events,
         ));
+    }
+    
+    public function calendarAction(Request $request)
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	
+    	$query = $em->createQuery(
+			'SELECT e
+			FROM AppBundle:Event e
+			WHERE e.endTime > :now
+			ORDER BY e.startTime ASC'
+		)->setParameter('now', new \DateTime());
+		
+		$events = $query->getResult();
+    	
+    	return $this->render('AppBundle:Admin:calendar.html.twig', array(
+    		'events' => $events,
+    	));
     }
 }

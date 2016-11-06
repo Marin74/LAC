@@ -5,6 +5,12 @@
     margin:0 auto;
     text-align: center;
 }
+.main-color{
+	color: var(--main-color);
+}
+.jumbotron h1{
+	color: var(--main-color);
+}
 .bs-docs-footer{
     margin-top: 40px;
     padding-top: 30px;
@@ -50,9 +56,6 @@ body{
 	margin-bottom: 10px;
 	max-height: 250px;
 	box-shadow: 1px 1px 12px #555;
-}
-.navbar-inverse .title-element, .navbar-inverse .title-element:focus, .navbar-inverse .title-element:hover{
-	color: greenyellow;
 }
 .map{
 	height: 400px;
