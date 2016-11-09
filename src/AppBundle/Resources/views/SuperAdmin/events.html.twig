@@ -13,6 +13,7 @@
         <table class="table table-striped">
             <thead>
             <tr>
+            	<th></th>
                 <th>{{ "event"|trans }}</th>
                 <th>{{ "date"|trans }}</th>
                 <th>{{ "association"|trans }}</th>
@@ -23,7 +24,16 @@
             <tbody>
             {% for event in events %}
                 <tr>
-                    <td><a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a></td>
+                	<td>
+            			{% if event.published %}
+            				<span class="label label-success">{{ "event_set"|trans }}</span>
+            			{% else %}
+            				<span class="label label-warning">{{ "planned"|trans }}</span>
+            			{% endif %}
+                	</td>
+                    <td>
+                    	<a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a>
+                	</td>
                     <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
                     <td>
                         <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl, "source": "super_admin_events"}) }}">
