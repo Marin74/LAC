@@ -104,7 +104,7 @@ event_set: Fixé
 planned: Prévu
 calendar: Calendrier
 calendar_of_events_planned: Calendrier des actions fixées et prévues
-calendar_hint: Le calendrier liste les actions fixées ou prévues par les associations afin de mieux vous organiser dans la planification de vos évènements.
+calendar_hint: Le calendrier liste les actions fixées ou prévues par les associations pour faciliter la planification de vos actions.
 contacts: Contacts
 event_website: "Site internet de l'action"
 welcome_message: Bienvenue sur le site de Liaison des Actions Citoyennes dans le Chablais !
@@ -137,7 +137,7 @@ score_moderately: Correspond dans une moindre mesure
 score_vaguely: Correspond vaguement
 delete_quiz_score_confirmation: 'Êtes-vous sûr de vouloir supprimer ce résultat ? Il sera effacé définitivement.'
 quiz_score_already_exists: Un résultat existe déjà pour ce groupe et cette catégorie.
-search: Rechercher
+validate: Je valide
 quiz_result: Résultat du Quizz
 quiz_categories_selected: Les Catégories choisies
 quiz_return: Retour au Quizz
