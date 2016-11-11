@@ -3,23 +3,8 @@
 {% block content %}
     <div class="container">
         <center>
-        	<h2>{{ "quiz_result"|trans }}</h2>
+        	<h2 class="main-color">{{ "associations_finded"|trans }}</h2>
 		</center>
-		
-		<h4 class="main-color">{{ "quiz_categories_selected"|trans }}</h4>
-		
-		<div class="row">
-    		{% for quizCategory in quizCategories %}
-    			<div class="col-sm-6 col-md-4">
-    				<center>
-    					<img src="{{ asset("upload/img/quiz/"~quizCategory.name~".svg") }}" id="icon_{{ quizCategory.name }}" style="height: 50px;" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="{{ quizCategory.name|trans }}"/>
-    					<h5>{{ (quizCategory.name~"_hint")|trans }}</h5>
-    				</center>
-    			</div>
-    		{% endfor %}
-		</div>
-		
-		<h4 class="main-color">{{ "associations_finded"|trans }}</h4>
 		
 		{% if associations|length == 0 %}
 			<p>
@@ -27,33 +12,33 @@
 			</p>
 		{% endif %}
 		
-		<p>
-			{% for association in associations %}
-				<div class="media">
-					<div class="media-left">
-						<a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl}) }}">
-							<img class="media-object" src="{{ asset(association.picturePath) }}" style="height: 50px;">
-						</a>
-					</div>
-					<div class="media-body">
-						<h4 class="media-heading"><a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl}) }}">{{ association.name }}</a></h4>
-						{% for score in association.quizScores %}
-							{% if score.quizCategory.name in quizCategoriesNames %}
-    							<img src="{{ asset("upload/img/quiz/"~score.quizCategory.name~".svg") }}" style="height: 25px;" id="icon_{{ score.id }}" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="
-    							{% if score.score == 2 %}
-    								{{ "score_exactly"|trans }}
-    							{% elseif score.score == 1 %}
-    								{{ "score_moderately"|trans }}
-    							{% else %}
-    								{{ "score_vaguely"|trans }}
-    							{% endif %}
-    							"/>
-							{% endif %}
-						{% endfor %}
-					</div>
-				</div>
-			{% endfor %}
-		</p>
+        <p>
+            <div class="row">
+                {% for association in associations %}
+    
+                    <div class="col-sm-6 col-md-4">
+                        <div class="thumbnail" style="height: 210px; padding: 0px; background-color: #43a2ca; padding-top: 10px;">
+                            {% if association.picture is not empty %}
+                            	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}">
+                                    <div class="img-association" style="
+                        				background-image: url('{{ asset(association.picturePath) }}');
+                        				position: relative;
+                        				float: center;
+                        				background-position: 50% 50%;
+                        				background-size:     contain;">
+                                    </div>
+                                </a>
+                            {% endif %}
+                            <div class="caption" style="padding-bottom: 0px;">
+                            	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}" style="text-decoration: none;">
+                            		<h4 class="white" style="text-align: center;">{{ association.name }}</h4>
+                        		</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </p>
 		
 		<center>
 			<a class="btn btn-success btn-lg" role="button" href="{{ url("app_quiz") }}">{{ "quiz_return"|trans }}</a>

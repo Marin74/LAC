@@ -5,8 +5,10 @@
         <center>
         	<h2 class="main-color">{{ "quiz_question"|trans }}</h2>
     		<p>
-    			{{ "quiz_hint"|trans }}<br/>
-    			{{ "quiz_hint_2"|trans }}
+    			<em>
+        			{{ "quiz_hint"|trans }}<br/>
+        			{{ "quiz_hint_2"|trans }}
+    			</em>
     		</p>
 		</center>
 		
@@ -15,8 +17,8 @@
         		{% for quizCategory in quizCategories %}
         			<div class="col-sm-6 col-md-4" style="margin-bottom: 10px; padding: 10px;">
         				<center>
-        					<img src="{{ asset("upload/img/quiz/"~quizCategory.name~".svg") }}" id="icon_{{ quizCategory.name }}" style="height: 150px; opacity: 0.5;" onClick="select('{{ quizCategory.name }}');"/>
-        					<h5>{{ quizCategory.name|trans }}</h5>
+        					<img src="{{ asset("upload/img/quiz/"~quizCategory.name~".svg") }}" id="icon_{{ quizCategory.name }}" style="height: 130px; opacity: 0.5;" onClick="select('{{ quizCategory.name }}');"/>
+        					<h5 id="hint_{{ quizCategory.name }}" style="max-width: 250px; opacity: 0.7; color: black;">{{ quizCategory.name|trans }}</h5>
         				</center>
         			</div>
         			
@@ -65,16 +67,19 @@
 	function select(quizCategory) {
 		
 		var icon = $("#icon_"+quizCategory);
+		var hint = $("#hint_"+quizCategory);
 
 		if(icon.css("opacity") == 1) {
 
 			icon.css("opacity", 0.5);
+			hint.css("opacity", 0.7);
 			remove(quizCategory);
 			isSelected = false;
 		}
 		else if(tabCategoriesSelected.length < 3) {
 
 			icon.css("opacity", 1);
+			hint.css("opacity", 1);
 			remove(quizCategory);
 			tabCategoriesSelected.push(quizCategory);
 			isSelected = true;

@@ -2,26 +2,24 @@
 
 {% block content %}
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron" style="margin-top: -30px;">
-        <div class="container">
-            <center><h1>{{ "welcome"|trans }}</h1></center>
-            <table class="center" style="width: 100%; table-layout: fixed;">
-                <tr>
-                    <td>
-                    	<a href="{{ url("app_associations") }}"><img src="{{ asset("bundles/app/img/btn-associations.svg") }}"/></a>
-                    	<h3 class="main-color">{{ "local_associations"|trans }}</h3>
-                    </td>
-                    <td>
-                    	<a href="{{ url("app_quiz") }}"><img src="{{ asset("bundles/app/img/btn-quiz.svg") }}"/></a>
-                    	<h3 class="main-color">{{ "interesting_events"|trans }}</h3>
-                    </td>
-                </tr>
-            </table>
-        </div>
+    <div class="container">
+        <center><h1 class="main-color">{{ "welcome"|trans }}</h1></center>
+        <table class="center" style="width: 100%; table-layout: fixed; margin-top: -10px; max-width: 800px;">
+            <tr>
+                <td>
+                	<a href="{{ url("app_associations") }}"><img src="{{ asset("bundles/app/img/btn-associations.svg") }}" style="height: 175px;"/></a>
+                	<h3 class="main-color" style="margin-top: 5px;">{{ "local_associations"|trans }}</h3>
+                </td>
+                <td>
+                	<a href="{{ url("app_quiz") }}"><img src="{{ asset("bundles/app/img/btn-quiz.svg") }}" style="height: 175px;"/></a>
+                	<h3 class="main-color" style="margin-top: 5px;">{{ "interesting_events"|trans }}</h3>
+                </td>
+            </tr>
+        </table>
     </div>
 
-    <div class="container">
-        <h1 class="main-color">{{ "next_events"|trans }}</h1>
+    <div class="container" style="margin-top: 10px;">
+        <h2 class="main-color">{{ "next_events"|trans }}</h2>
     </div>
 
     {% if nextEvents|length == 0 %}
@@ -37,7 +35,7 @@
 
                 {% for event in nextEvents %}
 
-                    {% if loop.index0%3 == 0 %}
+                    {% if loop.index0%4 == 0 %}
 
                         <div class="item {% if loop.index0 == 0 %}active{% endif %}" >
                         <div class="row">
@@ -45,7 +43,7 @@
 
                     {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
 
-                    {% if loop.index0%3 == 2 or loop.index >= nextEvents|length %}
+                    {% if loop.index0%4 == 3 or loop.index >= nextEvents|length %}
 
                         </div>
                         </div>

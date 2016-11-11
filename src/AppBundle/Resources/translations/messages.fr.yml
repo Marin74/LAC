@@ -95,9 +95,9 @@ free: Gratuit
 paying: Payant
 pricing_hint: Prix (si payant)
 pricing: Entrée
-search_volunteers: Besoin de volontaires
-search_volunteers_hint: Indiquez si vous avez besoin de volontaires pour organiser l'évènement.
-search_volunteers_message: '%name% recherche des volontaires pour aider à l''organisation de l''action.'
+search_volunteers: Besoin de bénévoles
+search_volunteers_hint: Indiquez si vous avez besoin de bénévoles pour organiser l'évènement.
+search_volunteers_message: '%name% recherche des bénévoles pour aider à l''organisation de l''action.'
 publish: Publier
 publish_hint: Si vous décochez ce bouton, l'évènement ne sera pas visible par les internautes mais il apparaîtra dans le calendrier commun aux associations. Ils verront que vous allez potentiellement organiser un évènement à cette date.
 event_set: Fixé
@@ -138,11 +138,9 @@ score_vaguely: Correspond vaguement
 delete_quiz_score_confirmation: 'Êtes-vous sûr de vouloir supprimer ce résultat ? Il sera effacé définitivement.'
 quiz_score_already_exists: Un résultat existe déjà pour ce groupe et cette catégorie.
 validate: Je valide
-quiz_result: Résultat du Quizz
-quiz_categories_selected: Les Catégories choisies
 quiz_return: Retour au Quizz
 associations_finded: Les Acteurs qui vous correspondent
 no_association_finded: Pour le moment aucun acteur ne vous correspond.
-
+error_video_player: Votre navigateur ne supporte pas le lecteur vidéo.
 
 

@@ -1,8 +1,8 @@
 :root {
-    --main-color: #2780e3;
+    --main-color: #43a2ca;
 }
 .center{
-    margin:0 auto;
+    margin: 0 auto;
     text-align: center;
 }
 .main-color{
@@ -67,7 +67,7 @@ body{
     position: relative;
     float: center;
     width:  100%;
-    height: 300px;
+    height: 200px;
     background-position: 50% 50%;
     background-repeat:   no-repeat;
     background-size:     cover;

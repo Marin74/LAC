@@ -12,7 +12,8 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{{ url("app_index") }}" style="
-                	height: 75px;
+                	vertical-align: middle;
+                	height: 69px;
                 	width: 150px;
                     background-image:url({{ asset("bundles/app/img/logo.svg") }});
     				background-size:     contain;
@@ -24,6 +25,9 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
             	<ul class="nav navbar-nav navbar-left">
+            		<li class="white">
+            			<a><h4>{{ "welcome_message"|trans }}</h4></a>
+            		</li>
                     <!--<li><a href=""></a></li>-->
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -53,10 +57,16 @@
             </div>
             <div id="navbar-footer" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="{{ path("app_license") }}">{{ "site_open_source"|trans }}</a></li>
+                    <li><a class="btn btn-outline-inverse btn-sm" href="{{ path("app_license") }}">{{ "site_open_source"|trans }}</a></li>
                 </ul>
+                
+                {% if mainAssociation is defined and mainAssociation is not null %}
+                    <!-- <ul class="nav navbar-nav" style="float: center! important;">
+                    	<li><a class="btn btn-primary btn-lg" style="margin-top: 20px;" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}" role="button">{{ "who_are_we"|trans }} &raquo;</a></li>
+                    </ul>-->
+                {% endif %}
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{ path("app_admin_index") }}">{{ "members_area"|trans }}</a></li>
+                    <li><a class="btn btn-outline-inverse btn-sm" href="{{ path("app_admin_index") }}">{{ "members_area"|trans }}</a></li>
                 </ul>
             </div><!--/.navbar-collapse -->
         </div>

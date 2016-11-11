@@ -1,5 +1,5 @@
-<div class="col-sm-6 col-md-4">
-    <div class="thumbnail">
+<div class="col-sm-6 col-md-3">
+    <div class="thumbnail" style="padding-bottom: 0px;">
     	{% set picturePath = "" %}
     	
         {% if event.picturePath is not empty %}
@@ -10,16 +10,16 @@
         
 		<a href="{{ url("app_event", {"id": event.id, "name": event.nameForURl}) }}">
             <div class="img" style="
-				background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
-				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(59%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.65))), url('{{ asset(picturePath) }}') no-repeat;
-				background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
-				background: -o-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
-				background: -ms-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
-				background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 59%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
+				background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
+				background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(70%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.65))), url('{{ asset(picturePath) }}') no-repeat;
+				background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
+				background: -o-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
+				background: -ms-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
+				background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.65) 100%), url('{{ asset(picturePath) }}') no-repeat;
 				position: relative;
 				float: center;
 				background-position: 50% 50%;
-				background-size:     contain">
+				background-size:     cover">
 				{# For background-size: contain or cover #}
 				
             	<div style="position: absolute; bottom: 5%;
@@ -31,15 +31,38 @@
         			<span class="white">
                         {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}
                     </span><br/>
-                    <strong class="white">{{ event.name }}</strong>
+                    <strong class="white" style="
+                                      /* Style to limit the number or lines */
+                                      display: block;
+                                      text-overflow: ellipsis;
+                                      word-wrap: break-word;
+                                      overflow: hidden;
+                                      max-height: 1.1em;
+                                      line-height: 1.1em;">{{ event.name }}</strong>
             	</div>
             </div>
         </a>
-        <div class="caption">
-            {% if event.searchVolunteers %}
-            	<a class="glyphicon glyphicon-fire" aria-hidden=true style="color: red;" data-toggle="modal" data-target="#modal_search_volunteers_{{ event.id }}" title="{{ "search_volunteers"|trans }}"></a> 
-        	{% endif %}
-        	{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a>
+        <div class="caption" style="padding-bottom: 0px;">
+        	<table class="table" style="padding: 0px; margin: 0px;">
+            	<tr style="padding: 0px; margin: 0px;">
+            		<td style="padding: 0px; border: none;">
+            			<a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center;">{{ event.association.name }}</a>
+            		</td>
+                    {% if event.searchVolunteers %}
+                    	<td style="padding: 0px; border: none;">
+                        	<span style="font-size: 1.6em; float: right;">
+                        		<a class="glyphicon glyphicon-flag" aria-hidden=true style="color: #ff8f00; cursor: pointer;" data-toggle="modal" data-target="#modal_search_volunteers_{{ event.id }}" title="{{ "search_volunteers"|trans }}"></a>
+                    		</span>
+                		</td>
+            		{% else %}
+                    	<td style="padding: 0px; border: none;">
+                        	<span style="font-size: 1.6em; float: right;">
+                        		<a class="glyphicon glyphicon-flag" aria-hidden=true style="color: #ff8f00; cursor: pointer; visibility: hidden;" data-toggle="modal" data-target="#modal_search_volunteers_{{ event.id }}" title="{{ "search_volunteers"|trans }}"></a>
+                        	</span>
+                		</td>
+                    {% endif %}
+            	</tr>
+        	</table>
         </div>
     </div>
 </div>

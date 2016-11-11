@@ -9,14 +9,12 @@
             <div class="row">
     
                 {% set colors = ["#2ca25f", "#e34a33", "#43a2ca", "#dd1c77"] %}
-    
                 {% for association in associations %}
+    				<!-- {{ colors[loop.index0%(colors|length)] }} -->
     
                     <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail" style="background-color: {{ colors[loop.index0%(colors|length)] }}; height: 200px;">
+                        <div class="thumbnail" style="height: 210px; padding: 0px; background-color: #43a2ca; padding-top: 10px;">
                             {% if association.picture is not empty %}
-                            	<!-- <a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl}) }}"><img src="{{ asset(association.picturePath) }}" title="{{ association.name }}"></a>
-                            -->
                             	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}">
                                     <div class="img-association" style="
                         				background-image: url('{{ asset(association.picturePath) }}');
@@ -26,12 +24,12 @@
                         				background-size:     contain;">
                                     </div>
                                 </a>
-                            	<h4 class="white" style="text-align: center;">{{ association.name }}</h4>
-                            {% else %}
+                            {% endif %}
+                            <div class="caption" style="padding-bottom: 0px;">
                             	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}" style="text-decoration: none;">
                             		<h4 class="white" style="text-align: center;">{{ association.name }}</h4>
                         		</a>
-                            {% endif %}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

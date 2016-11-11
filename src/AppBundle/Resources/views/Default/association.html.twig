@@ -22,6 +22,80 @@
             <h1 class="page-header">{{ "association_unknown"|trans }}</h1>
         {% else %}
 			
+			{% if association.urlVideo is not empty %}
+			
+			
+
+			<div class="row">
+                {% if association.urlVideo is not empty %}
+                    <!--<div class="center">
+                        <iframe width="90%" height="315" src="{{ association.urlVideo }}" frameborder="0" allowfullscreen></iframe>
+                    </div>-->
+    				<video width="700px;" height="100%;" controls style="float: left; display: inline;">
+    					<source src="{{ association.urlVideo }}" type="video/mp4">
+    					{{ "error_video_player"|trans }}
+    				</video>
+                {% endif %}
+        		<p class="center" style="padding-left: 10px;">
+        	        {% if association.picture is not empty %}
+                    	<a href="{{ asset(association.picturePath) }}">
+                    		<img src="{{ asset(association.picturePath) }}" class="fit picture-element img-rounded" style="max-height: 100px;"/>
+                		</a>
+                    {% endif %}
+                			
+                    {% if association.fullAddress is not empty
+                        or association.phone is not empty
+                        or association.website is not empty
+                        or association.urlFacebook is not empty
+                    %}
+                        <ul style="padding-left: 10px;">
+                            {% if association.fullAddress is not empty %}
+        
+                                <li>
+                                    {{ "address_colon"|trans({"%address%": association.fullAddress }) }}
+                                </li>
+                            {% endif %}
+        
+                            {% if association.phone is not empty %}
+                                <li>
+                                    {{ "phone_colon"|trans({"%phone%": association.phone }) }}
+                                </li>
+                            {% endif %}
+        
+                            {% if association.website is not empty %}
+                                <li>
+                                    <a href="{{ association.website }}" target="_blank">{{ "website"|trans }}</a>
+                                </li>
+                            {% endif %}
+        
+                            {% if association.urlFacebook is not empty %}
+                                <li>
+                                    <a href="{{ association.urlFacebook }}" target="_blank">{{ "facebook"|trans }}</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                </p>
+                
+            </div>
+			
+            {% if association.description is not empty %}
+            	<p style="font-family: 'avenir next'; font-size: 1.1em;">
+                    {{ association.description|nl2br }}
+                </p>
+            {% endif %}
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            {% else %}
+			
+			
     		<p class="center">
     	        {% if association.picture is not empty %}
                 	<a href="{{ asset(association.picturePath) }}">
@@ -31,23 +105,31 @@
                 <h3 class="center">{{ association.name }}</h3>
             </p>
 
-            {% if association.urlVideo is not empty %}
-                <div class="center">
-                    <iframe width="90%" height="315" src="{{ association.urlVideo }}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+			<div style="display:inline-block;">
+                {% if association.urlVideo is not empty %}
+                    <!--<div class="center">
+                        <iframe width="90%" height="315" src="{{ association.urlVideo }}" frameborder="0" allowfullscreen></iframe>
+                    </div>-->
+    				
+    				<video width="500px;" height="100%;" controls style="float: left; display: inline;">
+    					<source src="{{ association.urlVideo }}" type="video/mp4">
+    					{{ "error_video_player"|trans }}
+    				</video>
+                {% endif %}
+            </div>
+			
+            {% if association.description is not empty %}
+				<div style="font-family: 'avenir next'; font-size: 1.1em;"
+                    {{ association.description|nl2br }}
                 </div>
             {% endif %}
-
-            {% if association.description is not empty %}
-                <p>
-                    {{ association.description|nl2br }}
-                </p>
-            {% endif %}
-
+        			
             {% if association.fullAddress is not empty
                 or association.phone is not empty
                 or association.website is not empty
                 or association.urlFacebook is not empty
             %}
+            	<div>
                 <h4>{{ "coordinates"|trans }}</h4>
                 <ul>
                     {% if association.fullAddress is not empty %}
@@ -75,6 +157,9 @@
                         </li>
                     {% endif %}
                 </ul>
+                </div>
+            {% endif %}
+            
             {% endif %}
             
             {% if association.documents|length > 0 %}
@@ -96,7 +181,7 @@
                     {% set index = 0 %}
                     {% for event in association.nextEvents %}
 
-                        {% if index%3 == 0 %}
+                        {% if index%4 == 0 %}
 
                             <div class="item {% if index == 0 %}active{% endif %}">
                             <div class="row">
@@ -104,7 +189,7 @@
 
                         {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
 
-                        {% if index%3 == 2 or loop.index >= association.nextEvents|length %}
+                        {% if index%4 == 3 or loop.index >= association.nextEvents|length %}
 
                             </div>
                             </div>
