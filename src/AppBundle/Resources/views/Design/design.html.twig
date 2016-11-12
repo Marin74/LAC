@@ -26,7 +26,15 @@
             <div id="navbar" class="navbar-collapse collapse">
             	<ul class="nav navbar-nav navbar-left">
             		<li class="white">
-            			<a><h4>{{ "welcome_message"|trans }}</h4></a>
+            			<a>
+            				<h4>
+            					{% if association is defined %}
+            						{{ association.name }}
+            					{% else %}
+                                    {{ "welcome_message"|trans }}
+                                {% endif %}
+            				</h4>
+            			</a>
             		</li>
                     <!--<li><a href=""></a></li>-->
                 </ul>

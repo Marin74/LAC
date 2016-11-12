@@ -28,7 +28,7 @@ save: Sauvegarder
 name: Nom
 description: Description
 email: Email
-url_video: Lien de la vidéo
+url_video: Nom de la vidéo
 phone: Téléphone
 street: Rue
 zipCode: Code postal

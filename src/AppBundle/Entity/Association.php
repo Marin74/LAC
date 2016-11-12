@@ -570,6 +570,12 @@ class Association
         return __DIR__.'/../../../web/'.$this->getUploadDir();
     }
 
+    public function getUploadVideoDir()
+    {
+        // Returns the relative path for the twig code
+        return 'upload/video';
+    }
+
     public function getPicturePath()
     {
         // Returns path + filename
@@ -578,6 +584,16 @@ class Association
             return null;
         
         return $this->getUploadDir()."/".$this->getPicture();
+    }
+
+    public function getUrlVideoPath()
+    {
+        // Returns path + filename
+        
+    	if(empty($this->getUrlVideo()))
+    		return null;
+    	
+    	return $this->getUploadVideoDir()."/".$this->getUrlVideo();
     }
 }
 

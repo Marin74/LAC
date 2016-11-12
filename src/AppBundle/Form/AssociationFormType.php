@@ -28,7 +28,7 @@ class AssociationFormType extends AbstractType
             ->add('street',             TextType::class)
             ->add('zipCode',            TextType::class)
             ->add('city',               TextType::class)
-            ->add('urlVideo',           UrlType::class)
+            ->add('urlVideo',           TextType::class)
             ->add('urlFacebook',        UrlType::class)
             ->add('file',               FileType::class)
             ->add('displayed',			CheckboxType::class)
