@@ -229,7 +229,7 @@ class AdminController extends Controller
 		$events = array();
 		
 		foreach($tempEvents as $event) {
-			if($event->getAssociation->isDisplayed())
+			if($event->getAssociation()->isDisplayed())
 				$events[] = $event;
 		}
     	
