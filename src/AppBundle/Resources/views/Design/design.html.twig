@@ -45,7 +45,7 @@
     </div> <!-- /container -->
 
     <footer class="bs-docs-footer navbar navbar-inverse navbar-bottom" style="margin-bottom: 0px;">
-        <div class="container">
+        <div class="container" style="">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-footer" aria-expanded="false" aria-controls="navbar-footer">
                     <span class="sr-only">Toggle navigation</span>
@@ -55,9 +55,9 @@
                 </button>
 
             </div>
-            <div id="navbar-footer" class="navbar-collapse collapse">
+            <div id="navbar-footer" class="navbar-collapse collapse" style="">
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a class="btn btn-outline-inverse btn-sm" href="{{ path("app_license") }}">{{ "site_open_source"|trans }}</a></li>
+                    <li><a class="btn btn-outline-inverse btn-sm" style="border-color: lightgrey;" href="{{ path("app_license") }}">{{ "site_open_source"|trans }}</a></li>
                 </ul>
                 
                 {% if mainAssociation is defined and mainAssociation is not null %}
@@ -66,7 +66,7 @@
                     </ul>-->
                 {% endif %}
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a class="btn btn-outline-inverse btn-sm" href="{{ path("app_admin_index") }}">{{ "members_area"|trans }}</a></li>
+                    <li><a class="btn btn-outline-inverse btn-sm" style="border-color: lightgrey;" href="{{ path("app_admin_index") }}">{{ "members_area"|trans }}</a></li>
                 </ul>
             </div><!--/.navbar-collapse -->
         </div>

@@ -142,5 +142,8 @@ quiz_return: Retour au Quizz
 associations_finded: Les Acteurs qui vous correspondent
 no_association_finded: Pour le moment aucun acteur ne vous correspond.
 error_video_player: Votre navigateur ne supporte pas le lecteur vidéo.
+association_displayed: Visible
+association_undisplayed: Masqué
+display: Afficher
 
 

@@ -23,7 +23,14 @@ class DefaultController extends Controller
             ORDER BY e.startTime ASC'
         )->setParameter('now', new \DateTime());
 
-        $nextEvents = $query->getResult();
+        $tempEvents = $query->getResult();
+        $nextEvents = array();
+        
+        foreach($tempEvents as $event) {
+        	
+        	if($event->getAssociation()->isDisplayed())
+        		$nextEvents[] = $event;
+        }
 
         return $this->render('AppBundle:Default:index.html.twig', array(
             'mainAssociation' => $mainAssociation,
@@ -40,7 +47,7 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $repoAssociation = $em->getRepository("AppBundle:Association");
-        $association = $repoAssociation->find($request->get("id"));
+        $association = $repoAssociation->findOneBy(array("id" => $request->get("id"), "displayed" => true));
 
         return $this->render('AppBundle:Default:association.html.twig', array(
             'association' => $association,
@@ -51,7 +58,7 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $repoAssociation = $em->getRepository("AppBundle:Association");
-        $associations = $repoAssociation->findBy(array(), array("name" => "ASC"));
+        $associations = $repoAssociation->findBy(array("displayed" => true), array("name" => "ASC"));
 
         return $this->render('AppBundle:Default:associations.html.twig', array(
             'associations' => $associations,
@@ -63,6 +70,9 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repoEvent = $em->getRepository("AppBundle:Event");
         $event = $repoEvent->findOneBy(array("id" => $request->get("id"), "published" => true));
+        
+        if(!$event->getAssociation()->isDisplayed())
+        	$event = null;
 
         return $this->render('AppBundle:Default:event.html.twig', array(
             'event' => $event,
@@ -107,7 +117,7 @@ class DefaultController extends Controller
     				
     				foreach($scores as $score) {
     					
-    					if($score->getScore() > 0) {
+    					if($score->getScore() > 0 && $score->getAssociation()->isDisplayed()) {
     						
     						// Add the association if it's not already in the list and add the score
     						if(array_key_exists($score->getAssociation()->getName(), $associationsSelected))

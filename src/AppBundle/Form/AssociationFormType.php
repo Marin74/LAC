@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class AssociationFormType extends AbstractType
 {
@@ -30,6 +31,7 @@ class AssociationFormType extends AbstractType
             ->add('urlVideo',           UrlType::class)
             ->add('urlFacebook',        UrlType::class)
             ->add('file',               FileType::class)
+            ->add('displayed',			CheckboxType::class)
         ;
     }
     

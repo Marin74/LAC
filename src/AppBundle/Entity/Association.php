@@ -108,6 +108,14 @@ class Association
     private $picture;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="displayed", type="boolean", nullable=false)
+     * @Assert\NotNull()
+     */
+    private $displayed = true;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event",mappedBy="association")
      * @OrderBy({"startTime" = "ASC"})
      */
@@ -487,6 +495,16 @@ class Association
     public function setPicture($picture)
     {
         $this->picture = $picture;
+    }
+    
+    public function isDisplayed()
+    {
+    	return $this->displayed;
+    }
+    
+    public function setDisplayed($displayed)
+    {
+    	$this->displayed = $displayed;
     }
 
     public function getOwners()

@@ -225,7 +225,13 @@ class AdminController extends Controller
 			ORDER BY e.startTime ASC'
 		)->setParameter('now', new \DateTime());
 		
-		$events = $query->getResult();
+		$tempEvents = $query->getResult();
+		$events = array();
+		
+		foreach($tempEvents as $event) {
+			if($event->getAssociation->isDisplayed())
+				$events[] = $event;
+		}
     	
     	return $this->render('AppBundle:Admin:calendar.html.twig', array(
     		'events' => $events,

@@ -13,6 +13,7 @@
         <table class="table table-striped">
             <thead>
             <tr>
+            	<th></th>
                 <th>{{ "association"|trans }}</th>
                 <th></th>
                 <th></th>
@@ -21,6 +22,13 @@
             <tbody>
             {% for association in associations %}
                 <tr>
+                	<td>
+                		{% if association.isDisplayed %}
+                			<span class="label label-success" style="text-decoration: none;">{{ "association_displayed"|trans }}</span>
+                		{% else %}
+                			<span class="label label-default" style="text-decoration: none;">{{ "association_undisplayed"|trans }}</span>
+                		{% endif %}
+                	</td>
                     <td><a data-toggle="modal" data-target="#modal_update_{{ association.id }}" id="a_update_{{ association.id }}">{{ association.name }}</a></td>
                     <td>
                         <a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl, "source": "super_admin_associations"}) }}">{{ "consult"|trans }}</a>
@@ -171,6 +179,17 @@
                                 {{ form_errors(formAdd.city) }}
 
                                 {{ form_widget(formAdd.city, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+            
+                            {{ form_label(formAdd.displayed, "display", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+            
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.displayed) }}
+            
+                                {{ form_widget(formAdd.displayed, {'attr': {'class': 'form-control'}}) }}
                             </div>
                         </div>
 
@@ -338,6 +357,17 @@
                                     {{ form_errors(form.city) }}
 
                                     {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                
+                                {{ form_label(form.displayed, "display", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                
+                                <div class="col-sm-10">
+                                    {{ form_errors(form.displayed) }}
+                
+                                    {{ form_widget(form.displayed, {'attr': {'class': 'form-control'}}) }}
                                 </div>
                             </div>
 
