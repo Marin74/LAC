@@ -1,5 +1,5 @@
 :root {
-    --main-color: #43a2ca;
+    --main-color: #00A0E1;
 }
 .center{
     margin: 0 auto;
@@ -95,4 +95,15 @@ body{
 }
 .display-none {
 	display: none;
+}
+.footer{
+	background-image: url('../img/pattern.png');
+	margin-top: 20px;
+	margin-bottom: 0px;
+	width: 100%;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+.btn-outline-inverse:hover{
+	color: var(--main-color);
 }

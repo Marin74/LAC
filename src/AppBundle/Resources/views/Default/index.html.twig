@@ -135,12 +135,6 @@
     {% endif %}
 
     <div id="mapid" class="col-md-12 map fit" style="min-width: 310px;"></div>
-    
-    {% if mainAssociation is not null %}
-        <p class="center">
-        	<a class="btn btn-primary btn-lg" style="margin-top: 20px;" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}" role="button">{{ "who_are_we"|trans }} &raquo;</a>
-        </p>
-    {% endif %}
 {% endblock %}
 
 {% block js %}

@@ -52,31 +52,24 @@
     <div class="container">
     </div> <!-- /container -->
 
-    <footer class="bs-docs-footer navbar navbar-inverse navbar-bottom" style="margin-bottom: 0px;">
+    <footer class="footer" style="">
         <div class="container" style="">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-footer" aria-expanded="false" aria-controls="navbar-footer">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-
-            </div>
-            <div id="navbar-footer" class="navbar-collapse collapse" style="">
-                <ul class="nav navbar-nav navbar-left">
-                    <li><a class="btn btn-outline-inverse btn-sm" style="border-color: lightgrey;" href="{{ path("app_license") }}">{{ "site_open_source"|trans }}</a></li>
-                </ul>
-                
-                {% if mainAssociation is defined and mainAssociation is not null %}
-                    <!-- <ul class="nav navbar-nav" style="float: center! important;">
-                    	<li><a class="btn btn-primary btn-lg" style="margin-top: 20px;" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}" role="button">{{ "who_are_we"|trans }} &raquo;</a></li>
-                    </ul>-->
-                {% endif %}
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a class="btn btn-outline-inverse btn-sm" style="border-color: lightgrey;" href="{{ path("app_admin_index") }}">{{ "members_area"|trans }}</a></li>
-                </ul>
-            </div><!--/.navbar-collapse -->
+        	
+        	<table style="width: 95%; table-layout: fixed;">
+        		<tr>
+        			<td>
+        				<center><a class="btn btn-outline-inverse btn-sm" style="border-color: lightgrey;" href="{{ path("app_license") }}">{{ "site_open_source"|trans }}</a></center>
+        			</td>
+        			<td>
+        				{% if mainAssociation is defined and mainAssociation is not null %}
+                            <center><a class="btn btn-outline-inverse btn-sm" style="border-color: lightgrey;" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}" role="button">{{ "who_are_we"|trans }} &raquo;</a></center>
+                        {% endif %}
+        			</td>
+        			<td>
+        				<center><a class="btn btn-outline-inverse btn-sm" style="border-color: lightgrey;" href="{{ path("app_admin_index") }}">{{ "members_area"|trans }}</a></center>
+        			</td>
+        		</tr>
+        	</table>
         </div>
     </footer>
 

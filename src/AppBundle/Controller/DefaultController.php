@@ -40,7 +40,15 @@ class DefaultController extends Controller
 
     public function licenseAction()
     {
-        return $this->render('AppBundle:Default:license.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name"))
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        
+        return $this->render('AppBundle:Default:license.html.twig', array(
+        	'mainAssociation' => $mainAssociation
+        ));
     }
 
     public function associationAction(Request $request)
@@ -48,9 +56,13 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $association = $repoAssociation->findOneBy(array("id" => $request->get("id"), "displayed" => true));
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name"))
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
 
         return $this->render('AppBundle:Default:association.html.twig', array(
-            'association' => $association,
+        	'mainAssociation' => $mainAssociation,
+            'association' => $association
         ));
     }
 
@@ -59,9 +71,13 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $associations = $repoAssociation->findBy(array("displayed" => true), array("name" => "ASC"));
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name"))
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
 
         return $this->render('AppBundle:Default:associations.html.twig', array(
-            'associations' => $associations,
+        	'mainAssociation' => $mainAssociation,
+            'associations' => $associations
         ));
     }
 
@@ -70,12 +86,17 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repoEvent = $em->getRepository("AppBundle:Event");
         $event = $repoEvent->findOneBy(array("id" => $request->get("id"), "published" => true));
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name"))
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
         
         if(!$event->getAssociation()->isDisplayed())
         	$event = null;
 
         return $this->render('AppBundle:Default:event.html.twig', array(
-            'event' => $event,
+        	'mainAssociation' => $mainAssociation,
+            'event' => $event
         ));
     }
     
@@ -84,9 +105,14 @@ class DefaultController extends Controller
     	$em = $this->getDoctrine()->getManager();
     	$repoQuizCategory = $em->getRepository("AppBundle:QuizCategory");
     	$quizCategories = $repoQuizCategory->findBy(array(), array("order" => "ASC"));
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name"))
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
     
     	return $this->render('AppBundle:Default:quiz.html.twig', array(
-    		'quizCategories' => $quizCategories,
+    		'mainAssociation' => $mainAssociation,
+    		'quizCategories' => $quizCategories
     	));
     }
     
@@ -101,6 +127,9 @@ class DefaultController extends Controller
     	$quizCategoriesNames = array();
     	$associationsSelected = array();
     	$associations = array();
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name"))
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
     	
     	if(!empty($input)) {
     		$names = explode(",", $input);
@@ -143,6 +172,7 @@ class DefaultController extends Controller
     	}
     
     	return $this->render('AppBundle:Default:quiz_result.html.twig', array(
+    		'mainAssociation' => $mainAssociation,
     		'quizCategories'		=> $quizCategories,
     		'quizCategoriesNames'	=> $quizCategoriesNames,
     		'associations'			=> $associations

@@ -17,7 +17,7 @@
         		{% for quizCategory in quizCategories %}
         			<div class="col-sm-6 col-md-4" style="margin-bottom: 10px; padding: 10px;">
         				<center>
-        					<img src="{{ asset("upload/img/quiz/"~quizCategory.name~".svg") }}" id="icon_{{ quizCategory.name }}" style="height: 130px; opacity: 0.5;" onClick="select('{{ quizCategory.name }}');"/>
+        					<img src="{{ asset("upload/img/quiz/"~quizCategory.name~".svg") }}" id="icon_{{ quizCategory.name }}" style="height: 130px; cursor: pointer; opacity: 0.5;" onClick="select('{{ quizCategory.name }}');"/>
         					<h5 id="hint_{{ quizCategory.name }}" style="max-width: 250px; opacity: 0.7; color: black;">{{ quizCategory.name|trans }}</h5>
         				</center>
         			</div>
@@ -27,12 +27,14 @@
         				<div class="clearfix"></div>
         			{% endif %}
         		{% endfor %}
+        		
+    			<div class="col-sm-6 col-md-4" style="margin-bottom: 10px; padding: 10px;">
+    				<center>
+    					<img src="{{ asset("bundles/app/img/quizz-button.svg") }}" onClick="search();" style="height: 130px; cursor: pointer;"/>
+    				</center>
+    			</div>
     		</div>
 		</p>
-		
-		<center>
-			<button class="btn btn-success btn-lg" role="button" onClick="search();">{{ "validate"|trans }}</button>
-		</center>
 		
 		<form method="POST" action="{{ url("app_quiz_result") }}" id="formSearch">
 			<input type="hidden" id="inputCategories" name="categories" value=""/>
