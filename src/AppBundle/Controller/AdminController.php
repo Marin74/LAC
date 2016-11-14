@@ -101,7 +101,7 @@ class AdminController extends Controller
 
         return $this->render('AppBundle:Admin:index.html.twig', array(
             "form" => $form->createView(),
-        	"formDocument" => $form == null ? null: $formDocument->createView(),
+        	"formDocument" => $formDocument == null ? null: $formDocument->createView(),
         ));
     }
 
