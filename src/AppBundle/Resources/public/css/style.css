@@ -1,5 +1,6 @@
 :root {
     --main-color: #00A0E1;
+    --second-main-color: orange;
 }
 .center{
     margin: 0 auto;
@@ -7,6 +8,12 @@
 }
 .main-color{
 	color: var(--main-color);
+}
+.second-main-color{
+	color: var(--second-main-color);
+}
+.bg-second-main-color{
+	background-color: var(--second-main-color);
 }
 .jumbotron h1{
 	color: var(--main-color);

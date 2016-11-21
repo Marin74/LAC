@@ -569,43 +569,51 @@
 			if(city)
 				address += " " + city;
 
-        	// Send request
-        	$.ajax({
-                type: "GET",
-                url: 'http://api-adresse.data.gouv.fr/search/?q='+address,
-                dataType: 'json',
-                success: function(response){
+			if(address === '') {
+				// Remove the loading mode on the submit button
+				$('#'+formName+'_button_submit').button('reset');
+				alert('{{ "no_address"|trans }}');
+			}
+			else {
 
-					// Send a request to the API to get the coordinates (lat/lng) of the place.
-					// An error is displayed if the request fails, if there is no result
-					// or if the places returned don't have a good match score. 
-					
-					if("features" in response
-							&& response["features"].length > 0
-							&& "geometry" in response["features"][0]
-							&& "coordinates" in response["features"][0]["geometry"]
-							&& response["features"][0]["geometry"]["coordinates"].length > 1
-							&& "properties" in response["features"][0]
-							&& "score" in response["features"][0]["properties"]
-							&& response["features"][0]["properties"]["score"] > 0.70
-					){
-						// Set lat/lng in the field and submit the form
-						var coordinates = response["features"][0]["geometry"]["coordinates"];
+	        	// Send request
+	        	$.ajax({
+	                type: "GET",
+	                url: 'http://api-adresse.data.gouv.fr/search/?q='+address,
+	                dataType: 'json',
+	                success: function(response){
 
-						$("#"+formName+" #super_admin_event_form_longitude").val(coordinates[0]);
-						$("#"+formName+" #super_admin_event_form_latitude").val(coordinates[1]);
-
-						$("#"+formName).submit();
-					}
-					else {
-
-						// Remove the loading mode on the submit button
-						$('#'+formName+'_button_submit').button('reset');
+						// Send a request to the API to get the coordinates (lat/lng) of the place.
+						// An error is displayed if the request fails, if there is no result
+						// or if the places returned don't have a good match score. 
 						
-						alert("{{ "error_getting_location"|trans }}");
-					}
-                }
-			});
+						if("features" in response
+								&& response["features"].length > 0
+								&& "geometry" in response["features"][0]
+								&& "coordinates" in response["features"][0]["geometry"]
+								&& response["features"][0]["geometry"]["coordinates"].length > 1
+								&& "properties" in response["features"][0]
+								&& "score" in response["features"][0]["properties"]
+								&& response["features"][0]["properties"]["score"] > 0.70
+						){
+							// Set lat/lng in the field and submit the form
+							var coordinates = response["features"][0]["geometry"]["coordinates"];
+
+							$("#"+formName+" #super_admin_event_form_longitude").val(coordinates[0]);
+							$("#"+formName+" #super_admin_event_form_latitude").val(coordinates[1]);
+
+							$("#"+formName).submit();
+						}
+						else {
+
+							// Remove the loading mode on the submit button
+							$('#'+formName+'_button_submit').button('reset');
+							
+							alert("{{ "error_getting_location"|trans }}");
+						}
+	                }
+				});
+			}
         }
 
 		{% if app.user.association != null %}

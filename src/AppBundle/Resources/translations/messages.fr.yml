@@ -108,8 +108,8 @@ calendar_hint: Le calendrier liste les actions fixées ou prévues par les assoc
 contacts: Contacts
 event_website: "Site internet de l'action"
 welcome_message: Bienvenue sur le site de Liaison des Actions Citoyennes dans le Chablais !
-local_associations: Les Acteurs du Chablais
-interesting_events: Les Actions qui vous motivent
+local_associations: les Acteurs du Chablais
+interesting_events: les Actions qui vous motivent
 quiz: Quizz
 new_quiz_score: Nouveau résultat
 quiz_score: Résultat
@@ -145,5 +145,5 @@ error_video_player: Votre navigateur ne supporte pas le lecteur vidéo.
 association_displayed: Visible
 association_undisplayed: Masqué
 display: Afficher
-
+no_address: Vous devez renseigner une adresse.
 

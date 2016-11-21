@@ -40,7 +40,10 @@ class EventFormType extends AbstractType
                		'class' => 'form-control input-inline form_datetime',
             ]))
             ->add('description',		TextareaType::class)
-            ->add('website',			UrlType::class)
+            ->add('website',			UrlType::class, array(
+            	'required'	=> false
+            	)
+            )
             ->add('place',				TextType::class)
             ->add('street',				TextType::class)
             ->add('zipCode',			TextType::class)
@@ -49,7 +52,10 @@ class EventFormType extends AbstractType
             ->add('longitude',			NumberType::class)
             ->add('file',				FileType::class)
             ->add('free',				CheckboxType::class)
-            ->add('pricing',			TextType::class)
+            ->add('pricing',			TextType::class, array(
+            	'required'	=> false
+            	)
+            )
             ->add('searchVolunteers',	CheckboxType::class)
             ->add('published',			CheckboxType::class)
         ;

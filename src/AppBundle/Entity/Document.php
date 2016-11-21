@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * File
@@ -26,6 +27,7 @@ class Document
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -48,7 +50,12 @@ class Document
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $association;
-
+    
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     */
     private $file;
 
     public function __construct() {

@@ -57,6 +57,7 @@ class SuperAdminEventFormType extends AbstractType
             ))
             ->add('website',        UrlType::class, array(
                 'attr'                      => ['class' => 'form-control',],
+            	'required'					=> false
             ))
             ->add('place',          TextType::class, array(
                 'attr'                      => ['class' => 'form-control',],
@@ -84,6 +85,7 @@ class SuperAdminEventFormType extends AbstractType
             ))
             ->add('pricing',			TextType::class, array(
                 'attr'                      => ['class' => 'form-control',],
+            	'required'					=> false
             ))
             ->add('searchVolunteers',	CheckboxType::class, array(
                 'attr'                      => ['class' => 'form-control',],

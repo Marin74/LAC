@@ -22,15 +22,42 @@ class AssociationFormType extends AbstractType
         $builder
             ->add('name',               TextType::class)
             ->add('description',        TextareaType::class)
-            ->add('website',            UrlType::class)
-            ->add('email',              TextType::class)
-            ->add('phone',              TextType::class)
-            ->add('street',             TextType::class)
-            ->add('zipCode',            TextType::class)
-            ->add('city',               TextType::class)
-            ->add('urlVideo',           TextType::class)
-            ->add('urlFacebook',        UrlType::class)
-            ->add('file',               FileType::class)
+            ->add('website',            UrlType::class, array(
+            		'required'	=> false
+            	)
+            )
+            ->add('email',              TextType::class, array(
+            		'required'	=> false
+            	)
+            )
+            ->add('phone',              TextType::class, array(
+            		'required'	=> false
+            	)
+            )
+            ->add('street',             TextType::class, array(
+            		'required'	=> false
+            	)
+            )
+            ->add('zipCode',            TextType::class, array(
+            		'required'	=> false
+            	)
+            )
+            ->add('city',               TextType::class, array(
+            		'required'	=> false
+            	)
+            )
+            ->add('urlVideo',           TextType::class, array(
+            		'required'	=> false
+            	)
+            )
+            ->add('urlFacebook',        UrlType::class, array(
+            		'required'	=> false
+            	)
+            )
+            ->add('file',               FileType::class, array(
+            		'required'	=> false
+            	)
+            )
             ->add('displayed',			CheckboxType::class)
         ;
     }
