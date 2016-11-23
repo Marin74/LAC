@@ -15,13 +15,15 @@
 
         {% if app.user.association.picture is not empty %}
             <p class="center">
-                <img src="{{ asset(app.user.association.getPicturePath()) }}" title="{{ "picture"|trans }}" />
+                <img src="{{ asset(app.user.association.getPicturePath()) }}" title="{{ "picture"|trans }}" style="max-height: 100px;" />
             </p>
         {% endif %}
 
-        <div class="well well-sm">
-            {{ "association_form_hint"|trans }}
-        </div>
+		<p>
+            <div class="well well-sm">
+                {{ "association_form_hint"|trans }}
+            </div>
+        </p>
 
         <p>
 
