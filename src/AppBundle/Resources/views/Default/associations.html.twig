@@ -7,15 +7,13 @@
         <!-- Wrapper for slides -->
         <p>
             <div class="row">
-    
-                {% set colors = ["#2ca25f", "#e34a33", "#43a2ca", "#dd1c77"] %}
+            	
                 {% for association in associations %}
-    				<!-- {{ colors[loop.index0%(colors|length)] }} -->
-    
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail" style="height: 210px; padding: 0px; background-color: #43a2ca; padding-top: 10px;">
-                            {% if association.picture is not empty %}
-                            	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}">
+    				
+                    <div class="col-sm-6 col-md-3">
+                    	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}" style=" text-decoration: none;">
+                            <div class="thumbnail" style="height: 220px; padding: 0px; background-color: #43a2ca; padding-top: 10px;">
+                                {% if association.picture is not empty %}
                                     <div class="img-association" style="
                         				background-image: url('{{ asset(association.picturePath) }}');
                         				position: relative;
@@ -23,14 +21,12 @@
                         				background-position: 50% 50%;
                         				background-size:     contain;">
                                     </div>
-                                </a>
-                            {% endif %}
-                            <div class="caption" style="padding-bottom: 0px;">
-                            	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}" style="text-decoration: none;">
-                            		<h4 class="white" style="text-align: center;">{{ association.name }}</h4>
-                        		</a>
+                                {% endif %}
+                                <div class="caption" style="padding-bottom: 0px;">
+                                	<h4 class="white" style="text-align: center;">{{ association.name }}</h4>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 {% endfor %}
             </div>
