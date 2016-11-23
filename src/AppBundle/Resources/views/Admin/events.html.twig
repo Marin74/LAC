@@ -580,7 +580,7 @@
 								&& response["features"][0]["geometry"]["coordinates"].length > 1
 								&& "properties" in response["features"][0]
 								&& "score" in response["features"][0]["properties"]
-								&& response["features"][0]["properties"]["score"] > 0.70
+								&& response["features"][0]["properties"]["score"] > 0.60
 						){
 							// Set lat/lng in the field and submit the form
 							var coordinates = response["features"][0]["geometry"]["coordinates"];
