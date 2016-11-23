@@ -23,7 +23,7 @@ class SuperAdminController extends Controller
         $repoEvent = $em->getRepository("AppBundle:Event");
         $newEvent = new Event();
         $formAdd = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $newEvent)->getForm();
-
+        $timezone = $this->getParameter("time_zone");
         $eventIdToUpdate = $request->get("eventId");
         $deleteId = $request->get("deleteId");
 
@@ -68,10 +68,33 @@ class SuperAdminController extends Controller
             }
         }
         
-        $events = $repoEvent->findBy(array(), array("startTime" => "DESC"));
+        $query = $em->createQuery(
+            'SELECT e
+            FROM AppBundle:Event e
+            WHERE e.endTime > :now
+        	AND e.published = true
+            ORDER BY e.startTime ASC'
+        )->setParameter('now', new \DateTime());
+        $events = $query->getResult();
+        
+        $date = new \DateTime();
+        $date->modify("-14 days");
+        
+        $query = $em->createQuery(
+            'SELECT e
+            FROM AppBundle:Event e
+            WHERE e.endTime >= :date
+        	AND e.endTime <= :now
+        	AND e.published = true
+            ORDER BY e.startTime DESC'
+        )->setParameter('date', $date)
+        ->setParameter('now', new \DateTime());
+        $passedEvents = $query->getResult();
+        
+        $allEvents = array_merge($events, $passedEvents);
 
         $forms = array();
-        foreach($events as $event) {
+        foreach($allEvents as $event) {
             $formBuilder = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $event);
 
             $form = $formBuilder->getForm();
@@ -113,9 +136,11 @@ class SuperAdminController extends Controller
         }
 
         return $this->render('AppBundle:SuperAdmin:events.html.twig', array(
-            "formAdd" => $formAdd->createView(),
-            "forms" => $forms,
-            "events" => $events,
+            "formAdd"		=> $formAdd->createView(),
+            "forms"			=> $forms,
+            "events"		=> $events,
+        	"passedEvents"	=> $passedEvents,
+        	"allEvents"		=> $allEvents
         ));
     }
 
