@@ -10,6 +10,9 @@ coordinates: Coordonnées
 website: Site internet
 address_colon: "Adresse : %address%"
 phone_colon: "Tél. : %phone%"
+email_colon: "Email : %email% *"
+email_at_replace: " à "
+email_dot_replace: " point "
 proposed_by: "Proposé par :"
 when: Quand ?
 where: Où ?
@@ -147,3 +150,4 @@ association_undisplayed: Masqué
 display: Afficher
 no_address: Vous devez renseigner une adresse.
 passed_events: Évènements terminés
+email_format_hint: "* Pour éviter le siphonnage de votre adresse mail, celle-ci est notée en toutes lettres : « à » = @ et « point »  = ."

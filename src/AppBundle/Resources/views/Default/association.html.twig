@@ -71,6 +71,10 @@
                                         {% if association.phone is not empty %}
                                             {{ "phone_colon"|trans({"%phone%": association.phone }) }}<br/>
                                         {% endif %}
+                                        
+                                        {% if association.email is not empty %}
+                                            {{ "email_colon"|trans({"%email%": association.email|replace({"@": "email_at_replace"|trans, ".": "email_dot_replace"|trans}) }) }}<br/>
+                                        {% endif %}
                     
                                         {% if association.website is not empty %}
                                             <a href="{{ association.website }}" target="_blank">{{ "website"|trans }}</a><br/>
@@ -102,6 +106,12 @@
             			</li>
             		{% endfor %}
             	</ul>
+            {% endif %}
+			
+            {% if association.email is not empty %}
+            	<div class="well well-sm">
+                    {{ "email_format_hint"|trans }}
+                </div>
             {% endif %}
 
             {% if association.nextEvents|length > 0 %}

@@ -94,7 +94,7 @@
     <script type="application/javascript">
 
     	{% if event is not null %}
-            var map = L.map('mapid').setView([{{ event.latitude }}, {{ event.longitude }}], 11);
+            var map = L.map('mapid').setView([{{ event.latitude }}, {{ event.longitude }}], 15);
     
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
                 maxZoom: 18,

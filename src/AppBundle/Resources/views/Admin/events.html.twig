@@ -260,6 +260,12 @@
                         <div class="modal-body">
 
                             <div id="warning_update_{{ event.id }}"></div>
+							
+                            {% if event.picture is not empty %}
+                                <p class="center">
+                                    <img src="{{ asset(event.getPicturePath()) }}" title="{{ "picture"|trans }}" class="fit picture-form" />
+                                </p>
+                            {% endif %}
 
                             <p>
 
