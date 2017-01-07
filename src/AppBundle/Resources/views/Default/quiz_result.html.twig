@@ -28,29 +28,6 @@
 
 {% block js %}
 <script type="text/javascript">
-    {% for association in associations %}
-
-        {% for score in association.quizScores %}
-    		$("#icon_{{ score.id }}").mouseover(function() {
-    			$("#icon_{{ score.id }}").popover('show')
-        	});
-        
-    		$("#icon_{{ score.id }}").mouseout(function() {
-    			$("#icon_{{ score.id }}").popover('hide')
-        	});
-    	{% endfor %}
-    {% endfor %}
-
-    {% for quizCategory in quizCategories %}
-    	
-		$("#icon_{{ quizCategory.name }}").mouseover(function() {
-			$("#icon_{{ quizCategory.name }}").popover('show')
-    	});
-    
-		$("#icon_{{ quizCategory.name }}").mouseout(function() {
-			$("#icon_{{ quizCategory.name }}").popover('hide')
-    	});
-    {% endfor %}
 </script>
 {% endblock %}
 

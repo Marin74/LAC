@@ -120,11 +120,10 @@ class DefaultController extends Controller
     {
     	$em = $this->getDoctrine()->getManager();
     	$repoQuizCategory = $em->getRepository("AppBundle:QuizCategory");
-    	$repoQuizScores = $em->getRepository("AppBundle:QuizScore");
+    	$repoQuizScore = $em->getRepository("AppBundle:QuizScore");
     	$repoAssociation = $em->getRepository("AppBundle:Association");
     	$input = $request->get("categories");
     	$quizCategories = array();
-    	$quizCategoriesNames = array();
     	$associationsSelected = array();
     	$associations = array();
         $mainAssociation = null;
@@ -140,23 +139,31 @@ class DefaultController extends Controller
     			
     			if($category != null) {
     				$quizCategories[] = $category;
-    				$quizCategoriesNames[] = $category->getName();
+    			}
+    		}
+    		
+    		foreach($repoAssociation->findByDisplayed(true) as $association) {
+    			
+    			$matches = true;
+    			$totalScore = 0;
+    			
+    			foreach($quizCategories as $category) {
     				
-    				$scores = $repoQuizScores->findBy(array("quizCategory" => $category));
-    				
-    				foreach($scores as $score) {
+    				if($matches) {
+						
+    					$score = $repoQuizScore->findOneBy(array("quizCategory" => $category, "association" => $association));
     					
-    					if($score->getScore() > 0 && $score->getAssociation()->isDisplayed()) {
-    						
-    						// Add the association if it's not already in the list and add the score
-    						if(array_key_exists($score->getAssociation()->getName(), $associationsSelected))
-    							$associationsSelected[$score->getAssociation()->getName()] += $score->getScore();
-    						else {
-    							$associationsSelected[$score->getAssociation()->getName()] = $score->getScore();
-    						}
+    					if($score == null || $score->getScore() <= 0) {
+    						$matches = false;
+    					}
+    					else {
+    						$totalScore += $score->getScore();
     					}
     				}
     			}
+    			
+    			if($matches && $totalScore > 0)
+    				$associationsSelected[$association->getName()] = $totalScore;
     		}
     	}
     	
@@ -172,10 +179,9 @@ class DefaultController extends Controller
     	}
     
     	return $this->render('AppBundle:Default:quiz_result.html.twig', array(
-    		'mainAssociation' => $mainAssociation,
-    		'quizCategories'		=> $quizCategories,
-    		'quizCategoriesNames'	=> $quizCategoriesNames,
-    		'associations'			=> $associations
+    		'mainAssociation'	=> $mainAssociation,
+    		'quizCategories'	=> $quizCategories,
+    		'associations'		=> $associations
     	));
     }
 }
