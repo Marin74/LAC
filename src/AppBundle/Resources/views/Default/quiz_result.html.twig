@@ -15,25 +15,7 @@
         <p>
             <div class="row">
                 {% for association in associations %}
-    
-                    <div class="col-sm-6 col-md-3">
-                    	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}" style="text-decoration: none;">
-                            <div class="thumbnail" style="height: 210px; padding: 0px; background-color: #43a2ca; padding-top: 10px;">
-                                {% if association.picture is not empty %}
-                                    <div class="img-association" style="
-                        				background-image: url('{{ asset(association.picturePath) }}');
-                        				position: relative;
-                        				float: center;
-                        				background-position: 50% 50%;
-                        				background-size:     contain;">
-                                    </div>
-                                {% endif %}
-                                <div class="caption" style="padding-bottom: 0px;">
-                                	<h4 class="white" style="text-align: center;">{{ association.name }}</h4>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                    {% include 'AppBundle:Template:association.html.twig' with {'association': association} %}
                 {% endfor %}
             </div>
         </p>
