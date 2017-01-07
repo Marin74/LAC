@@ -13,7 +13,7 @@ phone_colon: "Tél. : %phone%"
 email_colon: "Email : %email% *"
 email_at_replace: " à "
 email_dot_replace: " point "
-proposed_by: "Proposé par :"
+proposed_by: "Ajouté par :"
 when: Quand ?
 where: Où ?
 log: Espace Acteurs
@@ -150,4 +150,4 @@ association_undisplayed: Masqué
 display: Afficher
 no_address: Vous devez renseigner une adresse.
 passed_events: Évènements terminés
-email_format_hint: "* Pour éviter le siphonnage de votre adresse mail, celle-ci est notée en toutes lettres : « à » = @ et « point »  = ."
+email_format_hint: "* Pour éviter le siphonnage de l'adresse email, celle-ci est notée en toutes lettres : « à » = @ et « point »  = ."
