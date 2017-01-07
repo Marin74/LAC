@@ -23,7 +23,6 @@ class SuperAdminController extends Controller
         $repoEvent = $em->getRepository("AppBundle:Event");
         $newEvent = new Event();
         $formAdd = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $newEvent)->getForm();
-        $timezone = $this->getParameter("time_zone");
         $eventIdToUpdate = $request->get("eventId");
         $deleteId = $request->get("deleteId");
 
