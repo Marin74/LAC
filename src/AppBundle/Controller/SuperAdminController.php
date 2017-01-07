@@ -73,7 +73,6 @@ class SuperAdminController extends Controller
             'SELECT e
             FROM AppBundle:Event e
             WHERE e.endTime > :now
-        	AND e.published = true
             ORDER BY e.startTime ASC'
         )->setParameter('now', new \DateTime());
         $events = $query->getResult();
@@ -86,7 +85,6 @@ class SuperAdminController extends Controller
             FROM AppBundle:Event e
             WHERE e.endTime >= :date
         	AND e.endTime <= :now
-        	AND e.published = true
             ORDER BY e.startTime DESC'
         )->setParameter('date', $date)
         ->setParameter('now', new \DateTime());

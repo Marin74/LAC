@@ -58,6 +58,53 @@
                 </tbody>
             </table>
         </div>
+        
+        <h3>{{ "passed_events"|trans }}</h3>
+        
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                	<th></th>
+                    <th>{{ "event"|trans }}</th>
+                    <th>{{ "date"|trans }}</th>
+                    <th>{{ "association"|trans }}</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for event in passedEvents %}
+                    <tr>
+                    	<td>
+                			{% if event.published %}
+                				<span class="label label-success">{{ "event_set"|trans }}</span>
+                			{% else %}
+                				<span class="label label-warning">{{ "planned"|trans }}</span>
+                			{% endif %}
+                    	</td>
+                        <td>
+                        	<a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a>
+                    	</td>
+                        <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
+                        <td>
+                            <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl, "source": "super_admin_events"}) }}">
+                                {{ event.association.name }}
+                            </a>
+                        </td>
+                        <td>
+                        	{% if event.published %}
+                            	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "super_admin_events"}) }}">{{ "consult"|trans }}</a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
 
         {# Form to add event #}
@@ -247,7 +294,7 @@
 
         {# Forms to update events #}
         {% for form in forms %}
-            {% set event = events[loop.index0] %}
+            {% set event = allEvents[loop.index0] %}
 
             <div class="modal fade" id="modal_update_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">

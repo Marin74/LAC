@@ -159,10 +159,35 @@ class AdminController extends Controller
 	                $request->getSession()->getFlashBag()->add('success', $translator->trans("event_deleted"));
 	            }
 	        }
+	        
+	        $query = $em->createQuery(
+	            'SELECT e
+	            FROM AppBundle:Event e
+	            WHERE e.endTime > :now
+	        	AND e.association = :association
+	            ORDER BY e.startTime ASC'
+	        )->setParameter('now', new \DateTime())
+	        ->setParameter('association', $user->getAssociation());
+	        $events = $query->getResult();
+	        
+	        $date = new \DateTime();
+	        $date->modify("-14 days");
+	        
+	        $query = $em->createQuery(
+	            'SELECT e
+	            FROM AppBundle:Event e
+	            WHERE e.endTime >= :date
+	        	AND e.endTime <= :now
+	        	AND e.association = :association
+	            ORDER BY e.startTime DESC'
+	        )->setParameter('date', $date)
+	        ->setParameter('now', new \DateTime())
+	        ->setParameter('association', $user->getAssociation());
+	        $passedEvents = $query->getResult();
+	        
+	        $allEvents = array_merge($events, $passedEvents);
         	
-        	$events = $user->getAssociation()->getEvents();
-        	
-        	foreach($events as $event) {
+        	foreach($allEvents as $event) {
         		$formBuilder = $this->get('form.factory')->createBuilder(EventFormType::class, $event);
         	
         		$form = $formBuilder->getForm();
@@ -178,22 +203,22 @@ class AdminController extends Controller
         	
         					if ($event->getStartTime() > $event->getEndTime())
         						$request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
-        						else {
-        					
-        							// Erase pricing field if it's free
-        							if($event->getFree())
-        								$event->setPricing(null);
-        							
-        							$event->uploadPicture();
-        	
-        							// Save the object event
-        							$em->flush();
-
-        							$formBuilder = $this->get('form.factory')->createBuilder(EventFormType::class, $event);
-        							$form = $formBuilder->getForm();
-        	
-        							$request->getSession()->getFlashBag()->add('success', $translator->trans("event_updated"));
-        						}
+        					else {
+        						
+        						// Erase pricing field if it's free
+        						if($event->getFree())
+        						$event->setPricing(null);
+        						
+        						$event->uploadPicture();
+        						
+        						// Save the object event
+        						$em->flush();
+								
+        						$formBuilder = $this->get('form.factory')->createBuilder(EventFormType::class, $event);
+        						$form = $formBuilder->getForm();
+        						
+        						$request->getSession()->getFlashBag()->add('success', $translator->trans("event_updated"));
+        					}
         				}
         			}
         		}
@@ -205,9 +230,11 @@ class AdminController extends Controller
         }
 
         return $this->render('AppBundle:Admin:events.html.twig', array(
-            "formAdd" => $formAdd->createView(),
-            "forms" => $forms,
-            "events" => $events,
+            "formAdd"		=> $formAdd->createView(),
+            "forms"			=> $forms,
+            "events"		=> $events,
+        	"passedEvents"	=> $passedEvents,
+        	"allEvents"		=> $allEvents
         ));
     }
     
