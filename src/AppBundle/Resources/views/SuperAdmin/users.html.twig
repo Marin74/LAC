@@ -14,8 +14,8 @@
             <tr>
                 <th>{{ "user"|trans }}</th>
                 <th>{{ "association"|trans }}</th>
-                <th>{{ "email"|trans }}</th>
                 <th>{{ "roles"|trans }}</th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -31,14 +31,14 @@
                         {% endif %}
                     </td>
                     <td>
-                        {{ user.email }}
+                        <ul>
+                            {% for role in user.roles %}
+                                <li>{{ role|trans }}</li>
+                            {% endfor %}
+                        </ul>
                     </td>
                     <td>
-                            <ul>
-                                {% for role in user.roles %}
-                                    <li>{{ role|trans }}</li>
-                                {% endfor %}
-                            </ul>
+                        <a data-toggle="modal" data-target="#modal_password_{{ user.id }}" class="label label-default" style="text-decoration: none;">{{ "password"|trans }}</a>
                     </td>
                     <td>
                         <a data-toggle="modal" data-target="#modal_delete_{{ user.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
@@ -87,7 +87,7 @@
     {% for form in forms %}
         {% set user = users[i] %}
 
-        {# Form to update user #}
+        {# Form to update the profile #}
         <div class="modal fade" id="modal_update_{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -117,6 +117,41 @@
 
                     {# Close <form> #}
                     {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+
+        {# Form to update the password #}
+        {% set formPassword = formsPassword[i] %}
+        <div class="modal fade" id="modal_password_{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ "password_change"|trans }}</h4>
+                    </div>
+                    {{ form_start(formPassword, {'attr': {'class': 'form-horizontal'}}) }}
+                    <div class="modal-body">
+
+                        <p>
+                        
+                        	<strong>{{ "user_modified"|trans({"%name%": user.username}) }}</strong>
+
+                            <input type="hidden" name="userIdPassword" value="{{ user.id }}"/>
+
+                            {# General errors of the form #}
+                            {{ form_errors(formPassword) }}
+
+                            {{ form_rest(formPassword) }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                        <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                    </div>
+
+                    {# Close <form> #}
+                    {{ form_end(formPassword) }}
                 </div>
             </div>
         </div>

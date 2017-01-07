@@ -81,6 +81,7 @@ new_user: Nouvel utilisateur
 user_created: L'utilisateur est créé.
 user_updated: L'utilisateur est mis à jour.
 user_deleted: L'utilisateur est supprimé.
+password_updated: Le mot de passe est modifié.
 delete_user_confirmation: 'Êtes-vous sûr de vouloir supprimer l''utilisateur "%name%" ? Il sera effacé définitivement.'
 loading: Chargement...
 error_getting_location: "Position géographique non trouvée. Vérifiez que les coordonnées du lieu sont complètes."
@@ -151,3 +152,5 @@ display: Afficher
 no_address: Vous devez renseigner une adresse.
 passed_events: Évènements terminés
 email_format_hint: "* Pour éviter le siphonnage de l'adresse email, celle-ci est notée en toutes lettres : « à » = @ et « point »  = ."
+password_change: Changement du mot de passe
+user_modified: "Compte : %name%"

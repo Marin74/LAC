@@ -12,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\QuizScore;
 use AppBundle\Form\QuizScoreFormType;
+use AppBundle\Form\ProfileFormType;
+use AppBundle\Form\ChangePasswordFormType;
 
 class SuperAdminController extends Controller
 {
@@ -152,6 +154,7 @@ class SuperAdminController extends Controller
         $formAdd = $this->get('form.factory')->createBuilder(UserFormType::class, $newUser)->getForm();
 
         $userIdToUpdate = $request->get("userId");
+        $userIdToUpdatePassword = $request->get("userIdPassword");
         $deleteId = $request->get("deleteId");
 
         // Add form
@@ -190,8 +193,10 @@ class SuperAdminController extends Controller
         $users = $repoUser->findBy(array(), array("username" => "ASC"));
 
         $forms = array();
+        $formsPassword = array();
         foreach($users as $user) {
-            $formBuilder = $this->get('form.factory')->createBuilder(UserFormType::class, $user);
+        	// Update profile
+            $formBuilder = $this->get('form.factory')->createBuilder(ProfileFormType::class, $user);
 
             $form = $formBuilder->getForm();
 
@@ -215,12 +220,41 @@ class SuperAdminController extends Controller
             $formView = $form->createView();
 
             $forms[] = $formView;
+            
+            // Update password
+            $formBuilder = $this->get('form.factory')->createBuilder(ChangePasswordFormType::class, $user);
+
+            $form = $formBuilder->getForm();
+
+            if ($request->isMethod('POST')) {
+
+                if(!empty($userIdToUpdatePassword) && $userIdToUpdatePassword == $user->getId()) {
+
+                    $form->handleRequest($request);// Set new data into the form
+
+                    if ($form->isValid()) {
+
+                    	$userManager = $this->container->get('fos_user.user_manager');
+                    	$userManager->updateUser($user);
+                        $em->flush();
+
+                        $request->getSession()->getFlashBag()->add('success', $translator->trans("password_updated"));
+                    }
+                    else
+                        $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+                }
+            }
+
+            $formView = $form->createView();
+
+            $formsPassword[] = $formView;
         }
 
         return $this->render('AppBundle:SuperAdmin:users.html.twig', array(
-            "users" => $users,
-            "formAdd" => $formAdd->createView(),
-            "forms" => $forms,
+            "users"			=> $users,
+            "formAdd"		=> $formAdd->createView(),
+            "forms"			=> $forms,
+        	"formsPassword"	=> $formsPassword
         ));
     }
 
