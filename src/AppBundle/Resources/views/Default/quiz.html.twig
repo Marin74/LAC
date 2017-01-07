@@ -28,12 +28,15 @@
         			{% endif %}
         		{% endfor %}
         		
-    			<div class="col-sm-6 col-md-4" style="margin-bottom: 10px; padding: 10px;">
+    			<!--<div class="col-sm-6 col-md-4" style="margin-bottom: 10px; padding: 10px;">
     				<center>
     					<img src="{{ asset("bundles/app/img/quizz-button.svg") }}" onClick="search();" style="height: 130px; cursor: pointer;"/>
     				</center>
-    			</div>
+    			</div>-->
     		</div>
+			<center>
+				<img src="{{ asset("bundles/app/img/quizz-button.svg") }}" onClick="search();" style="height: 130px; cursor: pointer;"/>
+			</center>
 		</p>
 		
 		<form method="POST" action="{{ url("app_quiz_result") }}" id="formSearch">
