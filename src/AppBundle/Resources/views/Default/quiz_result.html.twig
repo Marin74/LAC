@@ -16,7 +16,7 @@
             <div class="row">
                 {% for association in associations %}
     
-                    <div class="col-sm-6 col-md-4">
+                    <div class="col-sm-6 col-md-3">
                     	<a href="{{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}" style="text-decoration: none;">
                             <div class="thumbnail" style="height: 210px; padding: 0px; background-color: #43a2ca; padding-top: 10px;">
                                 {% if association.picture is not empty %}
