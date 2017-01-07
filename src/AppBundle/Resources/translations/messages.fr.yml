@@ -123,14 +123,16 @@ quiz_score_updated: Le résultat est mis à jour.
 quiz_score_deleted: Le résultat est supprimé.
 quiz_category_environment: Agir pour le respect de la nature, limiter les pollutions et dégradations de notre environnement
 quiz_category_environment_hint: Respect de la nature
-quiz_category_share_ideas: Échanger et développer des idées vers un monde et une économie plus justes
-quiz_category_share_ideas_hint: Échanger
+quiz_category_share_ideas: Développer des idées vers un monde et une économie plus justes
+quiz_category_share_ideas_hint: Développer
 quiz_category_help_people: Aider les autres, se mobiliser contre les injustices
 quiz_category_help_people_hint: Injustices
 quiz_category_consumption: Consommer mieux pour promouvoir une production locale/bio/durable
 quiz_category_consumption_hint: Consommer mieux
 quiz_category_international: S'engager dans des actions d'entr'aide à l'international
 quiz_category_international_hint: Entr'aide
+quiz_category_meetings: Favoriser des rencontres multi-culturelles ou inter-générationnelles et des échanges de savoirs et savoir-faire.
+quiz_category_meetings_hint: Favoriser
 quiz_question: Qu'est-ce qui vous intéresse ou vous donne envie d'agir ?
 quiz_hint: Choisissez de une à trois (maximum) des propositions suivantes.
 quiz_hint_2: Une fois votre choix fait, validez et vous obtiendrez la liste des acteurs qui vous correspondent.
