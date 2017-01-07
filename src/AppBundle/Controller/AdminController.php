@@ -17,7 +17,6 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get("translator");
         $repoDocument = $em->getRepository("AppBundle:Document");
-        $appName = $this->container->getParameter("app_name");
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $form = $this->get('form.factory')->createBuilder(AssociationFormType::class, $user->getAssociation())->getForm();
         $formDocument = null;
@@ -26,9 +25,7 @@ class AdminController extends Controller
         $deleteId = $request->get("deleteId");
         
         // If the user is the owner of the admin association, he can add document (other associations can't)
-        if($user->getAssociation() != null
-        		&& !empty($appName)
-        		&& $user->getAssociation()->getName() == $appName) {
+        if($user->getAssociation() != null) {
         	
         	$newDocument = new Document();
         	$newDocument->setAssociation($user->getAssociation());
