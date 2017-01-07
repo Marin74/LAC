@@ -266,9 +266,12 @@
             map.scrollWheelZoom.disable();
     
             var markers = [];
+            var markerClusters = L.markerClusterGroup({
+                showCoverageOnHover: false
+            });
     
             {% for event in association.nextEvents %}
-                var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
+                var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]);
                 marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
 
                 marker.on('mouseover', function (e) {
@@ -282,10 +285,12 @@
                 });
                 
                 markers.push([{{ event.latitude }}, {{ event.longitude }}]);
+                markerClusters.addLayer(marker);
             {% endfor %}
     
             {% if association.nextEvents|length > 1 %}
                 map.fitBounds(markers, { padding: [40, 40] });
+                map.addLayer(markerClusters);
             {% endif %}
         {% endif %}
     </script>
