@@ -157,3 +157,4 @@ email_format_hint: "* Pour éviter le siphonnage de l'adresse email, celle-ci es
 password_change: Changement du mot de passe
 user_modified: "Compte : %name%"
 results: Résultats
+other_quiz_results: Autres Acteurs qui peuvent vous correspondre

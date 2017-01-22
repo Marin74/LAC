@@ -22,10 +22,35 @@
         <p>
             <div class="row">
                 {% for association in associations %}
-                    {% include 'AppBundle:Template:association.html.twig' with {'association': association} %}
+                	{% if loop.index0 < 4 %}
+                        {% include 'AppBundle:Template:association.html.twig' with {'association': association} %}
+                    {% endif %}
                 {% endfor %}
             </div>
         </p>
+        
+    	{% if associations|length > 4 %}
+        <div class=panel-group role=tablist>
+            <div class="panel panel-default">
+                <div class=panel-heading role=tab id=collapseListGroupHeading1 data-toggle=collapse href=#collapseListGroup1 aria-expanded=false aria-controls=collapseListGroup1>
+                    <h4 class=panel-title>
+                        <a class="collapsed" style="text-decoration: none;" role=button><span class="second-main-color">{{ "other_quiz_results"|trans }}</span></a>
+                    </h4>
+                </div>
+                <div id=collapseListGroup1 class="panel-collapse collapse" role=tabpanel aria-labelledby=collapseListGroupHeading1>
+                    <p>
+                    	<div class="row">
+                            {% for association in associations %}
+                            	{% if loop.index0 >= 4 %}
+                                    {% include 'AppBundle:Template:association.html.twig' with {'association': association} %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 		
 		<center>
 			<a class="btn btn-success btn-lg" role="button" href="{{ url("app_quiz") }}">{{ "quiz_return"|trans }}</a>

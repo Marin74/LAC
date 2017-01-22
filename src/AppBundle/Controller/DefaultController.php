@@ -144,25 +144,18 @@ class DefaultController extends Controller
     		
     		foreach($repoAssociation->findByDisplayed(true) as $association) {
     			
-    			$matches = true;
     			$totalScore = 0;
     			
     			foreach($quizCategories as $category) {
     				
-    				if($matches) {
-						
-    					$score = $repoQuizScore->findOneBy(array("quizCategory" => $category, "association" => $association));
+    				$score = $repoQuizScore->findOneBy(array("quizCategory" => $category, "association" => $association));
     					
-    					if($score == null || $score->getScore() <= 0) {
-    						$matches = false;
-    					}
-    					else {
-    						$totalScore += $score->getScore();
-    					}
+    				if($score != null && $score->getScore() > 0) {
+    					$totalScore += $score->getScore();
     				}
     			}
     			
-    			if($matches && $totalScore > 0)
+    			if($totalScore > 0)
     				$associationsSelected[$association->getName()] = $totalScore;
     		}
     	}
