@@ -17,6 +17,18 @@
                 </nav>
             {% endif %}
         {% endif %}
+        
+        <ol class="breadcrumb">
+        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
+        	<li><a href="{{ url("app_associations") }}">{{ "local_associations"|trans }}</a></li>
+        	<li class="active">
+                {% if association is null %}
+        	        {{ "association_unknown"|trans }}
+        	    {% else %}
+        	    	{{ association.name }}
+        	    {% endif %}
+        	</li>
+        </ol>
 
         {% if association is null %}
             <h1 class="page-header">{{ "association_unknown"|trans }}</h1>
@@ -128,8 +140,8 @@
                                 <div class="item {% if loop.index0 == 0 %}active{% endif %}" >
                                 <div class="row">
                             {% endif %}
-        
-                            {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
+							
+                            {% include 'AppBundle:Template:event.html.twig' with {'event': event, 'source': 'association'} %}
         
                             {% if loop.index0%4 == 3 or loop.index >= association.nextEvents|length %}
         
@@ -272,7 +284,7 @@
     
             {% for event in association.nextEvents %}
                 var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]);
-                marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
+                marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
 
                 marker.on('mouseover', function (e) {
                     this.openPopup();
@@ -281,7 +293,7 @@
                     this.closePopup();
                 });
                 marker.on('click', function (e) {
-                    location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}'
+                    location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}'
                 });
                 
                 markers.push([{{ event.latitude }}, {{ event.longitude }}]);
@@ -290,8 +302,9 @@
     
             {% if association.nextEvents|length > 1 %}
                 map.fitBounds(markers, { padding: [40, 40] });
-                map.addLayer(markerClusters);
             {% endif %}
+
+            map.addLayer(markerClusters);
         {% endif %}
     </script>
 {% endblock %}

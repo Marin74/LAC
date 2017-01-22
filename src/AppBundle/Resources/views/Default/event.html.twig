@@ -17,6 +17,18 @@
                 </nav>
             {% endif %}
         {% endif %}
+        
+        <ol class="breadcrumb">
+        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
+        	{% if app.request.query.get("source") == "association" %}
+        		<li><a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></li>
+        	{% endif %}
+            {% if event is null %}
+            	<li class="active">{{ "event_unknown"|trans }}</li>
+            {% else %}
+            	<li class="active">{{ event.name }}</li>
+            {% endif %}
+        </ol>
 
         {% if event is null %}
             <h1 class="page-header">{{ "event_unknown"|trans }}</h1>

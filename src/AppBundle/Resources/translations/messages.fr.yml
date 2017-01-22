@@ -156,3 +156,4 @@ passed_events: Évènements terminés
 email_format_hint: "* Pour éviter le siphonnage de l'adresse email, celle-ci est notée en toutes lettres : « à » = @ et « point »  = ."
 password_change: Changement du mot de passe
 user_modified: "Compte : %name%"
+results: Résultats

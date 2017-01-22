@@ -204,7 +204,8 @@
 
         {% if nextEvents|length > 1 %}
             map.fitBounds(markers, { padding: [40, 40] });
-            map.addLayer(markerClusters);
         {% endif %}
+
+        map.addLayer(markerClusters);
     </script>
 {% endblock %}

@@ -2,6 +2,13 @@
 
 {% block content %}
     <div class="container">
+        
+        <ol class="breadcrumb">
+        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
+        	<li><a href="{{ url("app_quiz") }}">{{ "interesting_events"|trans }}</a></li>
+        	<li class="active">{{ "results"|trans }}</li>
+        </ol>
+        
         <center>
         	<h2 class="second-main-color">{{ "associations_finded"|trans }}</h2>
 		</center>

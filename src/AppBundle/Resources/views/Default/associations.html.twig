@@ -2,6 +2,12 @@
 
 {% block content %}
     <div class="container">
+        
+        <ol class="breadcrumb">
+        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
+        	<li class="active">{{ "local_associations"|trans }}</li>
+        </ol>
+        
         <h1 class="second-main-color center">{{ "local_associations"|trans }}</h1>
 
         <!-- Wrapper for slides -->

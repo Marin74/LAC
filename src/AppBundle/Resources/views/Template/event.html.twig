@@ -1,14 +1,19 @@
 <div class="col-sm-6 col-md-3">
     <div class="thumbnail" style="padding-bottom: 0px;">
-    	{% set picturePath = "" %}
-    	
         {% if event.picturePath is not empty %}
             {% set picturePath = event.picturePath %}
         {% elseif event.association.picturePath is not empty %}
             {% set picturePath = event.association.picturePath %}
         {% endif %}
         
-		<a href="{{ url("app_event", {"id": event.id, "name": event.nameForURl}) }}">
+        {% set eventURL = null %}
+        {% if source is defined %}
+            {% set eventURL = url("app_event", {"id": event.id, "name": event.nameForUrl, "source": source}) %}
+    	{% else %}
+    	    {% set eventURL = url("app_event", {"id": event.id, "name": event.nameForUrl}) %}
+	    {% endif %}
+	    
+		<a href="{{ eventURL }}">
             <div class="img" style="
 				background-image: url('{{ asset(picturePath) }}');
 				position: relative;
@@ -34,6 +39,7 @@
                 			<strong>{{ event.name }}</strong><br/>
                             <span style="font-size: 12px">{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</span><br/>
                         </span>
+                    	
             			<a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center;">{{ event.association.name }}</a>
             		</td>
                     {% if event.searchVolunteers %}

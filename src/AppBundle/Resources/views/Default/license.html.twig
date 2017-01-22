@@ -2,6 +2,12 @@
 
 {% block content %}
     <div class="container">
+        
+        <ol class="breadcrumb">
+        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
+        	<li class="active">{{ "site_open_source"|trans }}</li>
+        </ol>
+        
         <div class="page-header">
             <h1>{{ "site_open_source"|trans }}</h1>
         </div>
