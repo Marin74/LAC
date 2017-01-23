@@ -99,9 +99,9 @@ free: Gratuit
 paying: Payant
 pricing_hint: Prix (si payant)
 pricing: Entrée
-search_volunteers: Besoin de bénévoles
-search_volunteers_hint: Indiquez si vous avez besoin de bénévoles pour organiser l'évènement.
-search_volunteers_message: '%name% recherche des bénévoles pour aider à organiser l''action.'
+search_volunteers: Besoin de volontaires
+search_volunteers_hint: Indiquez si vous avez besoin de volontaires pour organiser l'évènement.
+search_volunteers_message: '%name% recherche des volontaires pour aider à organiser l''action.'
 publish: Publier
 publish_hint: Si vous décochez ce bouton, l'évènement ne sera pas visible par les internautes mais il apparaîtra dans le calendrier commun aux associations. Ils verront que vous allez potentiellement organiser un évènement à cette date.
 event_set: Fixé
