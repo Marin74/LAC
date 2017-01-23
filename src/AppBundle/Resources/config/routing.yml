@@ -7,6 +7,9 @@ app_license:
 app_associations:
     path:     /acteurs
     defaults: { _controller: "AppBundle:Default:associations" }
+app_events:
+    path:     /actions
+    defaults: { _controller: "AppBundle:Default:events" }
 app_quiz:
     path:     /quizz
     defaults: { _controller: "AppBundle:Default:quiz" }

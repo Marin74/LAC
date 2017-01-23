@@ -21,6 +21,7 @@
 	<div class="bg-second-main-color">
         <div class="container" style="margin-top: 10px;">
             <h3 class="white">{{ "next_events"|trans }}</h3>
+            <a href="{{ url("app_events") }}" style="color: white;">{{ "show_all_events"|trans }}</a>
         </div>
     
         {% if nextEvents|length == 0 %}

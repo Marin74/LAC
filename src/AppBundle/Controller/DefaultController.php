@@ -100,6 +100,40 @@ class DefaultController extends Controller
         ));
     }
     
+    public function eventsAction()
+    {
+    	$em = $this->getDoctrine()->getManager();
+    	$repoAssociation = $em->getRepository("AppBundle:Association");
+    	
+    	$query = $em->createQuery(
+    		'SELECT e
+            FROM AppBundle:Event e
+            WHERE e.endTime > :now
+    		AND e.published = :published
+            ORDER BY e.startTime ASC'
+		)
+    	->setParameter('now', new \DateTime())
+		->setParameter('published', true);
+		$tempEvents = $query->getResult();
+    	
+    	$events = array();
+    	
+    	foreach($tempEvents as $event) {
+    		if($event->getAssociation()->isDisplayed())
+    			$events[] = $event;
+    	}
+    	
+    	$mainAssociation = null;
+    	if($this->container->hasParameter("app_name"))
+    		$mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+    
+    	return $this->render('AppBundle:Default:events.html.twig', array(
+    			'mainAssociation'	=> $mainAssociation,
+    			'events'			=> $events
+    		)
+    	);
+    }
+    
     public function quizAction(Request $request)
     {
     	$em = $this->getDoctrine()->getManager();

@@ -26,7 +26,7 @@ come_back_to_homepage: Retour au site
 my_association: Mon groupe
 members_area: Espace Acteurs
 no_association_assigned: Aucun groupe ne vous est affecté.
-events: Évènements
+events: Actions
 save: Sauvegarder
 name: Nom
 description: Description
@@ -41,10 +41,10 @@ general: Général
 association_form_hint: Toutes les informations ci-dessous seront publiées sur le site.
 association_updated: Les informations ont été mises à jour.
 error_field: Un des champs est incorrect.
-event_created: L'évènement est créé.
-event_updated: L'évènement est mis à jour.
-new_event: Nouvel évènement
-event: Évènement
+event_created: L'action est créée.
+event_updated: L'action est mise à jour.
+new_event: Nouvelle action
+event: Action
 start: Début
 end: Fin
 place: Lieu
@@ -61,7 +61,7 @@ associations: Acteurs
 select_association: Sélectionner un groupe
 association: Groupe
 delete: Supprimer
-delete_event_confirmation: 'Êtes-vous sûr de vouloir supprimer l''évènement "%name%" ? Il sera effacé définitivement.'
+delete_event_confirmation: 'Êtes-vous sûr de vouloir supprimer l''action "%name%" ? Elle sera effacée définitivement.'
 cancel: Annuler
 association_deleted: Le groupe est supprimé.
 delete_association_confirmation: 'Êtes-vous sûr de vouloir supprimer le groupe "%name%" ? Il sera effacé définitivement.'
@@ -94,16 +94,16 @@ document_added: Le document est ajouté.
 document_form_hint: Les documents peuvent être téléchargés par les internautes quand ils consultent la page du groupe.
 delete_document_confirmation: 'Êtes-vous sûr de vouloir supprimer le document "%name%" ? Il sera effacé définitivement.'
 document_deleted: Le document est supprimé.
-event_deleted: 'L''évènement est supprimé.'
+event_deleted: 'L''action est supprimée.'
 free: Gratuit
 paying: Payant
 pricing_hint: Prix (si payant)
 pricing: Entrée
 search_volunteers: Besoin de volontaires
-search_volunteers_hint: Indiquez si vous avez besoin de volontaires pour organiser l'évènement.
+search_volunteers_hint: Indiquez si vous avez besoin de volontaires pour organiser l'action.
 search_volunteers_message: '%name% recherche des volontaires pour aider à organiser l''action.'
 publish: Publier
-publish_hint: Si vous décochez ce bouton, l'évènement ne sera pas visible par les internautes mais il apparaîtra dans le calendrier commun aux associations. Ils verront que vous allez potentiellement organiser un évènement à cette date.
+publish_hint: Si vous décochez ce bouton, l'action ne sera pas visible par les internautes mais il apparaîtra dans le calendrier commun aux associations. Ils verront que vous allez potentiellement organiser une action à cette date.
 event_set: Fixé
 planned: Prévu
 calendar: Calendrier
@@ -152,9 +152,11 @@ association_displayed: Visible
 association_undisplayed: Masqué
 display: Afficher
 no_address: Vous devez renseigner une adresse.
-passed_events: Évènements terminés
+passed_events: Actions terminées
 email_format_hint: "* Pour éviter le siphonnage de l'adresse email, celle-ci est notée en toutes lettres : « à » = @ et « point »  = ."
 password_change: Changement du mot de passe
 user_modified: "Compte : %name%"
 results: Résultats
 other_quiz_results: Autres Acteurs qui peuvent vous correspondre
+the_events: les Actions
+show_all_events: Voir toutes les actions

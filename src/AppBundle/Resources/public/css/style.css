@@ -114,3 +114,10 @@ body{
 .btn-outline-inverse:hover{
 	color: var(--main-color);
 }
+
+.marker-cluster-small{
+	background-color: rgba(91, 197, 255, 0.6);
+}
+.marker-cluster-small div{
+	background-color: rgba(93, 173, 255, 0.6);
+}
