@@ -11,8 +11,8 @@ website: Site internet
 address_colon: "Adresse : %address%"
 phone_colon: "Tél. : %phone%"
 email_colon: "Email : %email% *"
-email_at_replace: " à "
-email_dot_replace: " point "
+email_at_replace: " CHEZ "
+email_dot_replace: " POINT "
 proposed_by: "Ajouté par :"
 when: Quand ?
 where: Où ?
@@ -153,7 +153,7 @@ association_undisplayed: Masqué
 display: Afficher
 no_address: Vous devez renseigner une adresse.
 passed_events: Actions terminées
-email_format_hint: "* Pour éviter le siphonnage de l'adresse email, celle-ci est notée en toutes lettres : « à » = @ et « point »  = ."
+email_format_hint: "* Pour éviter le siphonnage de l'adresse email : « CHEZ » = @ et « POINT »  = ."
 password_change: Changement du mot de passe
 user_modified: "Compte : %name%"
 results: Résultats

@@ -97,6 +97,12 @@
                                         {% endif %}
                                     </address>
                 				</p>
+                                
+                                {% if association.email is not empty %}
+                                	<div class="well well-sm">
+                                        {{ "email_format_hint"|trans }}
+                                    </div>
+                                {% endif %}
             				</div>
                         {% endif %}
             		</div>
@@ -118,12 +124,6 @@
             			</li>
             		{% endfor %}
             	</ul>
-            {% endif %}
-			
-            {% if association.email is not empty %}
-            	<div class="well well-sm">
-                    {{ "email_format_hint"|trans }}
-                </div>
             {% endif %}
 
             {% if association.nextEvents|length > 0 %}
