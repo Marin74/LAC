@@ -25,3 +25,4 @@ parameters:
     image_folder_association:   ~
     image_folder_event:         ~
     locale:                     fr_FR
+    piwik_url:                  ~

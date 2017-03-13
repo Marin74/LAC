@@ -45,6 +45,7 @@ twig:
         url_source_code: "%url_source_code%"
         time_zone: "%time_zone%"
         locale: "%locale%"
+        piwik_url: "%piwik_url%"
 
 # Doctrine Configuration
 doctrine:
