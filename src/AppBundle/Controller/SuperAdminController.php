@@ -23,13 +23,46 @@ class SuperAdminController extends Controller
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get("translator");
         $repoEvent = $em->getRepository("AppBundle:Event");
-        $newEvent = new Event();
-        $formAdd = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $newEvent)->getForm();
-        $eventIdToUpdate = $request->get("eventId");
+        $action = $request->get("action");
+        $eventId = $request->get("eventId");
         $deleteId = $request->get("deleteId");
+        $isDuplicatingEvent = false;
+        
+        $newEvent = new Event();
+        
+        if(!empty($action) && $action == "duplicate" && !empty($eventId)) {
+        	// Duplicate an action
+        	
+        	$eventToDuplicate = $repoEvent->find($eventId);
+        	
+        	if($eventToDuplicate != null) {
+        		$isDuplicatingEvent = true;
+        		
+        		$newEvent->setAssociation($eventToDuplicate->getAssociation());
+        		$newEvent->setCity($eventToDuplicate->getCity());
+        		$newEvent->setDescription($eventToDuplicate->getDescription());
+        		$newEvent->setEndTime($eventToDuplicate->getEndTime());
+        		$newEvent->setFile($eventToDuplicate->getFile());
+        		$newEvent->setFree($eventToDuplicate->getFree());
+        		$newEvent->setLatitude($eventToDuplicate->getLatitude());
+        		$newEvent->setLongitude($eventToDuplicate->getLongitude());
+        		$newEvent->setName($eventToDuplicate->getName());
+        		$newEvent->setPicture($eventToDuplicate->getPicture());
+        		$newEvent->setPlace($eventToDuplicate->getPlace());
+        		$newEvent->setPricing($eventToDuplicate->getPricing());
+        		$newEvent->setPublished($eventToDuplicate->isPublished());
+        		$newEvent->setSearchVolunteers($eventToDuplicate->getSearchVolunteers());
+        		$newEvent->setStartTime($eventToDuplicate->getStartTime());
+        		$newEvent->setStreet($eventToDuplicate->getStreet());
+        		$newEvent->setWebsite($eventToDuplicate->getWebsite());
+        		$newEvent->setZipCode($eventToDuplicate->getZipCode());
+        	}
+        }
+        
+        $formAdd = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $newEvent)->getForm();
 
         // Add form
-        if ($request->isMethod('POST') && empty($eventIdToUpdate)) {
+        if ($request->isMethod('POST') && empty($action) && empty($deleteId)) {
 
             $formAdd->handleRequest($request);
 
@@ -100,7 +133,7 @@ class SuperAdminController extends Controller
 
             if ($request->isMethod('POST')) {
 
-                if(!empty($eventIdToUpdate) && $eventIdToUpdate == $event->getId()) {
+                if(!empty($action) && $action == "update" && !empty($eventId) && $eventId == $event->getId()) {
 
                     $form->handleRequest($request);// Set new data into the form
 
@@ -135,11 +168,12 @@ class SuperAdminController extends Controller
         }
 
         return $this->render('AppBundle:SuperAdmin:events.html.twig', array(
-            "formAdd"		=> $formAdd->createView(),
-            "forms"			=> $forms,
-            "events"		=> $events,
-        	"passedEvents"	=> $passedEvents,
-        	"allEvents"		=> $allEvents
+            "formAdd"				=> $formAdd->createView(),
+            "forms"					=> $forms,
+            "events"				=> $events,
+        	"passedEvents"			=> $passedEvents,
+        	"allEvents"				=> $allEvents,
+        	"isDuplicatingEvent"	=> $isDuplicatingEvent
         ));
     }
 

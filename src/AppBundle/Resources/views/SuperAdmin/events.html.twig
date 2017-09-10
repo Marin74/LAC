@@ -10,7 +10,10 @@
 
 {% block content %}
     <p>
-        <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_event"|trans }}</a>
+        <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_event"|trans }}</a> 
+        {% if events|length > 0 %}
+        	<a id="duplicateButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_duplicate">{{ "duplicate"|trans }}</a>
+        {% endif %}
     </p>
 
     <div class="table-responsive">
@@ -105,6 +108,37 @@
         </table>
     </div>
 
+
+	{# Form to duplicate an event #}
+	{% if events|length > 0 %}
+        <div class="modal fade" id="modal_duplicate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ "duplicate_event"|trans }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                        	<form method="POST">
+                        		<input type="hidden" name="action" value="duplicate" />
+                        		
+                        		<select name="eventId" class="form-control" onchange="this.form.submit()">
+                        			<option value=""></option>
+                        			{% for event in events %}
+                        				<option value="{{ event.id }}">{{ event.name }}</option>
+                        			{% endfor %}
+                        		</select>
+                        	</form>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     {# Form to add event #}
     <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -322,6 +356,7 @@
 
                         <p>
 
+                            <input type="hidden" name="action" value="update"/>
                             <input type="hidden" name="eventId" value="{{ event.id }}"/>
 
                             {# General errors of the form #}
@@ -535,6 +570,10 @@
 
         $(".form_datetime").datetimepicker({format: 'dd-mm-yyyy hh:ii', language: 'fr', autoclose: true});
 
+        {% if isDuplicatingEvent %}
+        	$("#modal_add").modal("show");
+        {% endif %}
+
         {# Open a modal dialog if there is a error with a form #}
         {% set i = 0 %}
         {% for form in forms %}
@@ -600,71 +639,82 @@
             // Set submit button in loading mode
 			$('#'+formName+'_button_submit').button('loading');
 
-            // Get address
-			var address = '';
-
-			var place = $("#"+formName+" #super_admin_event_form_place").val().trim();
-			var street = $("#"+formName+" #super_admin_event_form_street").val().trim();
-			var zipCode = $("#"+formName+" #super_admin_event_form_zipCode").val().trim();
-			var city = $("#"+formName+" #super_admin_event_form_city").val().trim();
-			
-			if(street) {
-				address = street;
-			}
-			else if(place) {
-				address = place;
-			}
-
-			if(zipCode)
-				address += " " + zipCode;
-			if(city)
-				address += " " + city;
-
-			if(address === '') {
-				// Remove the loading mode on the submit button
-				$('#'+formName+'_button_submit').button('reset');
-				alert('{{ "no_address"|trans }}');
-			}
-			else {
-
-	        	// Send request
-	        	$.ajax({
-	                type: "GET",
-	                url: 'http://api-adresse.data.gouv.fr/search/?q='+address,
-	                dataType: 'json',
-	                success: function(response){
-
-						// Send a request to the API to get the coordinates (lat/lng) of the place.
-						// An error is displayed if the request fails, if there is no result
-						// or if the places returned don't have a good match score. 
-						
-						if("features" in response
-								&& response["features"].length > 0
-								&& "geometry" in response["features"][0]
-								&& "coordinates" in response["features"][0]["geometry"]
-								&& response["features"][0]["geometry"]["coordinates"].length > 1
-								&& "properties" in response["features"][0]
-								&& "score" in response["features"][0]["properties"]
-								&& response["features"][0]["properties"]["score"] > 0.60
-						){
-							// Set lat/lng in the field and submit the form
-							var coordinates = response["features"][0]["geometry"]["coordinates"];
-
-							$("#"+formName+" #super_admin_event_form_longitude").val(coordinates[0]);
-							$("#"+formName+" #super_admin_event_form_latitude").val(coordinates[1]);
-
-							$("#"+formName).submit();
-						}
-						else {
-
-							// Remove the loading mode on the submit button
-							$('#'+formName+'_button_submit').button('reset');
-							
-							alert("{{ "error_getting_location"|trans }}");
-						}
-	                }
-				});
-			}
+            // If we duplicate an event, we don't search again the location (because we already have it)
+			{% if isDuplicatingEvent %}
+				if(formName == "form_add") {
+	        		$("#"+formName).submit();
+				}
+				else
+            {% else %}
+            	if(true)
+    		{% endif %}
+        	{
+                // Get address
+    			var address = '';
+    
+    			var place = $("#"+formName+" #super_admin_event_form_place").val().trim();
+    			var street = $("#"+formName+" #super_admin_event_form_street").val().trim();
+    			var zipCode = $("#"+formName+" #super_admin_event_form_zipCode").val().trim();
+    			var city = $("#"+formName+" #super_admin_event_form_city").val().trim();
+    			
+    			if(street) {
+    				address = street;
+    			}
+    			else if(place) {
+    				address = place;
+    			}
+    
+    			if(zipCode)
+    				address += " " + zipCode;
+    			if(city)
+    				address += " " + city;
+    
+    			if(address === '') {
+    				// Remove the loading mode on the submit button
+    				$('#'+formName+'_button_submit').button('reset');
+    				alert('{{ "no_address"|trans }}');
+    			}
+    			else {
+    
+    	        	// Send request
+    	        	$.ajax({
+    	                type: "GET",
+    	                url: 'http://api-adresse.data.gouv.fr/search/?q='+address,
+    	                dataType: 'json',
+    	                success: function(response){
+    
+    						// Send a request to the API to get the coordinates (lat/lng) of the place.
+    						// An error is displayed if the request fails, if there is no result
+    						// or if the places returned don't have a good match score. 
+    						
+    						if("features" in response
+    								&& response["features"].length > 0
+    								&& "geometry" in response["features"][0]
+    								&& "coordinates" in response["features"][0]["geometry"]
+    								&& response["features"][0]["geometry"]["coordinates"].length > 1
+    								&& "properties" in response["features"][0]
+    								&& "score" in response["features"][0]["properties"]
+    								&& response["features"][0]["properties"]["score"] > 0.60
+    						){
+    							// Set lat/lng in the field and submit the form
+    							var coordinates = response["features"][0]["geometry"]["coordinates"];
+    
+    							$("#"+formName+" #super_admin_event_form_longitude").val(coordinates[0]);
+    							$("#"+formName+" #super_admin_event_form_latitude").val(coordinates[1]);
+    
+    							$("#"+formName).submit();
+    						}
+    						else {
+    
+    							// Remove the loading mode on the submit button
+    							$('#'+formName+'_button_submit').button('reset');
+    							
+    							alert("{{ "error_getting_location"|trans }}");
+    						}
+    	                }
+    				});
+    			}
+    		}
         }
 
 		{% if app.user.association != null %}

@@ -26,10 +26,10 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li class="{% if app.request.attributes.get('_route') == "app_admin_calendar" %}active{% endif %}"><a href="{{ url("app_admin_calendar") }}">{{ "calendar"|trans }}</a></li>
+                    <li class="{% if app.request.attributes.get('_route') == "app_admin_index" %}active{% endif %}"><a href="{{ url("app_admin_index") }}">{{ "calendar"|trans }}</a></li>
                     {% if app.user.association != null %}
                     	<li class="{% if app.request.attributes.get('_route') == "app_admin_events" %}active{% endif %}"><a href="{{ url("app_admin_events") }}">{{ "events"|trans }}</a></li>
-                    	<li class="{% if app.request.attributes.get('_route') == "app_admin_index" %}active{% endif %}"><a href="{{ url("app_admin_index") }}">{{ "my_association"|trans }}</a></li>
+                    	<li class="{% if app.request.attributes.get('_route') == "app_admin_association" %}active{% endif %}"><a href="{{ url("app_admin_association") }}">{{ "my_association"|trans }}</a></li>
                 	{% endif %}
                 </ul>
                 {% if is_granted("ROLE_ADMIN") %}
