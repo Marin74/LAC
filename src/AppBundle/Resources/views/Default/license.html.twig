@@ -1,5 +1,9 @@
 {% extends 'AppBundle:Design:design.html.twig' %}
 
+{% block title %}
+	{{ "site_open_source"|trans }} - {{ parent() }}
+{% endblock %}
+
 {% block content %}
     <div class="container">
         

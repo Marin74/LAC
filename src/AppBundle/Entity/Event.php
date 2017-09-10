@@ -233,6 +233,7 @@ class Event
             $name = str_replace("ö", "o", $name);
             $name = str_replace("ù", "u", $name);
             $name = str_replace("ü", "u", $name);
+            $name = str_replace("ù", "u", $name);
             $name = str_replace("î", "i", $name);
             $name = str_replace("ï", "i", $name);
             $name = str_replace("ç", "c", $name);
@@ -251,11 +252,11 @@ class Event
             $name = str_replace("Ö", "O", $name);
             $name = str_replace("Ù", "U", $name);
             $name = str_replace("Ü", "U", $name);
-            $name = str_replace("Î", "i", $name);
-            $name = str_replace("Ï", "i", $name);
-            $name = str_replace("Ç", "c", $name);
-            $name = str_replace("Æ", "ae", $name);
-            $name = str_replace("Œ", "oe", $name);
+            $name = str_replace("Î", "I", $name);
+            $name = str_replace("Ï", "I", $name);
+            $name = str_replace("Ç", "C", $name);
+            $name = str_replace("Æ", "AE", $name);
+            $name = str_replace("Œ", "OE", $name);
             
             while(strpos($name, "--") !== false) {
             	

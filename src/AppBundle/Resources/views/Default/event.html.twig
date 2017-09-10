@@ -1,5 +1,14 @@
 {% extends 'AppBundle:Design:design.html.twig' %}
 
+{% block title %}
+	{% if event is null %}
+		{{ "event_unknown"|trans }}
+	{% else %}
+		{{ event.name }}
+	{% endif %}
+	 - {{ parent() }}
+{% endblock %}
+
 {% block content %}
     <div class="container">
         {% if app.request.query.has("source") %}
@@ -55,11 +64,11 @@
             
             <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
     
-            {% if event.website is not empty %}
-                <p><a href="{{ event.website }}" target="_blank">{{ "website"|trans }}</a></p>
-            {% endif %}
+            <p style="font-family: 'avenir next'; font-size: 1.1em; margin-top: 20px; max-width: 1000px;">{{ event.description|nl2br }}</p>
     
-            <p style="font-family: 'avenir next'; font-size: 1.1em; margin-top: 20px; margin-bottom: 20px; max-width: 1000px;">{{ event.description|nl2br }}</p>
+            {% if event.website is not empty %}
+                <p style="margin-bottom: 20px;"><a href="{{ event.website }}" target="_blank">{{ "read_more"|trans }}</a></p>
+            {% endif %}
     
             <h4>{{ "when"|trans }}</h4>
             <p>

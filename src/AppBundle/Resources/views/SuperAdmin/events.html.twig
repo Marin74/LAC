@@ -1,6 +1,10 @@
 {% extends "AppBundle:Design:design_admin.html.twig" %}
 
 {% block title %}
+    {{ "administration"|trans }} - {{ "events"|trans }} - {{ parent() }}
+{% endblock %}
+
+{% block page_title %}
     {{ "events"|trans }}
 {% endblock %}
 

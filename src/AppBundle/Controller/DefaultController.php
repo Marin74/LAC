@@ -62,8 +62,7 @@ class DefaultController extends Controller
 
         return $this->render('AppBundle:Default:association.html.twig', array(
         	'mainAssociation'	=> $mainAssociation,
-            'association'		=> $association,
-        	'title'				=> $association->getName()
+            'association'		=> $association
         ));
     }
 
@@ -92,13 +91,12 @@ class DefaultController extends Controller
         if($this->container->hasParameter("app_name"))
             $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
         
-        if(!$event->getAssociation()->isDisplayed())
+        if($event != null && !$event->getAssociation()->isDisplayed())
         	$event = null;
 
         return $this->render('AppBundle:Default:event.html.twig', array(
         	'mainAssociation'	=> $mainAssociation,
-            'event'				=> $event,
-        	'title'				=> $event->getName()
+            'event'				=> $event
         ));
     }
     

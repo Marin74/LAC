@@ -1,7 +1,11 @@
 {% extends "AppBundle:Design:design_admin.html.twig" %}
 
 {% block title %}
-{{ "calendar_of_events_planned"|trans }}
+	{{ "administration"|trans }} - {{ "calendar_of_events_planned"|trans }} - {{ parent() }}
+{% endblock %}
+
+{% block page_title %}
+    {{ "calendar_of_events_planned"|trans }}
 {% endblock %}
 
 {% block content %}

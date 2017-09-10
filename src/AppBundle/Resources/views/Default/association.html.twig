@@ -1,5 +1,14 @@
 {% extends 'AppBundle:Design:design.html.twig' %}
 
+{% block title %}
+	{% if association is null %}
+		{{ "association_unknown"|trans }}
+	{% else %}
+		{{ association.name }}
+	{% endif %}
+	 - {{ parent() }}
+{% endblock %}
+
 {% block content %}
     <div class="container">
         {% if app.request.query.has("source") %}

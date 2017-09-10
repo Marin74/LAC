@@ -1,5 +1,9 @@
 {% extends "AppBundle:Design:design.html.twig" %}
 
+{% block title %}
+	{{ "the_events"|trans }} - {{ parent() }}
+{% endblock %}
+
 {% block content %}
     <div class="container">
         

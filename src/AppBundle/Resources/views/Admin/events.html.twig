@@ -1,6 +1,16 @@
 {% extends "AppBundle:Design:design_admin.html.twig" %}
 
 {% block title %}
+	{{ "administration"|trans }} - 
+    {% if app.user.association is null %}
+        {{ "no_association_assigned"|trans }}
+    {% else %}
+        {{ "events"|trans }}
+    {% endif %}
+     - {{ parent() }}
+{% endblock %}
+
+{% block page_title %}
     {% if app.user.association is null %}
         {{ "no_association_assigned"|trans }}
     {% else %}

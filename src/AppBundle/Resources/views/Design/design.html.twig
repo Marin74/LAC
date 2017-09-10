@@ -28,7 +28,7 @@
             		<li class="white">
             			<a>
             				<h4>
-            					{% if association is defined %}
+            					{% if association is defined and association is not null %}
             						{{ association.name }}
             					{% else %}
                                     {{ "welcome_message"|trans }}
