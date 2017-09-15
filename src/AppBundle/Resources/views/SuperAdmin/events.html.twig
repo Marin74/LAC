@@ -135,6 +135,10 @@
                 <div class="modal-body">
 
                     <div id="warning_add"></div>
+                    
+                    {% if eventToDuplicateId is defined %}
+                    	<input type="hidden" name="eventToDuplicateId" value="{{ eventToDuplicateId }}"/>
+                    {% endif %}
 
                     <p>
 

@@ -17,7 +17,6 @@ use AppBundle\Form\ChangePasswordFormType;
 
 class SuperAdminController extends Controller
 {
-
     public function eventsAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -26,7 +25,9 @@ class SuperAdminController extends Controller
         $action = $request->get("action");
         $eventId = $request->get("eventId");
         $deleteId = $request->get("deleteId");
+        $eventToDuplicateId = $request->get("eventToDuplicateId");
         $isDuplicatingEvent = false;
+        $eventToDuplicate = null;
         
         $newEvent = new Event();
         
@@ -81,6 +82,15 @@ class SuperAdminController extends Controller
                     
                     $newEvent->uploadPicture();
                     $em->flush();
+                    
+                    if(!empty($eventToDuplicateId) && empty($newEvent->getPicture())) {
+                    	$tempEvent = $repoEvent->find($eventToDuplicateId);
+                    	
+                    	if($tempEvent != null) {
+                    		$newEvent->setPicture($tempEvent->getPicture());
+                    		$em->flush();
+                    	}
+                    }
 
                     $newEvent = new Event();
                     $formAdd = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $newEvent)->getForm();
@@ -166,15 +176,21 @@ class SuperAdminController extends Controller
             
             $forms[] = $formView;
         }
-
-        return $this->render('AppBundle:SuperAdmin:events.html.twig', array(
+        
+        $params =  array(
             "formAdd"				=> $formAdd->createView(),
             "forms"					=> $forms,
             "events"				=> $events,
         	"passedEvents"			=> $passedEvents,
         	"allEvents"				=> $allEvents,
         	"isDuplicatingEvent"	=> $isDuplicatingEvent
-        ));
+        );
+        
+        if($eventToDuplicate != null) {
+        	$params["eventToDuplicateId"] = $eventToDuplicate->getId();
+        }
+
+        return $this->render('AppBundle:SuperAdmin:events.html.twig', $params);
     }
 
     public function usersAction(Request $request)
