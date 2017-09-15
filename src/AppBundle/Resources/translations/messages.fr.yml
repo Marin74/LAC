@@ -101,7 +101,7 @@ pricing_hint: Prix (si payant)
 pricing: Entrée
 search_volunteers: Besoin de volontaires
 search_volunteers_hint: Indiquez si vous avez besoin de volontaires pour organiser l'action.
-search_volunteers_message: '%name% recherche des volontaires pour aider à organiser l''action.'
+search_volunteers_message: 'Recherche des volontaires pour aider à organiser l''action.'
 publish: Publier
 publish_hint: Si vous décochez ce bouton, l'action ne sera pas visible par les internautes mais il apparaîtra dans le calendrier commun aux associations. Ils verront que vous allez potentiellement organiser une action à cette date.
 event_set: Fixé
@@ -165,4 +165,4 @@ administration: Administration
 read_more: En savoir plus...
 duplicate: Dupliquer
 duplicate_event: Dupliquer une action
-
+geolocation_hint: "Si aucune position GPS n'est précisée, elle sera récupérée automatiquement. Autrement vous pouvez la rechercher ici :"

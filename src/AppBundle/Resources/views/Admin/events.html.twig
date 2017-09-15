@@ -21,10 +21,7 @@
 {% block content %}
     {% if app.user.association is not null %}
         <p>
-            <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_event"|trans }}</a> 
-            {% if events|length > 0 %}
-            	<a id="duplicateButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_duplicate">{{ "duplicate"|trans }}</a>
-            {% endif %}
+            <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_event"|trans }}</a>
         </p>
 
         <div class="table-responsive">
@@ -35,6 +32,7 @@
                     <th>{{ "event"|trans }}</th>
                     <th>{{ "date"|trans }}</th>
                     <th>{{ "place"|trans }}</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -64,7 +62,14 @@
                             	{% endif %}
                             </td>
                             <td>
-                            	<a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                            	<form method="post">
+                            		<input type="hidden" name="action" value="duplicate"/>
+                            		<input type="hidden" name="eventId" value="{{ event.id }}"/>
+                            		<button type="submit" class="btn btn-sm btn-primary">{{ "duplicate"|trans }}</button>
+                            	</form>
+                            </td>
+                            <td>
+                            	<button data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="btn btn-sm btn-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -82,6 +87,7 @@
                     <th>{{ "event"|trans }}</th>
                     <th>{{ "date"|trans }}</th>
                     <th>{{ "association"|trans }}</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -111,7 +117,14 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                        	<form method="post">
+                        		<input type="hidden" name="action" value="duplicate"/>
+                        		<input type="hidden" name="eventId" value="{{ event.id }}"/>
+                        		<button type="submit" class="btn btn-sm btn-primary">{{ "duplicate"|trans }}</button>
+                        	</form>
+                        </td>
+                        <td>
+                            <a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="btn btn-sm btn-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -120,36 +133,6 @@
         </div>
 		
 		
-    	{# Form to duplicate an event #}
-    	{% if events|length > 0 %}
-            <div class="modal fade" id="modal_duplicate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">{{ "duplicate_event"|trans }}</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>
-                            	<form method="POST">
-                            		<input type="hidden" name="action" value="duplicate" />
-                            		
-                            		<select name="eventId" class="form-control" onchange="this.form.submit()">
-                            			<option value=""></option>
-                            			{% for event in events %}
-                            				<option value="{{ event.id }}">{{ event.name }}</option>
-                            			{% endfor %}
-                            		</select>
-                            	</form>
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
 
         {# Form to add event #}
         <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -290,7 +273,9 @@
                                 {{ form_widget(formAdd.city, {'attr': {'class': 'form-control'}}) }}
                             </div>
                         </div>
-                        <div class="form-group display-none">
+                        <hr>
+                        <p class="well well-sm">{{ "geolocation_hint"|trans }} <a href="http://www.coordonnees-gps.fr" target="_blank">coordonnees-gps.fr</a></p>
+                        <div class="form-group">
 
                             {{ form_label(formAdd.latitude, "latitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
@@ -299,7 +284,7 @@
                                 {{ form_widget(formAdd.latitude, {'attr': {'class': 'form-control'}}) }}
                             </div>
                         </div>
-                        <div class="form-group display-none">
+                        <div class="form-group">
 
                             {{ form_label(formAdd.longitude, "longitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
@@ -488,7 +473,9 @@
                                         {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
                                     </div>
                                 </div>
-                                <div class="form-group display-none">
+                                <hr>
+                                <p class="well well-sm">{{ "geolocation_hint"|trans }} <a href="http://www.coordonnees-gps.fr" target="_blank">coordonnees-gps.fr</a></p>
+                                <div class="form-group">
 
                                     {{ form_label(form.latitude, "latitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
@@ -497,7 +484,7 @@
                                         {{ form_widget(form.latitude, {'attr': {'class': 'form-control'}}) }}
                                     </div>
                                 </div>
-                                <div class="form-group display-none">
+                                <div class="form-group">
 
                                     {{ form_label(form.longitude, "longitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                                     <div class="col-sm-10">
@@ -654,63 +641,70 @@
     			var street = $("#"+formName+" #event_form_street").val().trim();
     			var zipCode = $("#"+formName+" #event_form_zipCode").val().trim();
     			var city = $("#"+formName+" #event_form_city").val().trim();
-    			
-    			if(street) {
-    				address = street;
-    			}
-    			else if(place) {
-    				address = place;
-    			}
-    
-    			if(zipCode)
-    				address += " " + zipCode;
-    			if(city)
-    				address += " " + city;
-    			
-    			if(address === '') {
-    				// Remove the loading mode on the submit button
-    				$('#'+formName+'_button_submit').button('reset');
-    				alert('{{ "no_address"|trans }}');
-    			}
+    			var lat = $("#"+formName+" #event_form_latitude").val().trim();
+    			var lng = $("#"+formName+" #event_form_longitude").val().trim();
+
+    			if(lat && lng) {
+    				$("#"+formName).submit();
+        		}
     			else {
-    
-    	        	// Send request
-    	        	$.ajax({
-    	                type: "GET",
-    	                url: 'http://api-adresse.data.gouv.fr/search/?q='+address,
-    	                dataType: 'json',
-    	                success: function(response){
-    
-    						// Send a request to the API to get the coordinates (lat/lng) of the place.
-    						// An error is displayed if the request fails, if there is no result
-    						// or if the places returned don't have a good match score. 
-    						
-    						if("features" in response
-    								&& response["features"].length > 0
-    								&& "geometry" in response["features"][0]
-    								&& "coordinates" in response["features"][0]["geometry"]
-    								&& response["features"][0]["geometry"]["coordinates"].length > 1
-    								&& "properties" in response["features"][0]
-    								&& "score" in response["features"][0]["properties"]
-    								&& response["features"][0]["properties"]["score"] > 0.60
-    						){
-    							// Set lat/lng in the field and submit the form
-    							var coordinates = response["features"][0]["geometry"]["coordinates"];
-    
-    							$("#"+formName+" #event_form_longitude").val(coordinates[0]);
-    							$("#"+formName+" #event_form_latitude").val(coordinates[1]);
-    
-    							$("#"+formName).submit();
-    						}
-    						else {
-    
-    							// Remove the loading mode on the submit button
-    							$('#'+formName+'_button_submit').button('reset');
-    							
-    							alert("{{ "error_getting_location"|trans }}");
-    						}
-    	                }
-    				});
+        			if(street) {
+        				address = street;
+        			}
+        			else if(place) {
+        				address = place;
+        			}
+        
+        			if(zipCode)
+        				address += " " + zipCode;
+        			if(city)
+        				address += " " + city;
+        			
+        			if(address === '') {
+        				// Remove the loading mode on the submit button
+        				$('#'+formName+'_button_submit').button('reset');
+        				alert('{{ "no_address"|trans }}');
+        			}
+        			else {
+        
+        	        	// Send request
+        	        	$.ajax({
+        	                type: "GET",
+        	                url: 'http://api-adresse.data.gouv.fr/search/?q='+address,
+        	                dataType: 'json',
+        	                success: function(response){
+        
+        						// Send a request to the API to get the coordinates (lat/lng) of the place.
+        						// An error is displayed if the request fails, if there is no result
+        						// or if the places returned don't have a good match score. 
+        						
+        						if("features" in response
+        								&& response["features"].length > 0
+        								&& "geometry" in response["features"][0]
+        								&& "coordinates" in response["features"][0]["geometry"]
+        								&& response["features"][0]["geometry"]["coordinates"].length > 1
+        								&& "properties" in response["features"][0]
+        								&& "score" in response["features"][0]["properties"]
+        								&& response["features"][0]["properties"]["score"] > 0.60
+        						){
+        							// Set lat/lng in the field and submit the form
+        							var coordinates = response["features"][0]["geometry"]["coordinates"];
+        
+        							$("#"+formName+" #event_form_longitude").val(coordinates[0]);
+        							$("#"+formName+" #event_form_latitude").val(coordinates[1]);
+        
+        							$("#"+formName).submit();
+        						}
+        						else {
+        
+        							// Remove the loading mode on the submit button
+        							$('#'+formName+'_button_submit').button('reset');
+        							
+        							alert("{{ "error_getting_location"|trans }}");
+        						}
+        	                }
+        				});
+        			}
     			}
     		}
         }

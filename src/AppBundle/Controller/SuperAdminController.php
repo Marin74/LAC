@@ -111,7 +111,7 @@ class SuperAdminController extends Controller
         $events = $query->getResult();
         
         $date = new \DateTime();
-        $date->modify("-14 days");
+        $date->modify("-62 days");
         
         $query = $em->createQuery(
             'SELECT e
