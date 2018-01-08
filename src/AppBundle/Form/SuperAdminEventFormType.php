@@ -73,9 +73,11 @@ class SuperAdminEventFormType extends AbstractType
             ))
             ->add('latitude',       NumberType::class, array(
                 'attr'                      => ['class' => 'form-control',],
+            	"scale" => 6,// Round the value
             ))
             ->add('longitude',      NumberType::class, array(
                 'attr'                      => ['class' => 'form-control',],
+            	"scale" => 6,// Round the value
             ))
             ->add('file',           FileType::class, array(
                 'attr'                      => ['class' => 'form-control',],

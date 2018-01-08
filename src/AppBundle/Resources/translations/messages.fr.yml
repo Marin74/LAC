@@ -85,7 +85,7 @@ password_updated: Le mot de passe est modifié.
 delete_user_confirmation: 'Êtes-vous sûr de vouloir supprimer l''utilisateur "%name%" ? Il sera effacé définitivement.'
 loading: Chargement...
 error_getting_location: "Position géographique non trouvée. Vérifiez que les coordonnées du lieu sont complètes."
-nb_characters_description: XXX/2000 caractères
+nb_characters_description: XXX/2500 caractères
 document: Document
 documents: Documents
 add: Ajouter
@@ -111,7 +111,6 @@ calendar_of_events_planned: Calendrier des actions fixées et prévues
 calendar_hint: Le calendrier liste les actions fixées ou prévues par les associations pour faciliter la planification de vos actions.
 contacts: Contacts
 event_website: "Site internet de l'action"
-welcome_message: Bienvenue sur le site de Liaison des Actions Citoyennes dans le Chablais !
 local_associations: les Acteurs du Chablais
 interesting_events: les Actions qui vous motivent
 quiz: Quizz

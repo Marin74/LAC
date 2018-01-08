@@ -48,8 +48,8 @@ class EventFormType extends AbstractType
             ->add('street',				TextType::class)
             ->add('zipCode',			TextType::class)
             ->add('city',				TextType::class)
-            ->add('latitude',			NumberType::class)
-            ->add('longitude',			NumberType::class)
+            ->add('latitude',			NumberType::class, array("scale" => 6))
+            ->add('longitude',			NumberType::class, array("scale" => 6))
             ->add('file',				FileType::class)
             ->add('free',				CheckboxType::class)
             ->add('pricing',			TextType::class, array(
