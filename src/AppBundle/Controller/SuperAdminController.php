@@ -22,10 +22,13 @@ class SuperAdminController extends Controller
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get("translator");
         $repoEvent = $em->getRepository("AppBundle:Event");
+        $repoPlace = $em->getRepository("AppBundle:Place");
         $action = $request->get("action");
+        $placeId = $request->get("placeId");
         $eventId = $request->get("eventId");
         $deleteId = $request->get("deleteId");
         $eventToDuplicateId = $request->get("eventToDuplicateId");
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $isDuplicatingEvent = false;
         $eventToDuplicate = null;
         
@@ -40,24 +43,29 @@ class SuperAdminController extends Controller
         		$isDuplicatingEvent = true;
         		
         		$newEvent->setAssociation($eventToDuplicate->getAssociation());
-        		$newEvent->setCity($eventToDuplicate->getCity());
         		$newEvent->setDescription($eventToDuplicate->getDescription());
         		$newEvent->setEndTime($eventToDuplicate->getEndTime());
         		$newEvent->setFile($eventToDuplicate->getFile());
         		$newEvent->setFree($eventToDuplicate->getFree());
-        		$newEvent->setLatitude($eventToDuplicate->getLatitude());
-        		$newEvent->setLongitude($eventToDuplicate->getLongitude());
         		$newEvent->setName($eventToDuplicate->getName());
         		$newEvent->setPicture($eventToDuplicate->getPicture());
-        		$newEvent->setPlace($eventToDuplicate->getPlace());
+        		$newEvent->setPlaceEntity($eventToDuplicate->getPlaceEntity());
         		$newEvent->setPricing($eventToDuplicate->getPricing());
         		$newEvent->setPublished($eventToDuplicate->isPublished());
         		$newEvent->setSearchVolunteers($eventToDuplicate->getSearchVolunteers());
         		$newEvent->setStartTime($eventToDuplicate->getStartTime());
-        		$newEvent->setStreet($eventToDuplicate->getStreet());
         		$newEvent->setWebsite($eventToDuplicate->getWebsite());
-        		$newEvent->setZipCode($eventToDuplicate->getZipCode());
         	}
+        }
+        
+        // Add request
+        if ($user->getAssociation() != null && !empty($placeId)) {
+            
+            $place = $repoPlace->find($placeId);
+            
+            if($place != null) {
+                $newEvent->setPlaceEntity($place);
+            }
         }
         
         $formAdd = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $newEvent)->getForm();
@@ -183,7 +191,8 @@ class SuperAdminController extends Controller
             "events"				=> $events,
         	"passedEvents"			=> $passedEvents,
         	"allEvents"				=> $allEvents,
-        	"isDuplicatingEvent"	=> $isDuplicatingEvent
+        	"isDuplicatingEvent"	=> $isDuplicatingEvent,
+            "displayAddForm"        => $newEvent->getPlaceEntity() != null
         );
         
         if($eventToDuplicate != null) {

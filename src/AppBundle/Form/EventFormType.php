@@ -44,20 +44,26 @@ class EventFormType extends AbstractType
             	'required'	=> false
             	)
             )
-            ->add('place',				TextType::class)
-            ->add('street',				TextType::class)
-            ->add('zipCode',			TextType::class)
-            ->add('city',				TextType::class)
-            ->add('latitude',			NumberType::class, array("scale" => 6))
-            ->add('longitude',			NumberType::class, array("scale" => 6))
-            ->add('file',				FileType::class)
-            ->add('free',				CheckboxType::class)
+            ->add('file',				FileType::class, array(
+                'required'  => false
+            )
+            )
+            ->add('free',				CheckboxType::class, array(
+                'required'  => false
+            )
+            )
             ->add('pricing',			TextType::class, array(
-            	'required'	=> false
+            	'required' => false
             	)
             )
-            ->add('searchVolunteers',	CheckboxType::class)
-            ->add('published',			CheckboxType::class)
+            ->add('searchVolunteers',	CheckboxType::class, array(
+                'required'  => false
+            )
+            )
+            ->add('published',			CheckboxType::class, array(
+                'required'  => false
+            )
+            )
         ;
     }
     

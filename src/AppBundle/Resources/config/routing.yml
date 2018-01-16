@@ -35,6 +35,9 @@ app_admin_events:
 app_admin_index:
     path:     /admin
     defaults: { _controller: "AppBundle:Admin:calendar" }
+app_admin_search_place:
+    path:     /admin/lieux/recherche
+    defaults: { _controller: "AppBundle:Admin:searchPlace" }
 app_superadmin_users:
     path:     /admin/superadmin/utilisateur
     defaults: { _controller: "AppBundle:SuperAdmin:users" }

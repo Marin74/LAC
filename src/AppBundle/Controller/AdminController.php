@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Form\DocumentFormType;
 use AppBundle\Entity\Document;
+use AppBundle\Entity\Place;
+use AppBundle\Form\PlaceFormType;
 
 class AdminController extends Controller
 {
@@ -107,12 +109,14 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get("translator");
         $repoEvent = $em->getRepository("AppBundle:Event");
+        $repoPlace = $em->getRepository("AppBundle:Place");
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $events = array();
         $forms = array();
         $isDuplicatingEvent = false;
 
         $action = $request->get("action");
+        $placeId = $request->get("placeId");
         $eventId = $request->get("eventId");
         $deleteId = $request->get("deleteId");
         $eventToDuplicateId = $request->get("eventToDuplicateId");
@@ -129,24 +133,29 @@ class AdminController extends Controller
         		$isDuplicatingEvent = true;
         
         		$newEvent->setAssociation($eventToDuplicate->getAssociation());
-        		$newEvent->setCity($eventToDuplicate->getCity());
         		$newEvent->setDescription($eventToDuplicate->getDescription());
         		$newEvent->setEndTime($eventToDuplicate->getEndTime());
         		$newEvent->setFile($eventToDuplicate->getFile());
         		$newEvent->setFree($eventToDuplicate->getFree());
-        		$newEvent->setLatitude($eventToDuplicate->getLatitude());
-        		$newEvent->setLongitude($eventToDuplicate->getLongitude());
         		$newEvent->setName($eventToDuplicate->getName());
         		$newEvent->setPicture($eventToDuplicate->getPicture());
-        		$newEvent->setPlace($eventToDuplicate->getPlace());
+        		$newEvent->setPlaceEntity($eventToDuplicate->getPlaceEntity());
         		$newEvent->setPricing($eventToDuplicate->getPricing());
         		$newEvent->setPublished($eventToDuplicate->isPublished());
         		$newEvent->setSearchVolunteers($eventToDuplicate->getSearchVolunteers());
         		$newEvent->setStartTime($eventToDuplicate->getStartTime());
-        		$newEvent->setStreet($eventToDuplicate->getStreet());
         		$newEvent->setWebsite($eventToDuplicate->getWebsite());
-        		$newEvent->setZipCode($eventToDuplicate->getZipCode());
         	}
+        }
+        
+        // Add request
+        if ($user->getAssociation() != null && !empty($placeId)) {
+            
+            $place = $repoPlace->find($placeId);
+            
+            if($place != null) {
+                $newEvent->setPlaceEntity($place);
+            }
         }
         
         $formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
@@ -279,7 +288,8 @@ class AdminController extends Controller
             "events"				=> $events,
         	"passedEvents"			=> $passedEvents,
         	"allEvents"				=> $allEvents,
-        	"isDuplicatingEvent"	=> $isDuplicatingEvent
+        	"isDuplicatingEvent"	=> $isDuplicatingEvent,
+            "displayAddForm"        => $newEvent->getPlaceEntity() != null
         );
         
         if($eventToDuplicate != null) {
@@ -311,5 +321,54 @@ class AdminController extends Controller
     	return $this->render('AppBundle:Admin:calendar.html.twig', array(
     		'events' => $events,
     	));
+    }
+    
+    public function searchPlaceAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoPlace = $em->getRepository("AppBundle:Place");
+        
+        $places = array();
+        $search = $request->get("name");
+        
+        if($request->isMethod('POST') && !empty($search)) {
+            
+            $query = $repoPlace->createQueryBuilder('p')
+            ->where('p.name LIKE :name')
+            ->setParameter('name', '%'.str_replace(" ", "%", trim($search)).'%')
+            ->orderBy('p.name', 'ASC')
+            ->getQuery();
+            
+            $places = $query->getResult();
+        }
+        
+        $newPlace = new Place();
+        
+        $formAdd = $this->get('form.factory')->createBuilder(PlaceFormType::class, $newPlace)->getForm();
+        
+        if($request->isMethod('POST')) {
+            
+            $formAdd->handleRequest($request);
+            
+            if ($formAdd->isValid()) {
+                
+                $em->persist($newPlace);
+                $em->flush();
+                
+                $route = "app_admin_events";
+                
+                if($request->get("source") == "super_admin") {
+                    $route = "app_superadmin_events";
+                }
+                
+                return $this->redirectToRoute($route, array("placeId" => $newPlace->getId()));
+            }
+        }
+        
+        return $this->render('AppBundle:Admin:searchPlace.html.twig', array(
+            'places'    => $places,
+            'search'    => $search,
+            'formAdd'   => $formAdd->createView()
+        ));
     }
 }

@@ -93,16 +93,14 @@ class Event
     /**
      * @var string
      *
-     * @ORM\Column(name="latitude", type="string", length=255)
-     * @Assert\NotBlank()
+     * @ORM\Column(name="latitude", type="string", length=255, nullable=true)
      */
     private $latitude;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="longitude", type="string", length=255)
-     * @Assert\NotBlank()
+     * @ORM\Column(name="longitude", type="string", length=255, nullable=true)
      */
     private $longitude;
 
@@ -112,6 +110,13 @@ class Event
      * @Assert\NotNull()
      */
     private $association;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Place", inversedBy="events")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     * @Assert\NotNull()
+     */
+    private $placeEntity;
 
     /**
      * @var string
@@ -564,6 +569,18 @@ class Event
     {
         return $this->quizzScores;
     }
+    
+    public function setPlaceEntity($place)
+    {
+        $this->placeEntity = $place;
+        
+        return $this;
+    }
+    
+    public function getPlaceEntity()
+    {
+        return $this->placeEntity;
+    }
 
     /**
      * Get website
@@ -580,32 +597,6 @@ class Event
         $oneDayLater->add(new \DateInterval("PT24H"));
         
         return $this->getEndTime() < $oneDayLater;
-    }
-
-    public function getFullAddress()
-    {
-        $address = "";
-
-        if (!empty($this->getStreet())) {
-            $address = $this->getStreet();
-
-            if (!empty($this->getZipCode()))
-                $address .= ", " . $this->getZipCode();
-        }
-
-        if (!empty($this->getCity())) {
-
-            if(!empty($address)) {
-                if(!empty($this->getZipCode()))
-                    $address .= " ";
-                else
-                    $address .= ", ";
-            }
-
-            $address .= $this->getCity();
-        }
-
-        return $address;
     }
 
     public function getFile()

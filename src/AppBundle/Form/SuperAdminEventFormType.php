@@ -59,31 +59,13 @@ class SuperAdminEventFormType extends AbstractType
                 'attr'                      => ['class' => 'form-control',],
             	'required'					=> false
             ))
-            ->add('place',          TextType::class, array(
-                'attr'                      => ['class' => 'form-control',],
-            ))
-            ->add('street',         TextType::class, array(
-                'attr'                      => ['class' => 'form-control',],
-            ))
-            ->add('zipCode',        TextType::class, array(
-                'attr'                      => ['class' => 'form-control',],
-            ))
-            ->add('city',           TextType::class, array(
-                'attr'                      => ['class' => 'form-control',],
-            ))
-            ->add('latitude',       NumberType::class, array(
-                'attr'                      => ['class' => 'form-control',],
-            	"scale" => 6,// Round the value
-            ))
-            ->add('longitude',      NumberType::class, array(
-                'attr'                      => ['class' => 'form-control',],
-            	"scale" => 6,// Round the value
-            ))
             ->add('file',           FileType::class, array(
                 'attr'                      => ['class' => 'form-control',],
+                'required'                  => false,
             ))
             ->add('free',				CheckboxType::class, array(
                 'attr'                      => ['class' => 'form-control',],
+                'required'                  => false
             ))
             ->add('pricing',			TextType::class, array(
                 'attr'                      => ['class' => 'form-control',],
@@ -91,9 +73,11 @@ class SuperAdminEventFormType extends AbstractType
             ))
             ->add('searchVolunteers',	CheckboxType::class, array(
                 'attr'                      => ['class' => 'form-control',],
+                'required'                  => false,
             ))
             ->add('published',			CheckboxType::class, array(
                 'attr'                      => ['class' => 'form-control',],
+                'required'                  => false,
             ))
         ;
     }

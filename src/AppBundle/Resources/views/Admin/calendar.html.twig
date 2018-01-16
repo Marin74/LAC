@@ -50,15 +50,10 @@
 			
             <h4>{{ "where"|trans }}</h4>
             <p>
-                {% if event.place is not empty %}
-                    <strong>{{ event.place }}</strong>
-                        {% if event.fullAddress is not empty %}
-                            <br/>
-                        {% endif %}
-                {% endif %}
-    
-                {% if event.fullAddress is not empty %}
-                    {{ event.fullAddress }}
+				<strong>{{ event.placeEntity.name }}</strong>
+                {% if event.placeEntity.fullAddress is not empty %}
+                	<br/>
+                    {{ event.placeEntity.fullAddress }}
                 {% endif %}
             </p>
     	</div>

@@ -93,15 +93,11 @@
     		
             <h4>{{ "where"|trans }}</h4>
             <p>
-                {% if event.place is not empty %}
-                    <strong>{{ event.place }}</strong>
-                        {% if event.fullAddress is not empty %}
-                            <br/>
-                        {% endif %}
-                {% endif %}
+				<strong>{{ event.placeEntity.name }}</strong>
     
-                {% if event.fullAddress is not empty %}
-                    {{ event.fullAddress }}
+                {% if event.placeEntity.fullAddress is not empty %}
+                	<br/>
+                    {{ event.placeEntity.fullAddress }}
                 {% endif %}
             </p>
         {% endif %}
@@ -128,12 +124,12 @@
             // Prevent the zoom when we scroll the webpage
             map.scrollWheelZoom.disable();
     
-            var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]).addTo(map);
-            marker.bindPopup('{% if event.place is not empty %}<strong>{{ event.place }}</strong>{% endif %}'+
+            var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]).addTo(map);
+            marker.bindPopup('<strong>{{ event.placeEntity.name }}</strong>'+
                     '<br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>'+
-                    '{% if event.street is not empty %}<br/>{{ event.street }}{% endif %}'+
-                    '{% if event.zipCode is not empty %}<br/>{{ event.zipCode }}{% if event.city is not empty %} {{ event.city }}{% endif %}{% endif %}'+
-                    '{% if event.zipCode is empty and event.city is not empty %}<br/>{{ event.city }}{% endif %}'
+                    '{% if event.placeEntity.street is not empty %}<br/>{{ event.placeEntity.street }}{% endif %}'+
+                    '{% if event.placeEntity.zipCode is not empty %}<br/>{{ event.placeEntity.zipCode }}{% if event.placeEntity.city is not empty %} {{ event.placeEntity.city }}{% endif %}{% endif %}'+
+                    '{% if event.placeEntity.zipCode is empty and event.placeEntity.city is not empty %}<br/>{{ event.placeEntity.city }}{% endif %}'
             );
             marker.on('mouseover', function (e) {
                 this.openPopup();

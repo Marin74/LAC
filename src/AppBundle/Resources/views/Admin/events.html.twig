@@ -21,7 +21,7 @@
 {% block content %}
     {% if app.user.association is not null %}
         <p>
-            <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_event"|trans }}</a>
+            <a class="btn btn-primary" role="button" href="{{ url("app_admin_search_place", {"source": "admin"}) }}">{{ "new_event"|trans }}</a>
         </p>
 
         <div class="table-responsive">
@@ -49,13 +49,7 @@
                         	</td>
                             <td><a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a></td>
                             <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
-                            <td>
-                                {% if event.place is not empty %}
-                                    {{ event.place }}
-                                {% elseif event.city is not empty %}
-                                    {{ event.city }}
-                                {% endif %}
-                            </td>
+                            <td>{{ event.placeEntity.name }}</td>
                             <td>
                             	{% if event.published %}
                                 	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "admin_events"}) }}">{{ "consult"|trans }}</a>
@@ -77,60 +71,62 @@
             </table>
         </div>
         
-        <h3>{{ "passed_events"|trans }}</h3>
-        
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                	<th></th>
-                    <th>{{ "event"|trans }}</th>
-                    <th>{{ "date"|trans }}</th>
-                    <th>{{ "association"|trans }}</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for event in passedEvents %}
+        {% if passedEvents|length > 0 %}
+            <h3>{{ "passed_events"|trans }}</h3>
+            
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
                     <tr>
-                    	<td>
-                			{% if event.published %}
-                				<span class="label label-success">{{ "event_set"|trans }}</span>
-                			{% else %}
-                				<span class="label label-warning">{{ "planned"|trans }}</span>
-                			{% endif %}
-                    	</td>
-                        <td>
-                        	<a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a>
-                    	</td>
-                        <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
-                        <td>
-                            <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl, "source": "super_admin_events"}) }}">
-                                {{ event.association.name }}
-                            </a>
-                        </td>
-                        <td>
-                        	{% if event.published %}
-                            	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "super_admin_events"}) }}">{{ "consult"|trans }}</a>
-                            {% endif %}
-                        </td>
-                        <td>
-                        	<form method="post">
-                        		<input type="hidden" name="action" value="duplicate"/>
-                        		<input type="hidden" name="eventId" value="{{ event.id }}"/>
-                        		<button type="submit" class="btn btn-sm btn-primary">{{ "duplicate"|trans }}</button>
-                        	</form>
-                        </td>
-                        <td>
-                            <a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="btn btn-sm btn-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
-                        </td>
+                    	<th></th>
+                        <th>{{ "event"|trans }}</th>
+                        <th>{{ "date"|trans }}</th>
+                        <th>{{ "association"|trans }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                    {% for event in passedEvents %}
+                        <tr>
+                        	<td>
+                    			{% if event.published %}
+                    				<span class="label label-success">{{ "event_set"|trans }}</span>
+                    			{% else %}
+                    				<span class="label label-warning">{{ "planned"|trans }}</span>
+                    			{% endif %}
+                        	</td>
+                            <td>
+                            	<a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a>
+                        	</td>
+                            <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
+                            <td>
+                                <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl, "source": "super_admin_events"}) }}">
+                                    {{ event.association.name }}
+                                </a>
+                            </td>
+                            <td>
+                            	{% if event.published %}
+                                	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "super_admin_events"}) }}">{{ "consult"|trans }}</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                            	<form method="post">
+                            		<input type="hidden" name="action" value="duplicate"/>
+                            		<input type="hidden" name="eventId" value="{{ event.id }}"/>
+                            		<button type="submit" class="btn btn-sm btn-primary">{{ "duplicate"|trans }}</button>
+                            	</form>
+                            </td>
+                            <td>
+                                <a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="btn btn-sm btn-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
 		
 		
 
@@ -242,62 +238,6 @@
                             </div>
                         </div>
                         <hr>
-                        <h3>{{ "place"|trans }}</h3>
-                        <div class="form-group">
-
-                            {{ form_label(formAdd.place, "place_name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(formAdd.place) }}
-                                {{ form_widget(formAdd.place, {'attr': {'class': 'form-control'}}) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            {{ form_label(formAdd.street, "street", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(formAdd.street) }}
-                                {{ form_widget(formAdd.street, {'attr': {'class': 'form-control'}}) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            {{ form_label(formAdd.zipCode, "zipCode", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(formAdd.zipCode) }}
-
-                                {{ form_widget(formAdd.zipCode, {'attr': {'class': 'form-control'}}) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            {{ form_label(formAdd.city, "city", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(formAdd.city) }}
-
-                                {{ form_widget(formAdd.city, {'attr': {'class': 'form-control'}}) }}
-                            </div>
-                        </div>
-                        <hr>
-                        <p class="well well-sm">{{ "geolocation_hint"|trans }} <a href="http://www.coordonnees-gps.fr" target="_blank">coordonnees-gps.fr</a></p>
-                        <div class="form-group">
-
-                            {{ form_label(formAdd.latitude, "latitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(formAdd.latitude) }}
-
-                                {{ form_widget(formAdd.latitude, {'attr': {'class': 'form-control'}}) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            {{ form_label(formAdd.longitude, "longitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(formAdd.longitude) }}
-
-                                {{ form_widget(formAdd.longitude, {'attr': {'class': 'form-control'}}) }}
-                            </div>
-                        </div>
-                        <hr>
                         <div class="form-group">
 
                             {{ form_label(formAdd.published, "publish", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
@@ -314,7 +254,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
-                        <button type="button" class="btn btn-success" id="form_add_button_submit" onClick="getLocation('form_add');" data-loading-text="{{ "loading"|trans }}">{{ "save"|trans }}</button>
+                        <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
                     </div>
 
                     {# Close <form> #}
@@ -345,7 +285,10 @@
                                 <p class="center">
                                     <img src="{{ asset(event.getPicturePath()) }}" title="{{ "picture"|trans }}" class="fit picture-form" />
                                 </p>
+                                <p></p>
                             {% endif %}
+                                
+                        	<p class="well well-sm">{{ "event_location"|trans({'%place%': event.placeEntity.name}) }}</p>
 
                             <p>
 
@@ -441,63 +384,6 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <h3>{{ "place"|trans }}</h3>
-                                <div class="form-group">
-
-                                    {{ form_label(form.place, "place_name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                    <div class="col-sm-10">
-                                        {{ form_errors(form.place) }}
-                                        {{ form_widget(form.place, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-
-                                    {{ form_label(form.street, "street", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                    <div class="col-sm-10">
-                                        {{ form_errors(form.street) }}
-
-                                        {{ form_widget(form.street, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-
-                                    {{ form_label(form.zipCode, "zipCode", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                    <div class="col-sm-10">
-                                        {{ form_errors(form.zipCode) }}
-
-                                        {{ form_widget(form.zipCode, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-
-                                    {{ form_label(form.city, "city", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                    <div class="col-sm-10">
-                                        {{ form_errors(form.city) }}
-
-                                        {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                </div>
-                                <hr>
-                                <p class="well well-sm">{{ "geolocation_hint"|trans }} <a href="http://www.coordonnees-gps.fr" target="_blank">coordonnees-gps.fr</a></p>
-                                <div class="form-group">
-
-                                    {{ form_label(form.latitude, "latitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                    <div class="col-sm-10">
-                                        {{ form_errors(form.latitude) }}
-
-                                        {{ form_widget(form.latitude, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-
-                                    {{ form_label(form.longitude, "longitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                                    <div class="col-sm-10">
-                                        {{ form_errors(form.longitude) }}
-
-                                        {{ form_widget(form.longitude, {'attr': {'class': 'form-control'}}) }}
-                                    </div>
-                                </div>
-                                <hr>
                                 <div class="form-group">
         
                                     {{ form_label(form.published, "publish", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
@@ -514,7 +400,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
-                            <button type="button" class="btn btn-success" id="form_add_button_submit" onClick="getLocation('form_update_{{ event.id }}');" data-loading-text="{{ "loading"|trans }}">{{ "save"|trans }}</button>
+                            <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
                         </div>
 
                         {# Close <form> #}
@@ -559,7 +445,7 @@
 
         $(".form_datetime").datetimepicker({format: 'dd-mm-yyyy hh:ii', language: 'fr', autoclose: true});
 
-        {% if isDuplicatingEvent %}
+        {% if isDuplicatingEvent or displayAddForm %}
         	$("#modal_add").modal("show");
         {% endif %}
 
@@ -574,13 +460,7 @@
                 or form.searchVolunteers.vars.errors|length
                 or form.free.vars.errors|length
                 or form.pricing.vars.errors|length
-                or form.place.vars.errors|length
                 or form.name.vars.errors|length
-                or form.street.vars.errors|length
-                or form.zipCode.vars.errors|length
-                or form.city.vars.errors|length
-                or form.latitude.vars.errors|length
-                or form.longitude.vars.errors|length
                 or form.published.vars.errors|length
                 or form.file.vars.errors|length
             %}
@@ -604,13 +484,7 @@
             or formAdd.searchVolunteers.vars.errors|length
             or formAdd.free.vars.errors|length
             or formAdd.pricing.vars.errors|length
-            or formAdd.place.vars.errors|length
             or formAdd.name.vars.errors|length
-            or formAdd.street.vars.errors|length
-            or formAdd.zipCode.vars.errors|length
-            or formAdd.city.vars.errors|length
-            or formAdd.latitude.vars.errors|length
-            or formAdd.longitude.vars.errors|length
             or formAdd.published.vars.errors|length
             or formAdd.file.vars.errors|length
         %}
@@ -621,97 +495,6 @@
 
             $("#modal_add").modal("show");
         {% endif %}
-
-
-        function getLocation(formName) {
-			
-            // Set submit button in loading mode
-			$('#'+formName+'_button_submit').button('loading');
-
-            // If we duplicate an event, we don't search again the location (because we already have it)
-			{% if isDuplicatingEvent %}
-				if(formName == "form_add") {
-	        		$("#"+formName).submit();
-				}
-				else
-            {% else %}
-            	if(true)
-    		{% endif %}
-        	{
-                // Get address
-    			var address = '';
-    
-    			var place = $("#"+formName+" #event_form_place").val().trim();
-    			var street = $("#"+formName+" #event_form_street").val().trim();
-    			var zipCode = $("#"+formName+" #event_form_zipCode").val().trim();
-    			var city = $("#"+formName+" #event_form_city").val().trim();
-    			var lat = $("#"+formName+" #event_form_latitude").val().trim();
-    			var lng = $("#"+formName+" #event_form_longitude").val().trim();
-
-    			if(lat && lng) {
-    				$("#"+formName).submit();
-        		}
-    			else {
-        			if(street) {
-        				address = street;
-        			}
-        			else if(place) {
-        				address = place;
-        			}
-        
-        			if(zipCode)
-        				address += " " + zipCode;
-        			if(city)
-        				address += " " + city;
-        			
-        			if(address === '') {
-        				// Remove the loading mode on the submit button
-        				$('#'+formName+'_button_submit').button('reset');
-        				alert('{{ "no_address"|trans }}');
-        			}
-        			else {
-        
-        	        	// Send request
-        	        	$.ajax({
-        	                type: "GET",
-        	                url: 'http://api-adresse.data.gouv.fr/search/?q='+address,
-        	                dataType: 'json',
-        	                success: function(response){
-        
-        						// Send a request to the API to get the coordinates (lat/lng) of the place.
-        						// An error is displayed if the request fails, if there is no result
-        						// or if the places returned don't have a good match score. 
-        						
-        						if("features" in response
-        								&& response["features"].length > 0
-        								&& "geometry" in response["features"][0]
-        								&& "coordinates" in response["features"][0]["geometry"]
-        								&& response["features"][0]["geometry"]["coordinates"].length > 1
-        								&& "properties" in response["features"][0]
-        								&& "score" in response["features"][0]["properties"]
-        								&& response["features"][0]["properties"]["score"] > 0.60
-        						){
-        							// Set lat/lng in the field and submit the form
-        							var coordinates = response["features"][0]["geometry"]["coordinates"];
-        
-        							$("#"+formName+" #event_form_longitude").val(coordinates[0]);
-        							$("#"+formName+" #event_form_latitude").val(coordinates[1]);
-        
-        							$("#"+formName).submit();
-        						}
-        						else {
-        
-        							// Remove the loading mode on the submit button
-        							$('#'+formName+'_button_submit').button('reset');
-        							
-        							alert("{{ "error_getting_location"|trans }}");
-        						}
-        	                }
-        				});
-        			}
-    			}
-    		}
-        }
 
 		{% if app.user.association != null %}
     		$(function() {
