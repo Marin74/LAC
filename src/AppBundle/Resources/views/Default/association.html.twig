@@ -272,7 +272,7 @@
             {% if association.nextEvents|length != 1 %}
                 var map = L.map('mapid').setView([{{ map_center }}], 11);
             {% else %}
-                var map = L.map('mapid').setView([{{ association.nextEvents[0].latitude }}, {{ association.nextEvents[0].longitude }}], 11);
+                var map = L.map('mapid').setView([{{ association.nextEvents[0].placeEntity.latitude }}, {{ association.nextEvents[0].placeEntity.longitude }}], 11);
             {% endif %}
     
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
@@ -292,7 +292,7 @@
             });
     
             {% for event in association.nextEvents %}
-                var marker = L.marker([{{ event.latitude }}, {{ event.longitude }}]);
+                var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
                 marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
 
                 marker.on('mouseover', function (e) {
@@ -305,7 +305,7 @@
                     location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}'
                 });
                 
-                markers.push([{{ event.latitude }}, {{ event.longitude }}]);
+                markers.push([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
                 markerClusters.addLayer(marker);
             {% endfor %}
     
