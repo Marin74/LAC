@@ -47,9 +47,15 @@ class Document
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Association",inversedBy="documents")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $association;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Event",inversedBy="documents")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     */
+    private $event;
     
     /**
      * @var string
@@ -142,6 +148,16 @@ class Document
     public function getAssociation() {
         return $this->association;
     }
+    
+    public function setEvent($event) {
+        $this->event = $event;
+        
+        return $this;
+    }
+    
+    public function getEvent() {
+        return $this->event;
+    }
 
     public function getFile()
     {
@@ -168,9 +184,17 @@ class Document
         
         $maxNumber = 0;
         // Get max number
-        foreach($this->getAssociation()->getDocuments() as $document) {
-        	if($document->getNumber() > $maxNumber)
-        		$maxNumber = $document->getNumber();
+        if($this->getAssociation() != null) {
+            foreach($this->getAssociation()->getDocuments() as $document) {
+            	if($document->getNumber() > $maxNumber)
+            		$maxNumber = $document->getNumber();
+            }
+        }
+        elseif($this->getEvent() != null) {
+            foreach($this->getEvent()->getDocuments() as $document) {
+                if($document->getNumber() > $maxNumber)
+                    $maxNumber = $document->getNumber();
+            }
         }
         
         $maxNumber++;
@@ -178,7 +202,15 @@ class Document
         // Rename
         $mime = mime_content_type($this->getUploadRootDir()."/".$name);
         $mimeExplode = explode("/", $mime);
-        $filename = "association_".$this->getAssociation()->getId()."_".$maxNumber.".".$mimeExplode[1];
+        $filename = "";
+        if($this->getAssociation() != null) {
+            
+            $filename = "association_".$this->getAssociation()->getId()."_".$maxNumber.".".$mimeExplode[1];
+        }
+        elseif($this->getEvent() != null) {
+            
+            $filename = "event_".$this->getEvent()->getId()."_".$maxNumber.".".$mimeExplode[1];
+        }
         $newPath = $this->getUploadRootDir()."/".$filename;
         rename($this->getUploadRootDir()."/".$name, $newPath);
 

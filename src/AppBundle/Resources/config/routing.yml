@@ -35,6 +35,11 @@ app_admin_events:
 app_admin_index:
     path:     /admin
     defaults: { _controller: "AppBundle:Admin:calendar" }
+app_admin_event_document:
+    path:     /admin/action/{id}/document
+    defaults: { _controller: "AppBundle:Admin:eventDocument" }
+    requirements:
+        id: \d+
 app_admin_search_place:
     path:     /admin/lieux/recherche
     defaults: { _controller: "AppBundle:Admin:searchPlace" }

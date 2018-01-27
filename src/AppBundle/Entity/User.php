@@ -44,5 +44,9 @@ class User extends BaseUser
     public function getAssociation() {
         return $this->association;
     }
+    
+    public function isAdmin() {
+        return in_array(User::ROLE_ADMIN, $this->getRoles());
+    }
 }
 

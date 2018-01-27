@@ -35,6 +35,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -50,6 +51,9 @@
                             <td><a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}">{{ event.name }}</a></td>
                             <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
                             <td>{{ event.placeEntity.name }}</td>
+                            <td>
+                            	<a href="{{ url("app_admin_event_document", {"id": event.id}) }}">{{ "documents"|trans }}</a>
+                            </td>
                             <td>
                             	{% if event.published %}
                                 	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "admin_events"}) }}">{{ "consult"|trans }}</a>

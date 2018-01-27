@@ -95,6 +95,7 @@ add: Ajouter
 unknown_error: Une erreur inconnue est survenue.
 document_added: Le document est ajouté.
 document_form_hint: Les documents peuvent être téléchargés par les internautes quand ils consultent la page du groupe.
+event_document_form_hint: Joignez le programme de votre action ou tout autre document utile.
 delete_document_confirmation: 'Êtes-vous sûr de vouloir supprimer le document "%name%" ? Il sera effacé définitivement.'
 document_deleted: Le document est supprimé.
 event_deleted: 'L''action est supprimée.'
@@ -175,3 +176,4 @@ searched_place_not_found: Le lieu que je cherche est introuvable ?
 searched_place_not_found_hint: Faites plusieurs recherches sur différents mots-clés pour vous assurer que le lieu n'existe pas avant de le créer.
 i_create_it: "Je le crée !"
 event_location: "Lieu : %place%"
+event_documents: "Documents de %event%"

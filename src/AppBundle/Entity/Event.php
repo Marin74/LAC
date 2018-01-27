@@ -155,6 +155,12 @@ class Event
      * @ORM\Column(name="pricing", type="string", length=255, nullable=true)
      */
     private $pricing;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Document",mappedBy="event")
+     * @ORM\OrderBy({"name": "asc"})
+     */
+    private $documents;
 
     private $file;
 
@@ -590,6 +596,11 @@ class Event
     public function getWebsite()
     {
         return $this->website;
+    }
+    
+    public function getDocuments()
+    {
+        return $this->documents;
     }
 
     public function takesLessThanOneDay() {

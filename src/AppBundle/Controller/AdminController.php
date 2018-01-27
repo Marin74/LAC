@@ -76,7 +76,10 @@ class AdminController extends Controller
 	           				$request->getSession()->getFlashBag()->add('warning', $translator->trans("unknown_error"));
            				}
            				
-            			$em->flush();
+           				$em->flush();
+           				
+           				$em->refresh($user);
+           				$em->refresh($user->getAssociation());
             		}
             		else
 	                	$request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
@@ -99,7 +102,7 @@ class AdminController extends Controller
         }
 
         return $this->render('AppBundle:Admin:index.html.twig', array(
-            "form" => $form->createView(),
+            "form"          => $form->createView(),
         	"formDocument" => $formDocument == null ? null: $formDocument->createView(),
         ));
     }
@@ -382,6 +385,89 @@ class AdminController extends Controller
             'places'    => $places,
             'search'    => $search,
             'formAdd'   => $formAdd->createView()
+        ));
+    }
+    
+    public function eventDocumentAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoDocument = $em->getRepository("AppBundle:Document");
+        $repoEvent = $em->getRepository("AppBundle:Event");
+        $translator = $this->get("translator");
+        $formDocument = null;
+        $newDocument = null;
+        $deleteId = $request->get("deleteId");
+        $eventId = $request->get("id");
+        
+        $event = $repoEvent->find($eventId);
+        
+        if($event != null) {
+            
+            // Check if the event is organized by the user association or if the user is admin
+            if(!$this->getUser()->isAdmin() && $event->getAssociation()->getId() != $this->getUser()->getAssociation()->getId()) {
+                
+                $event = null;
+            }
+            else {
+                $newDocument = new Document();
+                $newDocument->setEvent($event);
+                $formDocument = $this->get('form.factory')->createBuilder(DocumentFormType::class, $newDocument)->getForm();
+                
+                if ($request->isMethod('POST')) {
+                    
+                    // Manage document form
+                    $formDocument->handleRequest($request);
+                    
+                    if($formDocument->isSubmitted()) {
+                        if ($formDocument->isValid()) {
+                            
+                            // Upload the document
+                            $em->persist($newDocument);
+                            $res = $newDocument->upload();
+                            
+                            if($res) {
+                                $request->getSession()->getFlashBag()->add('success', $translator->trans("document_added"));
+                                
+                                // Reinit the form
+                                $newDocument = new Document();
+                                $newDocument->setEvent($event);
+                                $formDocument = $this->get('form.factory')->createBuilder(DocumentFormType::class, $newDocument)->getForm();
+                            }
+                            else {
+                                $em->remove($newDocument);
+                                $request->getSession()->getFlashBag()->add('warning', $translator->trans("unknown_error"));
+                            }
+                            
+                            $em->flush();
+                            
+                            $em->refresh($event);
+                        }
+                        else
+                            $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+                    }
+                    
+                    
+                    
+                    // Delete request
+                    if ($request->isMethod('POST') && !empty($deleteId)) {
+                        
+                        $document = $repoDocument->find($deleteId);
+                        
+                        if($document != null && $document->getEvent()->getId() == $event->getId()) {
+                            $em->remove($document);
+                            $em->flush();
+                            $request->getSession()->getFlashBag()->add('success', $translator->trans("document_deleted"));
+                            
+                            $em->refresh($event);
+                        }
+                    }
+                }
+            }
+        }
+        
+        return $this->render('AppBundle:Admin:eventDocument.html.twig', array(
+            "event"         => $event,
+            "formDocument"  => $formDocument == null ? null: $formDocument->createView()
         ));
     }
 }

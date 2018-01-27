@@ -69,6 +69,14 @@
             {% if event.website is not empty %}
                 <p style="margin-bottom: 20px;"><a href="{{ event.website }}" target="_blank">{{ "read_more"|trans }}</a></p>
             {% endif %}
+            
+            {% if event.documents|length > 0 %}
+            	<p>
+            		{% for document in event.documents %}
+        				<a href="{{ asset(document.path) }}">{{ document.name }}</a><br/>
+            		{% endfor %}
+            	</p>
+            {% endif %}
     
             <h4>{{ "when"|trans }}</h4>
             <p>
