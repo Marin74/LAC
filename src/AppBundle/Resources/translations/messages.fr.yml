@@ -72,9 +72,12 @@ user: Utilisateur
 roles: Rôles
 ROLE_ADMIN: Administrateur
 ROLE_USER: Utilisateur
-explanations_open_source: Le code de ce site internet est open source. Cela signifie qu'il peut être utilisé et modifié par quiconque. Le code source est sous licence GPL v3.
-url_source_code: "Le code source de l'application est disponible ici :"
-github_profile: Profil GitHub
+explanations_open_source: Le site internet est open source. Cela signifie qu'il peut être utilisé et modifié par quiconque. Le code source est sous licence GPL v3.
+url_source_code: "Le code source du site est disponible ici :"
+github: GitHub
+license: La licence GPL v3
+website_help: Vous n'êtes pas développeur et vous souhaitez réutiliser ce site dans votre région ?
+contact_us: "Contactez-nous !"
 picture: Image
 facebook: Facebook
 new_user: Nouvel utilisateur

@@ -45,7 +45,6 @@ class SuperAdminController extends Controller
         		$newEvent->setAssociation($eventToDuplicate->getAssociation());
         		$newEvent->setDescription($eventToDuplicate->getDescription());
         		$newEvent->setEndTime($eventToDuplicate->getEndTime());
-        		$newEvent->setFile($eventToDuplicate->getFile());
         		$newEvent->setFree($eventToDuplicate->getFree());
         		$newEvent->setName($eventToDuplicate->getName());
         		$newEvent->setPicture($eventToDuplicate->getPicture());
@@ -65,6 +64,15 @@ class SuperAdminController extends Controller
             
             if($place != null) {
                 $newEvent->setPlaceEntity($place);
+            }
+        }
+        
+        // We have to do that because it's complicated to duplicate the place
+        if(!empty($eventToDuplicateId)) {
+            $tempEvent = $repoEvent->find($eventToDuplicateId);
+            
+            if($tempEvent != null) {
+                $newEvent->setPlaceEntity($tempEvent->getPlaceEntity());
             }
         }
         

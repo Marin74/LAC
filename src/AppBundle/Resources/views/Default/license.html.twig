@@ -13,15 +13,21 @@
         </ol>
         
         <div class="page-header">
-            <h1>{{ "site_open_source"|trans }}</h1>
+            <h2>{{ "site_open_source"|trans }}</h2>
         </div>
-        <p class="lead">
-            {{ "explanations_open_source"|trans() }}
+        
+        <p>
+            {{ "explanations_open_source"|trans }}
+            {% if mainAssociation is defined and mainAssociation is not null %}
+                <br/>
+                {{ "website_help"|trans }} <a href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}">{{ "contact_us"|trans }}</a>
+            {% endif %}
         </p>
-        <p class="lead">
-            {{ "url_source_code"|trans() }}
+        <p>
+            {{ "url_source_code"|trans }} <a href="{{ url_source_code }}">{{ "github"|trans }}</a>
+        	<br/>
+        	<a href="https://www.gnu.org/licenses/quick-guide-gplv3.fr.html">{{ "license"|trans }}</a>
         </p>
-        <a href="{{ url_source_code }}" class="btn btn-lg" >{{ "github_profile"|trans }}</a>
     </div>
 {% endblock %}
 

@@ -135,7 +135,6 @@ class AdminController extends Controller
         		$newEvent->setAssociation($eventToDuplicate->getAssociation());
         		$newEvent->setDescription($eventToDuplicate->getDescription());
         		$newEvent->setEndTime($eventToDuplicate->getEndTime());
-        		$newEvent->setFile($eventToDuplicate->getFile());
         		$newEvent->setFree($eventToDuplicate->getFree());
         		$newEvent->setName($eventToDuplicate->getName());
         		$newEvent->setPicture($eventToDuplicate->getPicture());
@@ -158,12 +157,21 @@ class AdminController extends Controller
             }
         }
         
+        // We have to do that because it's complicated to duplicate the place
+        if(!empty($eventToDuplicateId)) {
+            $tempEvent = $repoEvent->find($eventToDuplicateId);
+            
+            if($tempEvent != null) {
+                $newEvent->setPlaceEntity($tempEvent->getPlaceEntity());
+            }
+        }
+        
         $formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
         
         if($user->getAssociation() != null) {
-        	
+            
         	if ($request->isMethod('POST') && empty($action) && empty($deleteId)) {
-        	
+        	    
         		$newEvent->setAssociation($user->getAssociation());
         	
         		$formAdd->handleRequest($request);
@@ -333,13 +341,18 @@ class AdminController extends Controller
         
         if($request->isMethod('POST') && !empty($search)) {
             
-            $query = $repoPlace->createQueryBuilder('p')
-            ->where('p.name LIKE :name')
-            ->setParameter('name', '%'.str_replace(" ", "%", trim($search)).'%')
-            ->orderBy('p.name', 'ASC')
+            $qb = $repoPlace->createQueryBuilder('p');
+            $qb->where(
+                $qb->expr()->orX(
+                    $qb->expr()->like($qb->expr()->concat("p.name", $qb->expr()->concat($qb->expr()->literal('%'), "p.city")), ":name"),
+                    $qb->expr()->like($qb->expr()->concat("p.city", $qb->expr()->concat($qb->expr()->literal('%'), "p.name")), ":name")
+                )
+            )
+            ->setParameter("name", "%".str_replace(" ", "%", trim($search))."%")
+            ->orderBy("p.name", "ASC")
             ->getQuery();
             
-            $places = $query->getResult();
+            $places = $qb->getQuery()->getResult();
         }
         
         $newPlace = new Place();
