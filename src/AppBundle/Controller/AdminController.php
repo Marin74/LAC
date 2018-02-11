@@ -153,10 +153,25 @@ class AdminController extends Controller
         // Add request
         if ($user->getAssociation() != null && !empty($placeId)) {
             
+            // Check if we change the place of an event or is we create an event in a place
+            
             $place = $repoPlace->find($placeId);
             
             if($place != null) {
-                $newEvent->setPlaceEntity($place);
+                
+                if(!empty($action) && $action == "changePlace" && !empty($eventId)) {
+                    
+                    $event = $repoEvent->find($eventId);
+                    
+                    if($event != null) {
+                        $event->setPlaceEntity($place);
+                        $em->flush();
+                        $request->getSession()->getFlashBag()->add('success', $translator->trans("place_changed"));
+                    }
+                }
+                else {
+                    $newEvent->setPlaceEntity($place);
+                }
             }
         }
         
@@ -341,6 +356,8 @@ class AdminController extends Controller
         
         $places = array();
         $search = $request->get("name");
+        $action = $request->get("action");
+        $eventId = $request->get("eventId");
         
         if($request->isMethod('POST') && !empty($search)) {
             
@@ -377,14 +394,25 @@ class AdminController extends Controller
                     $route = "app_superadmin_events";
                 }
                 
-                return $this->redirectToRoute($route, array("placeId" => $newPlace->getId()));
+                $params = array("placeId" => $newPlace->getId());
+                
+                if(!empty($action)) {
+                    $params["action"] = $action;
+                }
+                if(!empty($eventId)) {
+                    $params["eventId"] = $eventId;
+                }
+                
+                return $this->redirectToRoute($route, $params);
             }
         }
         
         return $this->render('AppBundle:Admin:searchPlace.html.twig', array(
             'places'    => $places,
             'search'    => $search,
-            'formAdd'   => $formAdd->createView()
+            'formAdd'   => $formAdd->createView(),
+            'action'    => $action,
+            'eventId'   => $eventId
         ));
     }
     

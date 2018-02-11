@@ -60,10 +60,24 @@ class SuperAdminController extends Controller
         // Add request
         if ($user->getAssociation() != null && !empty($placeId)) {
             
+            // Check if we change the place of an event or is we create an event in a place
+            
             $place = $repoPlace->find($placeId);
             
             if($place != null) {
-                $newEvent->setPlaceEntity($place);
+                if(!empty($action) && $action == "changePlace" && !empty($eventId)) {
+                    
+                    $event = $repoEvent->find($eventId);
+                    
+                    if($event != null) {
+                        $event->setPlaceEntity($place);
+                        $em->flush();
+                        $request->getSession()->getFlashBag()->add('success', $translator->trans("place_changed"));
+                    }
+                }
+                else {
+                    $newEvent->setPlaceEntity($place);
+                }
             }
         }
         

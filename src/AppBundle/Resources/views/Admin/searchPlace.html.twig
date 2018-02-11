@@ -11,7 +11,7 @@
 
 {% block content %}
 
-	<form method="POST" action="{{ url(app.request.attributes.get('_route'), {'source': app.request.get('source')}) }}">
+	<form method="POST" action="{{ url(app.request.attributes.get('_route'), {'source': app.request.get('source'), 'action': app.request.get('action'), 'eventId': app.request.get('eventId')}) }}">
 		<input type="hidden" name="action" value="search" />
 		<p>
 			<input type="text" class="form-control" id="name" name="name" placeholder="{{ "place"|trans }}" value="{% if search is defined %}{{ search }}{% endif %}" autofocus>
@@ -33,7 +33,7 @@
     			{% for place in places %}
     				<tr>
     					<td>
-    						<a href="{% if app.request.get('source') == 'admin' %} {{ url("app_admin_events", {"placeId": place.id}) }} {% else %} {{ url("app_superadmin_events", {"placeId": place.id}) }} {% endif %} ">
+    						<a href="{% if app.request.get('source') == 'admin' %} {{ url("app_admin_events", {"placeId": place.id, "action": action, "eventId": eventId}) }} {% else %} {{ url("app_superadmin_events", {"placeId": place.id, "action": action, "eventId": eventId}) }} {% endif %} ">
     						    {{ place.name }}
     						</a>
     					</td>

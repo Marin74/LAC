@@ -177,3 +177,6 @@ searched_place_not_found_hint: Faites plusieurs recherches sur différents mots-
 i_create_it: "Je le crée !"
 event_location: "Lieu : %place%"
 event_documents: "Documents de %event%"
+place_changed: Le lieu est modifié.
+change: Modifier
+
