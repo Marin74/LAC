@@ -188,7 +188,7 @@ class AdminController extends Controller
         
         if($user->getAssociation() != null) {
             
-        	if ($request->isMethod('POST') && empty($action) && empty($deleteId)) {
+            if ($request->isMethod('POST') && (empty($action) || $action == "search") && empty($deleteId)) {
         	    
         		$newEvent->setAssociation($user->getAssociation());
         	

@@ -93,10 +93,10 @@ class SuperAdminController extends Controller
         $formAdd = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $newEvent)->getForm();
 
         // Add form
-        if ($request->isMethod('POST') && empty($action) && empty($deleteId)) {
+        if ($request->isMethod('POST') && (empty($action) || $action == "search") && empty($deleteId)) {
 
             $formAdd->handleRequest($request);
-
+            
             if ($formAdd->isValid()) {
 
                 if ($newEvent->getStartTime() > $newEvent->getEndTime())
