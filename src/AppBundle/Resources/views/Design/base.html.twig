@@ -6,8 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="">
+        <meta name="author" content="{{ app_name }}">
+        <link rel="icon" type="image/svg" href="{{ asset("bundles/app/img/favicon.svg") }}">
 
         <title>{% block title %}{{ app_name }}{% endblock %}</title>
 
@@ -32,6 +32,9 @@
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.0/dist/MarkerCluster.css" />
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.0/dist/MarkerCluster.Default.css" />
         <link href="{{ asset("bundles/app/css/style.css") }}" rel="stylesheet">
+        
+        <!-- AddEvent script -->
+		<script type="text/javascript" src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
         
 		<!-- Piwik -->
 		<script type="text/javascript">

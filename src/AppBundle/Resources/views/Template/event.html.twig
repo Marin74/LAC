@@ -34,13 +34,22 @@
                                       text-overflow: ellipsis;
                                       word-wrap: break-word;
                                       overflow: hidden;
-                                      max-height: 3.3em;
+                                      max-height: 2.2em;
                                       line-height: 1.1em;">
                 			<strong>{{ event.name }}</strong><br/>
-                            <span style="font-size: 12px">{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</span><br/>
                         </span>
+                        <span style="
+                                      /* Style to limit the number or lines */
+                                      display: block;
+                                      text-overflow: ellipsis;
+                                      word-wrap: break-word;
+                                      overflow: hidden;
+                                      max-height: 2.2em;
+                                      line-height: 1.1em;">
+                            <span style="font-size: 12px">{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</span><br/>
                     	
-            			<a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center;">{{ event.association.name }}</a>
+            				<a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center;">{{ event.association.name }}</a>
+            			</span>
             		</td>
                     {% if event.searchVolunteers %}
                     	<td style="padding: 0px; border: none;">

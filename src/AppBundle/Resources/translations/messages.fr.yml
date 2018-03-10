@@ -179,4 +179,6 @@ event_location: "Lieu : %place%"
 event_documents: "Documents de %event%"
 place_changed: Le lieu est modifié.
 change: Modifier
+add_to_calendar: Ajouter au calendrier
+location_in_calendar: "%place%, %address%"
 

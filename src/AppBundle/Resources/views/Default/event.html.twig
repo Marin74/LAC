@@ -77,6 +77,20 @@
             		{% endfor %}
             	</p>
             {% endif %}
+            
+            <center>
+                <div title="Add to Calendar" class="addeventatc">
+                    {{ "add_to_calendar"|trans }}
+                    <span class="start">{{ event.startTime|date("d/m/Y H:i:s") }}</span>
+                    <span class="end">{{ event.endTime|date("d/m/Y H:i:s") }}</span>
+                    <span class="timezone">UTC</span>
+                    <span class="date_format">DD/MM/YYYY</span>
+                    <span class="title">{{ event.name }}</span>
+                    <span class="description">{{ event.description }}</span>
+                	<span class="location">{{ "location_in_calendar"|trans({"%place%": event.placeEntity.name, "%address%": event.placeEntity.fullAddress}) }}</span>
+                	<span class="organizer">{{ event.association.name }}</span>
+                </div>
+            </center>
     
             <h4>{{ "when"|trans }}</h4>
             <p>
