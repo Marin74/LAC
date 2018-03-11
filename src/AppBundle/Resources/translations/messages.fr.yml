@@ -41,7 +41,7 @@ general: Général
 association_form_hint: Toutes les informations ci-dessous seront publiées sur le site.
 association_updated: Les informations ont été mises à jour.
 error_field: Un des champs est incorrect.
-event_created: L'action est créée.
+event_created: L'action est créée. Ajoutez le flyer de l'évènement dans les documents.
 event_updated: L'action est mise à jour.
 new_event: Nouvelle action
 event: Action
@@ -181,4 +181,5 @@ place_changed: Le lieu est modifié.
 change: Modifier
 add_to_calendar: Ajouter au calendrier
 location_in_calendar: "%place%, %address%"
+upload_picture_hint: "Sélectionnez une belle photo pour mettre en valeur votre évènement !"
 

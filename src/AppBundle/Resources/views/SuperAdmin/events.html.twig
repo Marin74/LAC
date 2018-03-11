@@ -171,6 +171,13 @@
                         {{ form_label(formAdd.file, "picture", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                         <div class="col-sm-10">
                             {{ form_errors(formAdd.file) }}
+                            
+                            <p>
+                                <div class="alert alert-info" role="alert">
+                                	{{ "upload_picture_hint"|trans }}
+                                </div>
+                            </p>
+                            
                             {{ form_widget(formAdd.file) }}
                         </div>
                     </div>
@@ -324,6 +331,13 @@
                             {{ form_label(form.file, "picture", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(form.file) }}
+                                
+                                <p>
+                                    <div class="alert alert-info" role="alert">
+                                    	{{ "upload_picture_hint"|trans }}
+                                    </div>
+                                </p>
+                                
                                 {{ form_widget(form.file) }}
                             </div>
                         </div>
