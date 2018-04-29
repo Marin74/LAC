@@ -157,13 +157,18 @@ class AdminController extends Controller
             
             $place = $repoPlace->find($placeId);
             
-            if($place != null) {
+            if($place != null || $placeId == "-1") {
                 
                 if(!empty($action) && $action == "changePlace" && !empty($eventId)) {
                     
                     $event = $repoEvent->find($eventId);
                     
                     if($event != null) {
+                        
+                        if($placeId == "-1") {
+                            $placeId = "";
+                        }
+                        
                         $event->setPlaceEntity($place);
                         $em->flush();
                         $request->getSession()->getFlashBag()->add('success', $translator->trans("place_changed"));
@@ -217,6 +222,10 @@ class AdminController extends Controller
 	                    		$newEvent->setPicture($tempEvent->getPicture());
 	                    		$em->flush();
 	                    	}
+	                    }
+	                    
+	                    if($placeId == "-1") {
+	                        $placeId = "";
 	                    }
         
        					$newEvent = new Event();
@@ -292,6 +301,10 @@ class AdminController extends Controller
         						
         						// Save the object event
         						$em->flush();
+        						
+        						if($placeId == "-1") {
+        						    $placeId = "";
+        						}
 								
         						$formBuilder = $this->get('form.factory')->createBuilder(EventFormType::class, $event);
         						$form = $formBuilder->getForm();
@@ -315,7 +328,7 @@ class AdminController extends Controller
         	"passedEvents"			=> $passedEvents,
         	"allEvents"				=> $allEvents,
         	"isDuplicatingEvent"	=> $isDuplicatingEvent,
-            "displayAddForm"        => $newEvent->getPlaceEntity() != null
+            "displayAddForm"        => ($newEvent->getPlaceEntity() != null || $placeId == "-1")
         );
         
         if($eventToDuplicate != null) {

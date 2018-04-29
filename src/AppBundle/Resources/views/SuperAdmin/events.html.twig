@@ -307,7 +307,7 @@
                             <p></p>
                         {% endif %}
                         
-                        <p class="well well-sm">{{ "event_location"|trans({'%place%': event.placeEntity.name}) }} <a href="{{ url("app_admin_search_place", {"source": "super_admin", "action": "changePlace", "eventId": event.id}) }}" class="btn btn-sm btn-primary">{{ "change"|trans }}</a></p>
+                        <p class="well well-sm">{% if event.placeEntity is not null %}{{ "event_location"|trans({'%place%': event.placeEntity.name}) }} {% endif %}<a href="{{ url("app_admin_search_place", {"source": "super_admin", "action": "changePlace", "eventId": event.id}) }}" class="btn btn-sm btn-primary">{% if event.placeEntity is not null %}{{ "change"|trans }}{% else %}{{ "select_place"|trans }}{% endif %}</a></p>
 
                         <p>
 

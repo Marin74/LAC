@@ -251,7 +251,7 @@
         {% endif %}
     </div>
 
-    {% if association is not null and association.nextEvents|length > 0 %}
+    {% if association is not null and association.nextEvents|length > 0 and association.hasNextEventsWithPlace %}
         <div id="mapid" class="map"></div>
     {% endif %}
 {% endblock %}
@@ -276,7 +276,7 @@
         	$("#carousel-next-events").carousel('prev');
         }
 
-    	{% if association is not null %}
+    	{% if association is not null and association.nextEvents|length > 0 and association.hasNextEventsWithPlace %}
             {% if association.nextEvents|length != 1 %}
                 var map = L.map('mapid').setView([{{ map_center }}], 11);
             {% else %}
@@ -300,23 +300,26 @@
             });
     
             {% for event in association.nextEvents %}
-                var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
-                marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
 
-                marker.on('mouseover', function (e) {
-                    this.openPopup();
-                });
-                marker.on('mouseout', function (e) {
-                    this.closePopup();
-                });
-                {% if is_mobile() == false %}
-                    marker.on('click', function (e) {
-                        location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}'
+        		{% if event.placeEntity is not null %}
+                    var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
+                    marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
+    
+                    marker.on('mouseover', function (e) {
+                        this.openPopup();
                     });
+                    marker.on('mouseout', function (e) {
+                        this.closePopup();
+                    });
+                    {% if is_mobile() == false %}
+                        marker.on('click', function (e) {
+                            location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}'
+                        });
+                    {% endif %}
+                    
+                    markers.push([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
+                    markerClusters.addLayer(marker);
                 {% endif %}
-                
-                markers.push([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
-                markerClusters.addLayer(marker);
             {% endfor %}
     
             {% if association.nextEvents|length > 1 %}

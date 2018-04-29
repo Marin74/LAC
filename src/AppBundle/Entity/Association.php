@@ -462,6 +462,18 @@ class Association
         return $nextEvents;
     }
     
+    public function hasNextEventsWithPlace() {
+        
+        foreach($this->getNextEvents() as $event) {
+            
+            if($event->getPlaceEntity() != null) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     public function getFullAddress()
     {
         $address = "";

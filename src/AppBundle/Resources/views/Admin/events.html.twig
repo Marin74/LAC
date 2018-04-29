@@ -36,7 +36,6 @@
                     	<th></th>
                         <th>{{ "event"|trans }}</th>
                         <th>{{ "date"|trans }}</th>
-                        <th>{{ "place"|trans }}</th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -55,7 +54,6 @@
                             	</td>
                                 <td><a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}" style="cursor: pointer;">{{ event.name }}</a></td>
                                 <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
-                                <td>{{ event.placeEntity.name }}</td>
                                 <td>
                                 	<a href="{{ url("app_admin_event_document", {"id": event.id}) }}">{{ "documents"|trans }}</a>
                                 </td>
@@ -91,7 +89,6 @@
                     	<th></th>
                         <th>{{ "event"|trans }}</th>
                         <th>{{ "date"|trans }}</th>
-                        <th>{{ "association"|trans }}</th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -111,11 +108,6 @@
                             	<a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}" style="cursor: pointer;">{{ event.name }}</a>
                         	</td>
                             <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
-                            <td>
-                                <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl, "source": "super_admin_events"}) }}">
-                                    {{ event.association.name }}
-                                </a>
-                            </td>
                             <td>
                             	{% if event.published %}
                                 	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "super_admin_events"}) }}">{{ "consult"|trans }}</a>
@@ -305,7 +297,7 @@
                                 <p></p>
                             {% endif %}
                                 
-                        	<p class="well well-sm">{{ "event_location"|trans({'%place%': event.placeEntity.name}) }} <a href="{{ url("app_admin_search_place", {"source": "admin", "action": "changePlace", "eventId": event.id}) }}" class="btn btn-sm btn-primary">{{ "change"|trans }}</a></p>
+                        	<p class="well well-sm">{% if event.placeEntity is not null %}{{ "event_location"|trans({'%place%': event.placeEntity.name}) }} {% endif %}<a href="{{ url("app_admin_search_place", {"source": "admin", "action": "changePlace", "eventId": event.id}) }}" class="btn btn-sm btn-primary">{% if event.placeEntity is not null %}{{ "change"|trans }}{% else %}{{ "select_place"|trans }}{% endif %}</a></p>
 
                             <p>
 

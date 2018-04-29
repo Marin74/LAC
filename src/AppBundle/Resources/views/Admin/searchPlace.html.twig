@@ -17,7 +17,7 @@
 			<input type="text" class="form-control" id="name" name="name" placeholder="{{ "place"|trans }}" value="{% if search is defined %}{{ search }}{% endif %}" autofocus>
 		</p>
 		<p>
-			<button type="submit" class="btn btn-success btn-small">{{ "search"|trans }}</button>
+			<button type="submit" class="btn btn-success btn-small">{{ "search"|trans }}</button> <a href="{% if app.request.get('source') == 'admin' %} {{ url("app_admin_events", {"placeId": -1, "action": action, "eventId": eventId}) }} {% else %} {{ url("app_superadmin_events", {"placeId": -1, "action": action, "eventId": eventId}) }} {% endif %}" type="button" class="btn btn-default btn-small">{{ "select_no_place"|trans }}</a>
 		</p>
 	</form>
 	

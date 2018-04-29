@@ -61,14 +61,16 @@
 
 			<em> - {{ event.association.name }}</em>
 			
-            <h4>{{ "where"|trans }}</h4>
-            <p>
-				<strong>{{ event.placeEntity.name }}</strong>
-                {% if event.placeEntity.fullAddress is not empty %}
-                	<br/>
-                    {{ event.placeEntity.fullAddress }}
-                {% endif %}
-            </p>
+			{% if event.placeEntity is not null %}
+                <h4>{{ "where"|trans }}</h4>
+                <p>
+    				<strong>{{ event.placeEntity.name }}</strong>
+                    {% if event.placeEntity.fullAddress is not empty %}
+                    	<br/>
+                        {{ event.placeEntity.fullAddress }}
+                    {% endif %}
+                </p>
+            {% endif %}
     	</div>
     	
 	    {% set lastEvent = event %}

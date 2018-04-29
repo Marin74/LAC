@@ -99,18 +99,20 @@
                 {% endif %}
     		</p>
     		
-            <h4>{{ "where"|trans }}</h4>
-            <p>
-				<strong>{{ event.placeEntity.name }}</strong>
-    
-                {% if event.placeEntity.fullAddress is not empty %}
-                	<br/>
-                    {{ event.placeEntity.fullAddress }}
-                {% endif %}
-            </p>
+    		{% if event.placeEntity is not null %}
+                <h4>{{ "where"|trans }}</h4>
+                <p>
+    				<strong>{{ event.placeEntity.name }}</strong>
+        
+                    {% if event.placeEntity.fullAddress is not empty %}
+                    	<br/>
+                        {{ event.placeEntity.fullAddress }}
+                    {% endif %}
+                </p>
+            {% endif %}
         {% endif %}
     </div>
-    {% if event is not null %}
+    {% if event is not null and event.placeEntity is not null %}
     	<div id="mapid" class="map"></div>
     {% endif %}
 {% endblock %}
@@ -118,7 +120,7 @@
 {% block js %}
     <script type="application/javascript">
 
-    	{% if event is not null %}
+    	{% if event is not null and event.placeEntity is not null %}
             var map = L.map('mapid').setView([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}], 15);
     
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {

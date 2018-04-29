@@ -114,7 +114,6 @@ class Event
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Place", inversedBy="events")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
-     * @Assert\NotNull()
      */
     private $placeEntity;
 

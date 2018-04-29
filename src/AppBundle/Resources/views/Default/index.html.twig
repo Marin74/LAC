@@ -131,8 +131,10 @@
             {% endfor %}
         {% endif %}
     </div>
-
-    <div id="mapid" class="col-md-12 map fit" style="min-width: 310px;"></div>
+    
+    {% if hasNextEventsWithPlace %}
+    	<div id="mapid" class="col-md-12 map fit" style="min-width: 310px;"></div>
+    {% endif %}
     
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="container" style="padding-top: 10px;">
@@ -172,53 +174,58 @@
         	$("#carousel-next-events").carousel('prev');
         }
 
-        {% if nextEvents|length != 1 %}
-            var map = L.map('mapid').setView([{{ map_center }}], 11);
-        {% else %}
-            var map = L.map('mapid').setView([{{ nextEvents[0].placeEntity.latitude }}, {{ nextEvents[0].placeEntity.longitude }}], 11);
-        {% endif %}
-
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
-            maxZoom: 18,
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-            '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            id: 'mapbox.streets'
-        }).addTo(map);
-
-        // Prevent the zoom when we scroll the webpage
-        map.scrollWheelZoom.disable();
-
-        var markers = [];
-        var markerClusters = L.markerClusterGroup({
-            showCoverageOnHover: false
-        });
-
-        {% for event in nextEvents %}
-            var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
-
-            marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong><br/>{{ event.placeEntity.name }}{% if event.placeEntity.street is not empty %}<br/>{{ event.placeEntity.street }}{% endif %}{% if event.placeEntity.city is not empty %}<br/>{{ event.placeEntity.city }}{% endif %}');
-
-            marker.on('mouseover', function (e) {
-                this.openPopup();
-            });
-            marker.on('mouseout', function (e) {
-                this.closePopup();
-            });
-            {% if is_mobile() == false %}
-                marker.on('click', function (e) {
-                    location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}'
-                });
+        {% if hasNextEventsWithPlace %}
+            {% if nextEvents|length != 1 %}
+                var map = L.map('mapid').setView([{{ map_center }}], 11);
+            {% else %}
+                var map = L.map('mapid').setView([{{ nextEvents[0].placeEntity.latitude }}, {{ nextEvents[0].placeEntity.longitude }}], 11);
             {% endif %}
-            
-            markers.push([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
-            markerClusters.addLayer(marker);
-        {% endfor %}
+    
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
+                maxZoom: 18,
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                id: 'mapbox.streets'
+            }).addTo(map);
+    
+            // Prevent the zoom when we scroll the webpage
+            map.scrollWheelZoom.disable();
+    
+            var markers = [];
+            var markerClusters = L.markerClusterGroup({
+                showCoverageOnHover: false
+            });
+    
+            {% for event in nextEvents %}
 
-        {% if nextEvents|length > 1 %}
-            map.fitBounds(markers, { padding: [40, 40] });
+        		{% if event.placeEntity != null %}
+                    var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
+        
+                    marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong><br/>{{ event.placeEntity.name }}{% if event.placeEntity.street is not empty %}<br/>{{ event.placeEntity.street }}{% endif %}{% if event.placeEntity.city is not empty %}<br/>{{ event.placeEntity.city }}{% endif %}');
+        
+                    marker.on('mouseover', function (e) {
+                        this.openPopup();
+                    });
+                    marker.on('mouseout', function (e) {
+                        this.closePopup();
+                    });
+                    {% if is_mobile() == false %}
+                        marker.on('click', function (e) {
+                            location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}'
+                        });
+                    {% endif %}
+                    
+                    markers.push([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
+                    markerClusters.addLayer(marker);
+                {% endif %}
+            {% endfor %}
+    
+            {% if nextEvents|length > 1 %}
+                map.fitBounds(markers, { padding: [40, 40] });
+            {% endif %}
+    
+            map.addLayer(markerClusters);
         {% endif %}
-
-        map.addLayer(markerClusters);
     </script>
 {% endblock %}

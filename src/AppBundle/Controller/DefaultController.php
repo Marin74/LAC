@@ -56,15 +56,21 @@ class DefaultController extends Controller
         ksort($tempArrayEvents);
         
         $nextEvents = array();
+        $hasNextEventsWithPlace = false;
         
         foreach($tempArrayEvents as $event) {
             
             $nextEvents[] = $event;
+            
+            if($event->getPlaceEntity() != null) {
+                $hasNextEventsWithPlace = true;
+            }
         }
 
         return $this->render('AppBundle:Default:index.html.twig', array(
-            'mainAssociation'   => $mainAssociation,
-            'nextEvents'        => $nextEvents,
+            'mainAssociation'           => $mainAssociation,
+            'nextEvents'                => $nextEvents,
+            'hasNextEventsWithPlace'    => $hasNextEventsWithPlace
         ));
     }
 
