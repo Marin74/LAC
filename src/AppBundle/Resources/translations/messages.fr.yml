@@ -1,10 +1,11 @@
 welcome: Découvrez
 who_are_we: Qui sommes-nous
+no_events: Pas d'actions.
 no_current_events: Pas d'actions pour le moment.
 details: Détails
 association_unknown: L'acteur n'existe pas.
 event_unknown: L'action n'existe pas.
-site_open_source: Site open source
+about: À propos
 next_events: Assistez ou participez aux prochaines actions
 coordinates: Coordonnées
 website: Site internet
@@ -179,7 +180,21 @@ event_location: "Lieu : %place%"
 event_documents: "Documents de %event%"
 place_changed: Le lieu est modifié.
 change: Modifier
-add_to_calendar: Ajouter au calendrier
-location_in_calendar: "%place%, %address%"
 upload_picture_hint: "Sélectionnez une belle photo pour mettre en valeur votre évènement !"
-
+in_progress: En cours
+month_01: Janvier
+month_02: Février
+month_03: Mars
+month_04: Avril
+month_05: Mai
+month_06: Juin
+month_07: Juillet
+month_08: Août
+month_09: Septembre
+month_10: Octobre
+month_11: Novembre
+month_12: Décembre
+month_and_year: "%month% %year%"
+previous_plural: Précédents
+next_plural: Suivants
+archives: Archives

@@ -33,7 +33,7 @@
                 			<span class="label label-default" style="text-decoration: none;">{{ "association_undisplayed"|trans }}</span>
                 		{% endif %}
                 	</td>
-                    <td><a data-toggle="modal" data-target="#modal_update_{{ association.id }}" id="a_update_{{ association.id }}">{{ association.name }}</a></td>
+                    <td><a data-toggle="modal" data-target="#modal_update_{{ association.id }}" id="a_update_{{ association.id }}" style="cursor: pointer;">{{ association.name }}</a></td>
                     <td>
                         <a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl, "source": "super_admin_associations"}) }}">{{ "consult"|trans }}</a>
                     </td>

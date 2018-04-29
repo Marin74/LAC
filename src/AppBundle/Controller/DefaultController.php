@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\Query\Expr\Join;
 
 class DefaultController extends Controller
 {
@@ -14,27 +15,56 @@ class DefaultController extends Controller
         $mainAssociation = null;
         if($this->container->hasParameter("app_name"))
             $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
-
+        
+        $now = new \DateTime();
+        
         $query = $em->createQuery(
             'SELECT e
             FROM AppBundle:Event e
             WHERE e.endTime > :now
         	AND e.published = true
             ORDER BY e.startTime ASC'
-        )->setParameter('now', new \DateTime());
+        )->setParameter('now', $now);
 
         $tempEvents = $query->getResult();
-        $nextEvents = array();
+        $tempArrayEvents = array();
         
         foreach($tempEvents as $event) {
         	
-        	if($event->getAssociation()->isDisplayed())
-        		$nextEvents[] = $event;
+            if($event->getAssociation()->isDisplayed()) {
+                
+                // Check if the event is long like an exhibition
+                $diff = $now->diff($event->getEndTime());
+                $diff->format('%R');
+                
+                $sortDate = $event->getStartTime();
+                
+                if($event->getStartTime() <= $now) {
+                    
+                    if($diff->days >= 10) {
+                        
+                        $sortDate = $event->getEndTime();
+                        
+                        $sortDate->modify("-7 days");
+                    }
+                }
+                
+                $tempArrayEvents[$sortDate->format("Y-m-d H:i:s")."_".$event->getId()] = $event;
+            }
+        }
+        
+        ksort($tempArrayEvents);
+        
+        $nextEvents = array();
+        
+        foreach($tempArrayEvents as $event) {
+            
+            $nextEvents[] = $event;
         }
 
         return $this->render('AppBundle:Default:index.html.twig', array(
-            'mainAssociation' => $mainAssociation,
-            'nextEvents' => $nextEvents,
+            'mainAssociation'   => $mainAssociation,
+            'nextEvents'        => $nextEvents,
         ));
     }
 
@@ -210,5 +240,83 @@ class DefaultController extends Controller
     		'quizCategories'	=> $quizCategories,
     		'associations'		=> $associations
     	));
+    }
+    
+    public function archivesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoEvent = $em->getRepository("AppBundle:Event");
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name")) {
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        }
+        
+        $page = intval($request->get("page"));
+        if($page <= 0) {
+            $page = 1;
+        }
+        
+        $NB_ITEMS = 10;
+        
+        $offset = ($page - 1) * $NB_ITEMS;
+        
+        $now = new \DateTime();
+        
+        $qb = $repoEvent->createQueryBuilder("e");
+        $qb
+        ->innerJoin(
+            'AppBundle:Association',
+            'a',
+            Join::WITH,
+            $qb->expr()->eq('e.association', 'a')
+        )
+        ->where($qb->expr()->eq("e.published", ":published"))
+        ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+        ->andWhere($qb->expr()->lte("e.endTime", ":now"))
+        ->setParameter("published", true)
+        ->setParameter("displayed", true)
+        ->setParameter("now", $now)
+        ->orderBy("e.endTime", "DESC")
+        ->setFirstResult($offset)
+        ->setMaxResults($NB_ITEMS)
+        ;
+        
+        $events = $qb->getQuery()->getResult();
+        
+        $nbDisplayedEvents = $offset + 1 + count($events);
+        
+        // Check if there are events after
+        $offset += $NB_ITEMS;
+        
+        $qb = $repoEvent->createQueryBuilder("e");
+        $qb->select('count(e.id)');
+        $qb
+        ->innerJoin(
+            'AppBundle:Association',
+            'a',
+            Join::WITH,
+            $qb->expr()->eq('e.association', 'a')
+        )
+        ->where($qb->expr()->eq("e.published", ":published"))
+        ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+        ->andWhere($qb->expr()->lte("e.endTime", ":now"))
+        ->setParameter("published", true)
+        ->setParameter("displayed", true)
+        ->setParameter("now", $now)
+        ->orderBy("e.endTime", "DESC")
+        //->setFirstResult($offset)
+        //->setMaxResults(1)
+        ;
+        
+        $nbOldEvents = $qb->getQuery()->getSingleScalarResult();
+        
+        
+        return $this->render('AppBundle:Default:archives.html.twig', array(
+            'mainAssociation'   => $mainAssociation,
+            'events'            => $events,
+            'displayNext'       => ($nbOldEvents > $nbDisplayedEvents),
+            'page'              => $page
+        ));
     }
 }

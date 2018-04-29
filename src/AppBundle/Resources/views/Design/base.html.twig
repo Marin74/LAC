@@ -8,6 +8,21 @@
         <meta name="description" content="">
         <meta name="author" content="{{ app_name }}">
         <link rel="icon" type="image/svg" href="{{ asset("bundles/app/img/favicon.svg") }}">
+        
+        <meta property="og:url"           content="{{ url(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")) }}" />
+		<meta property="og:type"          content="website" />
+		<meta property="og:title"         content="{{ app_name }}" />
+		<meta property="og:description"   content="{{ app_description }}" />
+		<meta property="og:image"         content="
+		{% if event is defined %}
+		    {% if event.picture is not empty%}
+		        {{ asset(event.picturePath) }}
+	        {% elseif event.association.picture is not empty %}
+	            {{ asset(event.association.picturePath) }}
+            {% endif %}
+        {% elseif association is defined and association.picture is not empty %}
+            {{ asset(event.picturePath) }}
+        {% endif %}" />
 
         <title>{% block title %}{{ app_name }}{% endblock %}</title>
 
@@ -32,9 +47,6 @@
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.0/dist/MarkerCluster.css" />
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.0/dist/MarkerCluster.Default.css" />
         <link href="{{ asset("bundles/app/css/style.css") }}" rel="stylesheet">
-        
-        <!-- AddEvent script -->
-		<script type="text/javascript" src="https://addevent.com/libs/atc/1.6.1/atc.min.js" async defer></script>
         
 		<!-- Piwik -->
 		<script type="text/javascript">

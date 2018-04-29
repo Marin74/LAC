@@ -38,7 +38,7 @@
                         <li class="{% if app.request.attributes.get('_route') == "app_superadmin_users" %}active{% endif %}"><a href="{{ url("app_superadmin_users") }}">{{ "users"|trans }}</a></li>
                         <li class="{% if app.request.attributes.get('_route') == "app_superadmin_associations" %}active{% endif %}"><a href="{{ url("app_superadmin_associations") }}">{{ "associations"|trans }}</a></li>
                         <li class="{% if app.request.attributes.get('_route') == "app_superadmin_events" %}active{% endif %}"><a href="{{ url("app_superadmin_events") }}">{{ "events"|trans }}</a></li>
-                        <li class="{% if app.request.attributes.get('_route') == "app_superadmin_quiz_scores" %}active{% endif %}"><a href="{{ url("app_superadmin_quiz_scores") }}">{{ "quiz"|trans }}</a></li>
+                        <!--<li class="{% if app.request.attributes.get('_route') == "app_superadmin_quiz_scores" %}active{% endif %}"><a href="{{ url("app_superadmin_quiz_scores") }}">{{ "quiz"|trans }}</a></li>-->
                     </ul>
                 {% endif %}
             </div>

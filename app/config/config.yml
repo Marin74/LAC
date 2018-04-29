@@ -46,6 +46,7 @@ twig:
         time_zone: "%time_zone%"
         locale: "%locale%"
         piwik_url: "%piwik_url%"
+        app_description: "%app_description%"
 
 # Doctrine Configuration
 doctrine:
@@ -81,6 +82,9 @@ fos_user:
     db_driver:     orm                       # Type of DB to use, here we use Doctrine ORM
     firewall_name: main
     user_class:    AppBundle\Entity\User # Class of the entity User we use
+    from_email:
+        address: "%mailer_user%"
+        sender_name: "%mailer_user%"
     
 # Services
 services:

@@ -1,0 +1,104 @@
+{% extends "AppBundle:Design:design.html.twig" %}
+
+{% block title %}
+	{{ "archives"|trans }} - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        
+        <ol class="breadcrumb">
+        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
+        	<li class="active">{{ "archives"|trans }}</li>
+        </ol>
+        
+        <h1 class="second-main-color center">{{ "archives"|trans }}</h1>
+        
+		<nav aria-label="...">
+    		<ul class="pager">
+    			{% if page > 1 %}
+    				<li class="previous"><a href="{{ url("app_archives_page", {"page": page-1}) }}"><span aria-hidden="true">&larr;</span> {{ "next_plural"|trans }}</a></li>
+    			{% endif %}
+    			{% if displayNext %}
+    				<li class="next"><a href="{{ url("app_archives_page", {"page": page+1}) }}">{{ "previous_plural"|trans }} <span aria-hidden="true">&rarr;</span></a></li>
+    			{% endif %}
+    		</ul>
+		</nav>
+
+        <!-- Wrapper for slides -->
+        <p>
+            {% if events|length == 0 %}
+            	{{ "no_events"|trans }}
+        	{% else %}
+                <div class="row">
+                    
+                	{% set now = "now"|date("Y-m-d H:i:s") %}
+                	
+                	{% set lastEvent = events[0] %}
+                	{% set inProgressTitleDisplayed = false %}
+                	
+                    {% for event in events %}
+                    	
+                    	{% if loop.index == 1 or event.startTime|date("Y-m") != lastEvent.startTime|date("Y-m") %}
+                    	    
+                    	    {% if event.startTime|date("Y-m-d H:i:s") <= now and now < event.endTime|date("Y-m-d H:i:s") %}
+                    	    	{# Set "In progress" title if it was never displayed it before #}
+                    	    	
+                    	    	{% if inProgressTitleDisplayed == false %}
+                    	    		{% set inProgressTitleDisplayed = true %}
+                    	    		
+                    	    		{% if loop.index > 1 %}
+                    	    			</div>
+                					{% endif %}
+                					
+                    	    		<h4>{{ "in_progress"|trans }}</h4>
+                    	    		
+            						<div class="row">
+                	    		{% endif %}
+                    		{% else %}
+                    			
+                	    		{% if loop.index > 1 %}
+                	    			</div>
+            					{% endif %}
+            					
+            					
+        						{% set month = ("month_"~event.startTime|date("m"))|trans %}
+        						
+            					{% if now|date("Y") != event.startTime|date("Y") %}
+                    				<h4>{{ "month_and_year"|trans({"%month%": month, "%year%": event.startTime|date("Y")}) }}</h4>
+    							{% else %}
+    								<h4>{{ month }}</h4>
+    							{% endif %}
+    							
+        						<div class="row">
+                			{% endif %}
+                    		
+                    	{% endif %}
+                    	
+                        {% include 'AppBundle:Template:event.html.twig' with {'event': event, 'displaySearchVolunteers': false} %}
+                        
+	                    {% set lastEvent = event %}
+                    {% endfor %}
+                    
+                    </div>
+                </div>
+            {% endif %}
+        </p>
+        
+		<nav aria-label="...">
+    		<ul class="pager">
+    			{% if page > 1 %}
+    				<li class="previous"><a href="{{ url("app_archives_page", {"page": page-1}) }}"><span aria-hidden="true">&larr;</span> {{ "next_plural"|trans }}</a></li>
+    			{% endif %}
+    			{% if displayNext %}
+    				<li class="next"><a href="{{ url("app_archives_page", {"page": page+1}) }}">{{ "previous_plural"|trans }} <span aria-hidden="true">&rarr;</span></a></li>
+    			{% endif %}
+    		</ul>
+		</nav>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="application/javascript">
+    </script>
+{% endblock %}

@@ -1,27 +1,11 @@
 {% extends "AppBundle:Design:design.html.twig" %}
 
 {% block content %}
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="container">
-        <h2 class="second-main-color">{{ "welcome"|trans }}</h2>
-        <table class="center" style="width: 100%; table-layout: fixed; margin-top: -10px; max-width: 800px;">
-            <tr>
-                <td>
-                	<a href="{{ url("app_associations") }}"><img src="{{ asset("bundles/app/img/btn-associations.svg") }}" style="width: 250px; max-width: 50%;"/></a>
-                	<h3 class="second-main-color" style="margin-top: 5px; margin-left: 5px; margin-right: 5px;">{{ "local_associations"|trans }}</h3>
-                </td>
-                <td>
-                	<a href="{{ url("app_quiz") }}"><img src="{{ asset("bundles/app/img/btn-quiz.svg") }}" style="width: 250px; max-width: 50%;"/></a>
-                	<h3 class="second-main-color" style="margin-top: 5px; margin-left: 5px; margin-right: 5px;">{{ "interesting_events"|trans }}</h3>
-                </td>
-            </tr>
-        </table>
-    </div>
 
-	<div class="bg-second-main-color">
-        <div class="container" style="margin-top: 10px;">
+	<div class="bg-second-main-color" style="margin-top: -20px;">
+        <div class="container">
             <h3 class="white">{{ "next_events"|trans }}</h3>
-            <a href="{{ url("app_events") }}" style="color: white;">{{ "show_all_events"|trans }}</a>
+            <a href="{{ url("app_events") }}" style="color: white; font-size: large;">{{ "show_all_events"|trans }}</a>
         </div>
     
         {% if nextEvents|length == 0 %}
@@ -149,6 +133,23 @@
     </div>
 
     <div id="mapid" class="col-md-12 map fit" style="min-width: 310px;"></div>
+    
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="container" style="padding-top: 10px;">
+        <h2 class="second-main-color">{{ "welcome"|trans }}</h2>
+        <table class="center" style="width: 100%; table-layout: fixed; margin-top: -10px; max-width: 800px;">
+            <tr>
+                <td>
+                	<a href="{{ url("app_associations") }}"><img src="{{ asset("bundles/app/img/btn-associations.svg") }}" style="width: 250px; max-width: 50%;"/></a>
+                	<h3 class="second-main-color" style="margin-top: 5px; margin-left: 5px; margin-right: 5px;">{{ "local_associations"|trans }}</h3>
+                </td>
+                <td>
+                	<a href="{{ url("app_quiz") }}"><img src="{{ asset("bundles/app/img/btn-quiz.svg") }}" style="width: 250px; max-width: 50%;"/></a>
+                	<h3 class="second-main-color" style="margin-top: 5px; margin-left: 5px; margin-right: 5px;">{{ "interesting_events"|trans }}</h3>
+                </td>
+            </tr>
+        </table>
+    </div>
 {% endblock %}
 
 {% block js %}

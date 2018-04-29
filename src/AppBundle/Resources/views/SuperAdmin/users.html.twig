@@ -27,7 +27,7 @@
             {% for user in users %}
                 <tr>
                     <td>
-                        <a data-toggle="modal" data-target="#modal_update_{{ user.id }}" id="a_update_{{ user.id }}">{{ user.username }}</a>
+                        <a data-toggle="modal" data-target="#modal_update_{{ user.id }}" id="a_update_{{ user.id }}" style="cursor: pointer;">{{ user.username }}</a>
                     </td>
                     <td>
                         {% if user.association is not empty %}
