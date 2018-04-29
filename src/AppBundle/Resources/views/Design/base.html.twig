@@ -21,7 +21,7 @@
 	            {{ asset(event.association.picturePath) }}
             {% endif %}
         {% elseif association is defined and association.picture is not empty %}
-            {{ asset(event.picturePath) }}
+            {{ asset(association.picturePath) }}
         {% endif %}" />
 
         <title>{% block title %}{{ app_name }}{% endblock %}</title>

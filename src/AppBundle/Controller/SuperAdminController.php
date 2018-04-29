@@ -14,6 +14,8 @@ use AppBundle\Entity\QuizScore;
 use AppBundle\Form\QuizScoreFormType;
 use AppBundle\Form\ProfileFormType;
 use AppBundle\Form\ChangePasswordFormType;
+use AppBundle\Entity\Document;
+use AppBundle\Form\DocumentFormType;
 
 class SuperAdminController extends Controller
 {
@@ -517,5 +519,81 @@ class SuperAdminController extends Controller
 			"forms" => $forms,
 			"quizScores" => $quizScores,
     	));
+    }
+    
+    public function associationDocumentAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoDocument = $em->getRepository("AppBundle:Document");
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $translator = $this->get("translator");
+        $formDocument = null;
+        $newDocument = null;
+        $deleteId = $request->get("deleteId");
+        $associationId = $request->get("id");
+        
+        $association = $repoAssociation->find($associationId);
+        
+        if($association != null) {
+            
+            $newDocument = new Document();
+            $newDocument->setAssociation($association);
+            $formDocument = $this->get('form.factory')->createBuilder(DocumentFormType::class, $newDocument)->getForm();
+            
+            if ($request->isMethod('POST')) {
+                
+                // Manage document form
+                $formDocument->handleRequest($request);
+                
+                if($formDocument->isSubmitted()) {
+                    if ($formDocument->isValid()) {
+                        
+                        // Upload the document
+                        $em->persist($newDocument);
+                        $res = $newDocument->upload();
+                        
+                        if($res) {
+                            $request->getSession()->getFlashBag()->add('success', $translator->trans("document_added"));
+                            
+                            // Reinit the form
+                            $newDocument = new Document();
+                            $newDocument->setAssociation($association);
+                            $formDocument = $this->get('form.factory')->createBuilder(DocumentFormType::class, $newDocument)->getForm();
+                        }
+                        else {
+                            $em->remove($newDocument);
+                            $request->getSession()->getFlashBag()->add('warning', $translator->trans("unknown_error"));
+                        }
+                        
+                        $em->flush();
+                        
+                        $em->refresh($association);
+                    }
+                    else
+                        $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+                }
+                
+                
+                
+                // Delete request
+                if ($request->isMethod('POST') && !empty($deleteId)) {
+                    
+                    $document = $repoDocument->find($deleteId);
+                    
+                    if($document != null && $document->getAssociation()->getId() == $association->getId()) {
+                        $em->remove($document);
+                        $em->flush();
+                        $request->getSession()->getFlashBag()->add('success', $translator->trans("document_deleted"));
+                        
+                        $em->refresh($association);
+                    }
+                }
+            }
+        }
+        
+        return $this->render('AppBundle:SuperAdmin:associationDocument.html.twig', array(
+            "association"   => $association,
+            "formDocument"  => $formDocument == null ? null: $formDocument->createView()
+        ));
     }
 }

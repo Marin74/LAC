@@ -63,4 +63,9 @@ app_superadmin_events:
 app_superadmin_quiz_scores:
     path:     /admin/superadmin/quizz
     defaults: { _controller: "AppBundle:SuperAdmin:quizScores" }
+app_superadmin_association_document:
+    path:     /admin/superadmin/acteur/{id}/document
+    defaults: { _controller: "AppBundle:SuperAdmin:associationDocument" }
+    requirements:
+        id: \d+
 
