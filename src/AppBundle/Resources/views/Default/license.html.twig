@@ -1,7 +1,7 @@
 {% extends 'AppBundle:Design:design.html.twig' %}
 
 {% block title %}
-	{{ "site_open_source"|trans }} - {{ parent() }}
+	{{ "about"|trans }} - {{ parent() }}
 {% endblock %}
 
 {% block content %}
@@ -9,11 +9,11 @@
         
         <ol class="breadcrumb">
         	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	<li class="active">{{ "site_open_source"|trans }}</li>
+        	<li class="active">{{ "about"|trans }}</li>
         </ol>
         
         <div class="page-header">
-            <h2>{{ "site_open_source"|trans }}</h2>
+            <h2>{{ "about"|trans }}</h2>
         </div>
         
         <p>

@@ -28,7 +28,10 @@
                 	
                     {% for event in events %}
                     	
-                    	{% if loop.index == 1 or event.startTime|date("Y-m") != lastEvent.startTime|date("Y-m") %}
+                    	{% if loop.index == 1 
+                    	or event.startTime|date("Y-m") != lastEvent.startTime|date("Y-m") 
+                    	or (event.startTime|date("Y-m-d H:i:s") > now and lastEvent.startTime|date("Y-m-d H:i:s") <= now )
+                    	%}
                     	    
                     	    {% if event.startTime|date("Y-m-d H:i:s") <= now and now < event.endTime|date("Y-m-d H:i:s") %}
                     	    	{# Set "In progress" title if it was never displayed it before #}

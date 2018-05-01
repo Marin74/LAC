@@ -292,6 +292,7 @@ class DefaultController extends Controller
         
         $nbDisplayedEvents = $offset + 1 + count($events);
         
+        
         // Check if there are events after
         $offset += $NB_ITEMS;
         

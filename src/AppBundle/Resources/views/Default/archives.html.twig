@@ -40,40 +40,22 @@
                     {% for event in events %}
                     	
                     	{% if loop.index == 1 or event.startTime|date("Y-m") != lastEvent.startTime|date("Y-m") %}
-                    	    
-                    	    {% if event.startTime|date("Y-m-d H:i:s") <= now and now < event.endTime|date("Y-m-d H:i:s") %}
-                    	    	{# Set "In progress" title if it was never displayed it before #}
-                    	    	
-                    	    	{% if inProgressTitleDisplayed == false %}
-                    	    		{% set inProgressTitleDisplayed = true %}
-                    	    		
-                    	    		{% if loop.index > 1 %}
-                    	    			</div>
-                					{% endif %}
-                					
-                    	    		<h4>{{ "in_progress"|trans }}</h4>
-                    	    		
-            						<div class="row">
-                	    		{% endif %}
-                    		{% else %}
-                    			
-                	    		{% if loop.index > 1 %}
-                	    			</div>
-            					{% endif %}
-            					
-            					
-        						{% set month = ("month_"~event.startTime|date("m"))|trans %}
-        						
-            					{% if now|date("Y") != event.startTime|date("Y") %}
-                    				<h4>{{ "month_and_year"|trans({"%month%": month, "%year%": event.startTime|date("Y")}) }}</h4>
-    							{% else %}
-    								<h4>{{ month }}</h4>
-    							{% endif %}
-    							
-        						<div class="row">
-                			{% endif %}
-                    		
-                    	{% endif %}
+                    	   	
+            	    		{% if loop.index > 1 %}
+            	    			</div>
+        					{% endif %}
+        					
+        					
+    						{% set month = ("month_"~event.startTime|date("m"))|trans %}
+    						
+        					{% if now|date("Y") != event.startTime|date("Y") %}
+                				<h4>{{ "month_and_year"|trans({"%month%": month, "%year%": event.startTime|date("Y")}) }}</h4>
+							{% else %}
+								<h4>{{ month }}</h4>
+							{% endif %}
+							
+    						<div class="row">
+            			{% endif %}
                     	
                         {% include 'AppBundle:Template:event.html.twig' with {'event': event, 'displaySearchVolunteers': false} %}
                         
