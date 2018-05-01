@@ -66,11 +66,52 @@ class DefaultController extends Controller
                 $hasNextEventsWithPlace = true;
             }
         }
+        
+        
+        // Get random association
+        $randomAssociation = null;
+        
+        $qb = $repoAssociation->createQueryBuilder('a');
+        $qb->select("COUNT(a)");
+        
+        if($mainAssociation != null) {
+            $qb->where(
+                $qb->expr()->neq("a.name", ":name")
+            )
+            ->setParameter("name", $mainAssociation->getName());
+        }
+        
+        $nbAssociations = $qb->getQuery()->getSingleScalarResult();
+        
+        while($nbAssociations > 1 && $randomAssociation == null) {
+            
+            $index = rand(0, $nbAssociations-1);
+            
+            $qb = $repoAssociation->createQueryBuilder('a');
+            
+            if($mainAssociation != null) {
+                $qb->where(
+                    $qb->expr()->neq("a.name", ":name")
+                )
+                ->setParameter("name", $mainAssociation->getName());
+            }
+            
+            $qb->setFirstResult($index);
+            $qb->setMaxResults(1);
+            
+            $results = $qb->getQuery()->getResult();
+            
+            if(count($results) > 0) {
+                $randomAssociation = $results[0];
+            }
+        }
+        
 
         return $this->render('AppBundle:Default:index.html.twig', array(
             'mainAssociation'           => $mainAssociation,
             'nextEvents'                => $nextEvents,
-            'hasNextEventsWithPlace'    => $hasNextEventsWithPlace
+            'hasNextEventsWithPlace'    => $hasNextEventsWithPlace,
+            'randomAssociation'         => $randomAssociation
         ));
     }
 
