@@ -73,9 +73,11 @@ class DefaultController extends Controller
         
         $qb = $repoAssociation->createQueryBuilder('a');
         $qb->select("COUNT(a)");
+        $qb->where($qb->expr()->eq("a.displayed", ":displayed"))
+        ->setParameter("displayed", true);
         
         if($mainAssociation != null) {
-            $qb->where(
+            $qb->andWhere(
                 $qb->expr()->neq("a.name", ":name")
             )
             ->setParameter("name", $mainAssociation->getName());
@@ -88,9 +90,11 @@ class DefaultController extends Controller
             $index = rand(0, $nbAssociations-1);
             
             $qb = $repoAssociation->createQueryBuilder('a');
+            $qb->where($qb->expr()->eq("a.displayed", ":displayed"))
+            ->setParameter("displayed", true);
             
             if($mainAssociation != null) {
-                $qb->where(
+                $qb->andWhere(
                     $qb->expr()->neq("a.name", ":name")
                 )
                 ->setParameter("name", $mainAssociation->getName());

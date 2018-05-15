@@ -147,8 +147,15 @@
                 <td>
                 	{% if randomAssociation is not null %}
                 		<span class="second-main-color">{{ "highlight"|trans }}</span><br/>
-                    	<a href="{{ url("app_associations") }}" style=" text-decoration: none;">
-                        	<img src="{{ asset(randomAssociation.picturePath) }}" style="height: 110px; max-width: 50%;"/>
+                    	<a href="{{ url("app_association", {"id": randomAssociation.id, "name": randomAssociation.nameForUrl}) }}" style=" text-decoration: none;">
+                    		<div class="img-association" style="
+                				background-image: url('{{ asset(randomAssociation.picturePath) }}');
+                				position: relative;
+                				float: center;
+                				background-position: 50% 50%;
+                				background-size:     contain;
+                				height: 110px; max-width: 100%;">
+                            </div>
                         	<h3 class="second-main-color" style="margin-top: 5px; margin-left: 5px; margin-right: 5px;">{{ randomAssociation.name }}</h3>
                     	</a>
                     {% endif %}

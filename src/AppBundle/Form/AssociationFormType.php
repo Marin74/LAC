@@ -58,7 +58,10 @@ class AssociationFormType extends AbstractType
             		'required'	=> false
             	)
             )
-            ->add('displayed',			CheckboxType::class)
+            ->add('displayed',			CheckboxType::class, array(
+                    'required'	=> false
+                )
+            )
         ;
     }
     

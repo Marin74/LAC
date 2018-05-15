@@ -11,8 +11,6 @@
         
         <meta property="og:url"           content="{{ url(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")) }}" />
 		<meta property="og:type"          content="website" />
-		<meta property="og:title"         content="{{ app_name }}" />
-		<meta property="og:description"   content="{{ app_description }}" />
 		<meta property="og:image"         content="
 		{% if event is defined %}
 		    {% if event.picture is not empty%}
@@ -30,7 +28,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         
         <!-- Compiled and minified JavaScript -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js" integrity="sha256-7LkWEzqTdpEfELxcZZlS6wAx5Ff13zZ83lYO2/ujj7g=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!-- Bootstrap datetimepicker coming from http://www.malot.fr/bootstrap-datetimepicker/ -->
         <script src="{{ asset("bundles/app/js/bootstrap-datetimepicker.min.js") }}"></script>
@@ -48,21 +46,23 @@
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.0/dist/MarkerCluster.Default.css" />
         <link href="{{ asset("bundles/app/css/style.css") }}" rel="stylesheet">
         
-		<!-- Piwik -->
-		<script type="text/javascript">
-			var _paq = _paq || [];
-			/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-			_paq.push(['trackPageView']);
-			_paq.push(['enableLinkTracking']);
-			(function() {
-				var u="{{ piwik_url }}";
-				_paq.push(['setTrackerUrl', u+'piwik.php']);
-				_paq.push(['setSiteId', '1']);
-				var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-				g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-			})();
-		</script>
-		<!-- End Piwik Code -->
+        {% if piwik_url is not empty %}
+    		<!-- Piwik -->
+    		<script type="text/javascript">
+    			var _paq = _paq || [];
+    			/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    			_paq.push(['trackPageView']);
+    			_paq.push(['enableLinkTracking']);
+    			(function() {
+    				var u="{{ piwik_url }}";
+    				_paq.push(['setTrackerUrl', u+'piwik.php']);
+    				_paq.push(['setSiteId', '1']);
+    				var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    				g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    			})();
+    		</script>
+    		<!-- End Piwik Code -->
+		{% endif %}
         
     </head>
 
