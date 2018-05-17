@@ -12,13 +12,13 @@
         <meta property="og:url"           content="{{ url(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")) }}" />
 		<meta property="og:type"          content="website" />
 		<meta property="og:image"         content="
-		{% if event is defined %}
+		{% if event is defined and event is not null %}
 		    {% if event.picture is not empty%}
 		        {{ asset(event.picturePath) }}
 	        {% elseif event.association.picture is not empty %}
 	            {{ asset(event.association.picturePath) }}
             {% endif %}
-        {% elseif association is defined and association.picture is not empty %}
+        {% elseif association is defined and association is not null and association.picture is not empty %}
             {{ asset(association.picturePath) }}
         {% endif %}" />
 

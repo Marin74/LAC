@@ -176,55 +176,9 @@ class SuperAdminController extends Controller
         $passedEvents = $query->getResult();
         
         $allEvents = array_merge($events, $passedEvents);
-
-        $forms = array();
-        foreach($allEvents as $event) {
-            $formBuilder = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $event);
-
-            $form = $formBuilder->getForm();
-
-            if ($request->isMethod('POST')) {
-
-                if(!empty($action) && $action == "update" && !empty($eventId) && $eventId == $event->getId()) {
-
-                    $form->handleRequest($request);// Set new data into the form
-
-                    if ($form->isValid()) {
-
-                        if ($event->getStartTime() > $event->getEndTime())
-                            $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
-                        else {
-        					
-       						// Erase pricing field if it's free
-        					if($event->getFree())
-        						$event->setPricing(null);
-        					
-                            $event->uploadPicture();
-                            
-                            // Save the object event
-                            $em->flush();
-                            
-                            if($placeId == "-1") {
-                                $placeId = "";
-                            }
-
-                            $formBuilder = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $event);
-                            $form = $formBuilder->getForm();
-
-                            $request->getSession()->getFlashBag()->add('success', $translator->trans("event_updated"));
-                        }
-                    }
-                }
-            }
-
-            $formView = $form->createView();
-            
-            $forms[] = $formView;
-        }
         
         $params =  array(
             "formAdd"				=> $formAdd->createView(),
-            "forms"					=> $forms,
             "events"				=> $events,
         	"passedEvents"			=> $passedEvents,
         	"allEvents"				=> $allEvents,
@@ -237,6 +191,88 @@ class SuperAdminController extends Controller
         }
 
         return $this->render('AppBundle:SuperAdmin:events.html.twig', $params);
+    }
+    
+    public function eventAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get("translator");
+        $repoEvent = $em->getRepository("AppBundle:Event");
+        $repoPlace = $em->getRepository("AppBundle:Place");
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $form = null;
+        
+        $action = $request->get("action");
+        $placeId = $request->get("placeId");
+        $eventId = $request->get("id");
+        
+        $event = $repoEvent->find($eventId);
+        
+        if($event == null) {
+            $request->getSession()->getFlashBag()->add('success', $translator->trans("event_unknown"));
+        }
+        else {
+            if ($user->getAssociation() != null && !empty($placeId)) {
+                
+                // Check if we change the place of an event
+                
+                $place = $repoPlace->find($placeId);
+                
+                if(($place != null || $placeId == "-1") && !empty($action) && $action == "changePlace") {
+                    
+                    if($placeId == "-1") {
+                        $placeId = "";
+                    }
+                    
+                    $event->setPlaceEntity($place);
+                    $em->flush();
+                    $request->getSession()->getFlashBag()->add('success', $translator->trans("place_changed"));
+                }
+            }
+            
+            $form = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $event)->getForm();
+            
+            if($user->getAssociation() != null) {
+                
+                if ($request->isMethod('POST')) {
+                    
+                    $form->handleRequest($request);// Set data into the form
+                    
+                    if ($form->isValid()) {
+                        
+                        if ($event->getStartTime() > $event->getEndTime()) {
+                            $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
+                        }
+                        else {
+                            
+                            // Erase pricing field if it's free
+                            if($event->getFree()) {
+                                $event->setPricing(null);
+                            }
+                            
+                            // Save the object event
+                            $em->flush();
+                            
+                            $event->uploadPicture();
+                            $em->flush();
+                            
+                            if($placeId == "-1") {
+                                $placeId = "";
+                            }
+                            
+                            $request->getSession()->getFlashBag()->add('success', $translator->trans("event_updated"));
+                        }
+                    }
+                }
+            }
+        }
+        
+        $params = array(
+            "form"  => ($form == null ? null : $form->createView()),
+            "event" => $event
+        );
+        
+        return $this->render('AppBundle:SuperAdmin:event.html.twig', $params);
     }
 
     public function usersAction(Request $request)

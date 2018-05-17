@@ -1,0 +1,219 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+	{{ "administration"|trans }} - 
+    {% if app.user.association is null %}
+        {{ "no_association_assigned"|trans }}
+    {% elseif event is not null %}
+    	{{ event.name }}
+    {% else %}
+        {{ "event"|trans }}
+    {% endif %}
+     - {{ parent() }}
+{% endblock %}
+
+{% block page_title %}
+    {% if app.user.association is null %}
+        {{ "no_association_assigned"|trans }}
+    {% elseif event is not null %}
+    	{{ event.name }}
+    {% else %}
+        {{ "event"|trans }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if event is not null %}
+    	
+        {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'form_update'}}) }}
+		
+        <p>
+        	<div id="warning"></div>
+    	</p>
+		
+        {% if event.picture is not empty %}
+            <p class="center">
+                <img src="{{ asset(event.getPicturePath()) }}" title="{{ "picture"|trans }}" class="fit picture-form" />
+            </p>
+            <p></p>
+        {% endif %}
+            
+    	<p class="well well-sm">{% if event.placeEntity is not null %}{{ "event_location"|trans({'%place%': event.placeEntity.name}) }} {% endif %}<a href="{{ url("app_admin_search_place", {"source": "admin", "action": "changePlace", "eventId": event.id}) }}" class="btn btn-sm btn-primary">{% if event.placeEntity is not null %}{{ "change"|trans }}{% else %}{{ "select_place"|trans }}{% endif %}</a></p>
+
+        <p>
+
+            {# General errors of the form #}
+            {{ form_errors(form) }}
+
+            {# Manual and exploded generation: #}
+            <div class="form-group">
+
+                {# Label. #}
+                {{ form_label(form.name, "name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+
+                    {# Display errors for this field. #}
+                    {{ form_errors(form.name) }}
+
+                    {# Input #}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.file, "picture", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.file) }}
+                    
+                    <p>
+                        <div class="alert alert-info" role="alert">
+                        	{{ "upload_picture_hint"|trans }}
+                        </div>
+                    </p>
+
+                    {{ form_widget(form.file, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.startTime, "start", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                <div class="col-sm-10">
+                    {{ form_errors(form.startTime) }}
+                    {{ form_widget(form.startTime, {'attr': {'onChange': "onChangeStart();"}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.endTime, "end", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                <div class="col-sm-10">
+                    {{ form_errors(form.endTime) }}
+                    {{ form_widget(form.endTime) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.description, "description", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                <div class="col-sm-10">
+                    {{ form_errors(form.description) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
+					
+					<p class="nb_characters_description"></p>
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.website, "website", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                <div class="col-sm-10">
+                    {{ form_errors(form.website) }}
+                    {{ form_widget(form.website, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.free, "free", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                <div class="col-sm-10">
+                    {{ form_errors(form.free) }}
+                    {{ form_widget(form.free, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.pricing, "pricing", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                <div class="col-sm-10">
+                    {{ form_errors(form.pricing) }}
+                    {{ form_widget(form.pricing, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.searchVolunteers, "search_volunteers", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                <div class="col-sm-10">
+                    {{ form_errors(form.searchVolunteers) }}
+                    {{ form_widget(form.searchVolunteers, {'attr': {'class': 'form-control'}}) }}
+                    
+                    <p class="well well-sm">{{ "search_volunteers_hint"|trans }}</p>
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.published, "publish", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                <div class="col-sm-10">
+                    {{ form_errors(form.published) }}
+                    {{ form_widget(form.published, {'attr': {'class': 'form-control'}}) }}
+                    
+                    <p class="well well-sm">{{ "publish_hint"|trans }}</p>
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+            
+            <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+        </p>
+
+        {# Close <form> #}
+        {{ form_end(form) }}
+        
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+
+    	{% if event is not null %}
+            $(".form_datetime").datetimepicker({format: 'dd-mm-yyyy hh:ii', language: 'fr', autoclose: true});
+            {% if form.name.vars.errors|length
+                or form.startTime.vars.errors|length
+                or form.endTime.vars.errors|length
+                or form.description.vars.errors|length
+                or form.website.vars.errors|length
+                or form.searchVolunteers.vars.errors|length
+                or form.free.vars.errors|length
+                or form.pricing.vars.errors|length
+                or form.name.vars.errors|length
+                or form.published.vars.errors|length
+                or form.file.vars.errors|length
+            %}
+    
+                {% set event = events[i] %}
+    
+                $("#warning").attr("class", "alert alert-warning");
+                $("#warning").attr("role", "alert");
+                $("#warning").text("{{ "error_field"|trans }}");
+            {% endif %}
+    
+    		{% if app.user.association != null %}
+        		$(function() {
+            		
+    				countNbCharacters();
+    		    	
+            		$("#form_update #event_form_description").on('keyup', function(event) {
+            			countNbCharacters();
+            		});
+        		});
+        
+        		function countNbCharacters() {
+        
+        			var currentString = $("#form_update #event_form_description").val();
+        		    var nb = currentString.length;
+        			var text = "{{ "nb_characters_description"|trans }}";
+        			text = text.replace("XXX", nb);
+        			
+        			$("#form_update .nb_characters_description").text(text);
+        		}
+    		{% endif %}
+    		
+    		function onChangeStart() {
+    			// If there is no start time or if the start time is after the end time, reset the end time.
+    			
+    			var start = $("#form_update #event_form_startTime");
+    			var end = $("#form_update #event_form_endTime");
+    
+    			if(!end.val() || start.val() > end.val()) {
+    				end.val(start.val());
+    			}
+    		}
+		{% endif %}
+    </script>
+{% endblock %}

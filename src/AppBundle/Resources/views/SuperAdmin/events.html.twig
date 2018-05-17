@@ -42,9 +42,7 @@
                 				<span class="label label-warning">{{ "planned"|trans }}</span>
                 			{% endif %}
                     	</td>
-                        <td>
-                        	<a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}" style="cursor: pointer;">{{ event.name }}</a>
-                    	</td>
+                        <td><a href="{{ url("app_superadmin_event", {"id": event.id}) }}">{{ event.name }}</a></td>
                         <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
                         <td>
                             <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl, "source": "super_admin_events"}) }}">
@@ -281,166 +279,7 @@
         </div>
     </div>
 
-
-    {% set i = 0 %}
-
-    {% for form in forms %}
-        
-        {% set event = allEvents[i] %}
-        {# Form to update event #}
-        <div class="modal fade" id="modal_update_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">{{ "event"|trans }}</h4>
-                    </div>
-                    {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'form_update_'~event.id}}) }}
-                    <div class="modal-body">
-
-                        <div id="warning_update_{{ event.id }}"></div>
-
-                        {% if event.picture is not empty %}
-                            <!--<p class="center">
-                                <img src="{{ asset(event.getPicturePath()) }}" title="{{ "picture"|trans }}" class="fit picture-form" />
-                            </p>
-                            <p></p>-->
-                        {% endif %}
-                        
-                        <p class="well well-sm">{% if event.placeEntity is not null %}{{ "event_location"|trans({'%place%': event.placeEntity.name}) }} {% endif %}<a href="{{ url("app_admin_search_place", {"source": "super_admin", "action": "changePlace", "eventId": event.id}) }}" class="btn btn-sm btn-primary">{% if event.placeEntity is not null %}{{ "change"|trans }}{% else %}{{ "select_place"|trans }}{% endif %}</a></p>
-
-                        <p>
-
-                            <input type="hidden" name="action" value="update"/>
-                            <input type="hidden" name="eventId" value="{{ event.id }}"/>
-
-                            {# General errors of the form #}
-                            {{ form_errors(form) }}
-
-                            {# Manual and exploded generation: #}
-                        <div class="form-group">
-
-                            {# Label. #}
-                            {{ form_label(form.name, "name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-
-                            <div class="col-sm-10">
-
-                                {# Display errors for this field. #}
-                                {{ form_errors(form.name) }}
-
-                                {# Input #}
-                                {{ form_widget(form.name) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            {{ form_label(form.file, "picture", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(form.file) }}
-                                
-                                <p>
-                                    <div class="alert alert-info" role="alert">
-                                    	{{ "upload_picture_hint"|trans }}
-                                    </div>
-                                </p>
-                                
-                                {{ form_widget(form.file) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            {{ form_label(form.association, "association", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(form.association) }}
-                                {{ form_widget(form.association) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            {{ form_label(form.startTime, "start", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(form.startTime) }}
-                                {{ form_widget(form.startTime, {'attr': {'onChange': "onChangeStart('form_update_"~event.id~"');"}}) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            {{ form_label(form.endTime, "end", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(form.endTime) }}
-                                {{ form_widget(form.endTime) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            {{ form_label(form.description, "description", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(form.description) }}
-                                {{ form_widget(form.description) }}
-                    
-                				<p class="nb_characters_description"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            {{ form_label(form.website, "website", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(form.website) }}
-                                {{ form_widget(form.website, {'attr': {'class': 'form-control'}}) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-    
-                            {{ form_label(form.free, "free", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(form.free) }}
-                                {{ form_widget(form.free) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-    
-                            {{ form_label(form.pricing, "pricing", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(form.pricing) }}
-                                {{ form_widget(form.pricing) }}
-                            </div>
-                        </div>
-                        <div class="form-group">
-    
-                            {{ form_label(form.searchVolunteers, "search_volunteers", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(form.searchVolunteers) }}
-                                {{ form_widget(form.searchVolunteers) }}
-                                
-                                <p class="well well-sm">{{ "search_volunteers_hint"|trans }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="form-group">
-
-                            {{ form_label(form.published, "publish", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(form.published) }}
-                                {{ form_widget(form.published) }}
-                                
-                                <p class="well well-sm">{{ "publish_hint"|trans }}</p>
-                            </div>
-                        </div>
-
-                        {{ form_rest(form) }}
-                        </p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
-                        <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
-                    </div>
-
-                    {# Close <form> #}
-                    {{ form_end(form) }}
-                </div>
-            </div>
-        </div>
-
+    {% for event in allEvents %}
 
         {# Form to delete event #}
         <div class="modal fade" id="modal_delete_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -467,8 +306,6 @@
                 </div>
             </div>
         </div>
-
-        {% set i = i + 1 %}
     {% endfor %}
 {% endblock %}
 
@@ -482,32 +319,6 @@
         {% endif %}
 
         {# Open a modal dialog if there is a error with a form #}
-        {% set i = 0 %}
-        {% for form in forms %}
-            {% if form.name.vars.errors|length
-                or form.association.vars.errors|length
-                or form.startTime.vars.errors|length
-                or form.endTime.vars.errors|length
-                or form.description.vars.errors|length
-                or form.website.vars.errors|length
-                or form.searchVolunteers.vars.errors|length
-                or form.free.vars.errors|length
-                or form.pricing.vars.errors|length
-                or form.published.vars.errors|length
-                or form.file.vars.errors|length
-            %}
-        
-                {% set event = allEvents[i] %}
-
-                $("#warning_update_{{ event.id }}").attr("class", "alert alert-warning");
-                $("#warning_update_{{ event.id }}").attr("role", "alert");
-                $("#warning_update_{{ event.id }}").text("{{ "error_field"|trans }}");
-
-                $("#modal_update_{{ event.id }}").modal("show");
-            {% endif %}
-            {% set i = i + 1 %}
-        {% endfor %}
-
         {% if formAdd.name.vars.errors|length
             or formAdd.association.vars.errors|length
             or formAdd.startTime.vars.errors|length

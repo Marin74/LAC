@@ -43,6 +43,11 @@ app_admin_events:
 app_admin_index:
     path:     /admin
     defaults: { _controller: "AppBundle:Admin:calendar" }
+app_admin_event:
+    path:     /admin/action/{id}
+    defaults: { _controller: "AppBundle:Admin:event" }
+    requirements:
+        id: \d+
 app_admin_event_document:
     path:     /admin/action/{id}/document
     defaults: { _controller: "AppBundle:Admin:eventDocument" }
@@ -60,6 +65,11 @@ app_superadmin_associations:
 app_superadmin_events:
     path:     /admin/superadmin/action
     defaults: { _controller: "AppBundle:SuperAdmin:events" }
+app_superadmin_event:
+    path:     /admin/superadmin/action/{id}
+    defaults: { _controller: "AppBundle:SuperAdmin:event" }
+    requirements:
+        id: \d+
 app_superadmin_quiz_scores:
     path:     /admin/superadmin/quizz
     defaults: { _controller: "AppBundle:SuperAdmin:quizScores" }
