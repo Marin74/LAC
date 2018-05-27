@@ -29,6 +29,7 @@
             		</li>
                     <!--<li><a href=""></a></li>-->
                 </ul>
+                
                 <ul class="nav navbar-nav navbar-right">
                     <!--<li><a href=""></a></li>-->
                     
@@ -36,6 +37,10 @@
                         <li class="white"><a href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}"><h4>{{ "who_are_we"|trans }} <span class="glyphicon glyphicon-question-sign"></span></h4></a></li>
                     {% endif %}
                 </ul>
+                
+                <form class="navbar-form navbar-right" style="padding-top: 10px;" method="GET" action="{{ url("app_search") }}">
+                	<input type="text" class="form-control" placeholder="{{ "search"|trans }}" name="q">
+                </form>
             </div><!--/.navbar-collapse -->
         </div>
     </nav>

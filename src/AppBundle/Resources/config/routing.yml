@@ -34,6 +34,9 @@ app_archives_page:
     defaults: { _controller: "AppBundle:Default:archives" }
     requirements:
         page: \d+
+app_search:
+    path:     /recherche
+    defaults: { _controller: "AppBundle:Default:search" }
 app_admin_association:
     path:     /admin/acteur
     defaults: { _controller: "AppBundle:Admin:index" }

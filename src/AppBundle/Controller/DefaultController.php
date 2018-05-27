@@ -371,4 +371,106 @@ class DefaultController extends Controller
             'page'              => $page
         ));
     }
+    
+    public function searchAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $repoEvent = $em->getRepository("AppBundle:Event");
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name")) {
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        }
+        
+        $q = trim($request->get("q"));
+        
+        $association = $repoAssociation->findOneBy(array("id" => $request->get("id"), "displayed" => true));
+        
+        $events = array();
+        $associations = array();
+        
+        /*
+        $qb = $repoPlace->createQueryBuilder('p');
+        $qb->where(
+            $qb->expr()->orX(
+                $qb->expr()->like($qb->expr()->concat("p.name", $qb->expr()->concat($qb->expr()->literal('%'), "p.city")), ":name"),
+                $qb->expr()->like($qb->expr()->concat("p.city", $qb->expr()->concat($qb->expr()->literal('%'), "p.name")), ":name")
+            )
+        )
+        ->setParameter("name", "%".str_replace(" ", "%", trim($search))."%")
+        ->orderBy("p.name", "ASC")
+        ->getQuery();
+        
+        $places = $qb->getQuery()->getResult();
+        */
+        
+        if(!empty($q)) {
+            // Get events
+            $qb = $repoEvent->createQueryBuilder('e');
+            
+            $qb
+            ->innerJoin(
+                'AppBundle:Association',
+                'a',
+                Join::WITH,
+                $qb->expr()->eq('e.association', 'a')
+            )
+            ->leftJoin("e.placeEntity", "p")
+            /*->innerJoin(
+                'AppBundle:Place',
+                'p',
+                Join::WITH,
+                $qb->expr()->eq('e.placeEntity', 'a')
+            )*/
+            ->where(
+                $qb->expr()->orX(
+                    $qb->expr()->like($qb->expr()->concat("e.name", $qb->expr()->concat($qb->expr()->literal('%'), "a.name")), ":pattern"),// Event       + Association
+                    $qb->expr()->like($qb->expr()->concat("a.name", $qb->expr()->concat($qb->expr()->literal('%'), "e.name")), ":pattern"),// Association + Event
+                    $qb->expr()->like($qb->expr()->concat("e.name", $qb->expr()->concat($qb->expr()->literal('%'), "p.city")), ":pattern"),// Event       + City
+                    $qb->expr()->like($qb->expr()->concat("p.city", $qb->expr()->concat($qb->expr()->literal('%'), "e.name")), ":pattern"),// City        + Event
+                    $qb->expr()->like($qb->expr()->concat("p.name", $qb->expr()->concat($qb->expr()->literal('%'), "p.city")), ":pattern"),// Place       + City
+                    $qb->expr()->like($qb->expr()->concat("p.city", $qb->expr()->concat($qb->expr()->literal('%'), "p.name")), ":pattern"),// City        + Place
+                    $qb->expr()->like("a.city", ":pattern") // Association city
+                )
+            )
+            ->andWhere($qb->expr()->eq("e.published", ":published"))
+            ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+            ->andWhere($qb->expr()->gte("e.endTime", ":now"))
+            ->setParameter("pattern", "%".str_replace(" ", "%", $q)."%")
+            ->setParameter("published", true)
+            ->setParameter("displayed", true)
+            ->setParameter('now', new \DateTime())
+            ->orderBy("e.startTime", "ASC")
+            ->getQuery();
+            
+            $events = $qb->getQuery()->getResult();
+            
+            
+            
+            
+            // Get associations
+            $qb = $repoAssociation->createQueryBuilder('a');
+            $qb
+            ->where(
+                $qb->expr()->orX(
+                    $qb->expr()->like($qb->expr()->concat("a.name", $qb->expr()->concat($qb->expr()->literal('%'), "a.name")), ":pattern"),
+                    $qb->expr()->like($qb->expr()->concat("a.name", $qb->expr()->concat($qb->expr()->literal('%'), "a.name")), ":pattern")
+                )
+            )
+            ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+            ->setParameter("pattern", "%".str_replace(" ", "%", $q)."%")
+            ->setParameter("displayed", true)
+            ->orderBy("a.name", "ASC")
+            ->getQuery();
+            
+            $associations = $qb->getQuery()->getResult();
+        }
+        
+        return $this->render('AppBundle:Default:search.html.twig', array(
+            'mainAssociation'	=> $mainAssociation,
+            'q'                 => $q,
+            'events'            => $events,
+            'associations'      => $associations
+        ));
+    }
 }

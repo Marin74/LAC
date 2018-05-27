@@ -173,6 +173,7 @@ duplicate_event: Dupliquer une action
 geolocation_hint: "Si aucune position GPS n'est précisée, elle sera récupérée automatiquement. Autrement vous pouvez la rechercher ici :"
 search_place_for_event: Où aura lieu l'action ?
 search: Rechercher
+search_keyword: "Rechercher : %q%"
 no_result: Aucun résultat
 searched_place_not_found: Le lieu que je cherche est introuvable ?
 searched_place_not_found_hint: Faites plusieurs recherches sur différents mots-clés pour vous assurer que le lieu n'existe pas avant de le créer.

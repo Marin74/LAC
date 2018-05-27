@@ -1,0 +1,136 @@
+{% extends "AppBundle:Design:design.html.twig" %}
+
+{% block title %}
+	{% if q is empty %}
+	    {{ "search"|trans }} - {{ parent() }}
+	{% else %}
+	    {{ "search_keyword"|trans({"%q%": q}) }} - {{ parent() }}
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        
+        <ol class="breadcrumb">
+        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
+        	<li class="active">
+            	{% if q is empty %}
+            	    {{ "search"|trans }}
+            	{% else %}
+            	    {{ "search_keyword"|trans({"%q%": q}) }}
+            	{% endif %}
+        	</li>
+        </ol>
+        
+        <h1 class="second-main-color center">
+        	{% if q is empty %}
+        	    {{ "search"|trans }}
+        	{% else %}
+        	    {{ "search_keyword"|trans({"%q%": q}) }}
+        	{% endif %}
+        </h1>
+        
+    	{% if events|length == 0 and associations|length == 0 %}
+    		<p>
+    		    {{ "no_result"|trans }}
+    		</p>
+    	{% else %}
+            {% if events|length > 0 %}
+            	<p>
+                	<h4>{{ "events"|trans }}</h4>
+                    <div class="row">
+                    	
+                        {% for event in events %}
+                            {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
+                        {% endfor %}
+                    </div>
+                </p>
+            {% endif %}
+            
+            {% if associations|length > 0 %}
+            	<p>
+                	<h4>{{ "associations"|trans }}</h4>
+                    <div class="row">
+                    	
+                        {% for association in associations %}
+                            {% include 'AppBundle:Template:association.html.twig' with {'association': association} %}
+                        {% endfor %}
+                    </div>
+                </p>
+            {% endif %}
+        {% endif %}
+        
+        {% for event in events %}
+			
+            {# Searching volunteers hint #}
+            {% if event.searchVolunteers %}
+                <div class="modal fade" id="modal_search_volunteers_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">{{ "search_volunteers"|trans }}</h4>
+                            </div>
+                            <div class="modal-body">
+                            	<p>
+                            		{{ "search_volunteers_message"|trans }}
+                            	</p>
+                            	
+                            	{% set association = event.association %}
+                            	
+                            	{% if association.fullAddress is not empty
+                                    or association.phone is not empty
+                                    or association.website is not empty
+                                    or association.urlFacebook is not empty
+                                    or event.website is not empty
+                                %}
+                            		<h5>{{ "contacts"|trans }}</h5>
+                                    <ul>
+                                        {% if association.fullAddress is not empty %}
+                    
+                                            <li>
+                                                {{ "address_colon"|trans({"%address%": association.fullAddress }) }}
+                                            </li>
+                                        {% endif %}
+                    
+                                        {% if association.phone is not empty %}
+                                            <li>
+                                                {{ "phone_colon"|trans({"%phone%": association.phone }) }}
+                                            </li>
+                                        {% endif %}
+                    
+                                        {% if association.website is not empty %}
+                                            <li>
+                                                <a href="{{ association.website }}" target="_blank">{{ "website"|trans }}</a>
+                                            </li>
+                                        {% endif %}
+                    
+                                        {% if association.urlFacebook is not empty %}
+                                            <li>
+                                                <a href="{{ association.urlFacebook }}" target="_blank">{{ "facebook"|trans }}</a>
+                                            </li>
+                                        {% endif %}
+                    
+                                        {% if event.website is not empty %}
+                                            <li>
+                                                <a href="{{ event.website }}" target="_blank">{{ "event_website"|trans }}</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="application/javascript">
+    </script>
+{% endblock %}
