@@ -181,8 +181,7 @@ class Association
 
         if (!empty($this->getName())) {
             $name = $this->getName();
-
-            $name = str_replace(" ", "-", $name);
+            
             $name = str_replace("'", "", $name);
             $name = str_replace('"', "", $name);
             $name = str_replace("/", "", $name);
@@ -207,6 +206,9 @@ class Association
             $name = str_replace('>', "", $name);
             $name = str_replace('@', "", $name);
             $name = str_replace('#', "", $name);
+            
+            $name = trim($name);
+            $name = str_replace(" ", "-", $name);
             
             // Lowercase
             $name = str_replace("é", "e", $name);

@@ -42,7 +42,11 @@ class EventFormType extends AbstractType
             ->add('description',		TextareaType::class)
             ->add('website',			UrlType::class, array(
             	'required'	=> false
-            	)
+        	)
+            )
+            ->add('carpool',			UrlType::class, array(
+                'required'	=> false
+            )
             )
             ->add('file',				FileType::class, array(
                 'required'  => false

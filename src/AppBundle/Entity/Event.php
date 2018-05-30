@@ -95,6 +95,13 @@ class Event
      * @ORM\Column(name="website", type="string", length=255, nullable=true)
      */
     private $website;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="carpool", type="string", length=255, nullable=true)
+     */
+    private $carpool;
 
     /**
      * @var boolean
@@ -176,8 +183,7 @@ class Event
 
         if (!empty($this->getName())) {
             $name = $this->getName();
-
-            $name = str_replace(" ", "-", $name);
+            
             $name = str_replace("'", "", $name);
             $name = str_replace('"', "", $name);
             $name = str_replace("/", "", $name);
@@ -202,6 +208,9 @@ class Event
             $name = str_replace('>', "", $name);
             $name = str_replace('@', "", $name);
             $name = str_replace('#', "", $name);
+            
+            $name = trim($name);
+            $name = str_replace(" ", "-", $name);
             
             // Lowercase
             $name = str_replace("é", "e", $name);
@@ -394,6 +403,20 @@ class Event
 
         return $this;
     }
+    
+    /**
+     * Set carpool
+     *
+     * @param string $carpool
+     *
+     * @return Event
+     */
+    public function setCarpool($carpool)
+    {
+        $this->carpool = $carpool;
+        
+        return $this;
+    }
 
     public function setSearchVolunteers($searchVolunteers)
     {
@@ -468,6 +491,16 @@ class Event
     public function getWebsite()
     {
         return $this->website;
+    }
+    
+    /**
+     * Get carpool
+     *
+     * @return string
+     */
+    public function getCarpool()
+    {
+        return $this->carpool;
     }
     
     public function getDocuments()

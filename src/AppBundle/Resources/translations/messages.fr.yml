@@ -204,4 +204,6 @@ archives: Archives
 select_no_place: Ne pas sélectionner de lieu
 select_place: Sélectionner un lieu
 highlight: À la une
-
+carpool: Co-voiturer
+carpool_url: Lien de co-voiturage
+carpool_hint: Organisez un co-voiturage
