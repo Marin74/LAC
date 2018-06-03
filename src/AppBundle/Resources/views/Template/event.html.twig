@@ -1,5 +1,5 @@
 <div class="col-sm-6 col-md-3">
-    <div class="thumbnail" style="padding-bottom: 0px;">
+    <div class="thumbnail" style="padding-bottom: 0px; {% if hideBottom is defined and hideBottom %}margin-bottom: 0px;{% endif %}">
         {% if event.picturePath is not empty %}
             {% set picturePath = event.picturePath %}
         {% elseif event.association.picturePath is not empty %}
