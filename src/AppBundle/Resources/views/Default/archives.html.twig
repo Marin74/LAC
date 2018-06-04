@@ -17,10 +17,10 @@
 		<nav aria-label="...">
     		<ul class="pager">
     			{% if page > 1 %}
-    				<li class="previous"><a href="{{ url("app_archives_page", {"page": page-1}) }}"><span aria-hidden="true">&larr;</span> {{ "next_plural"|trans }}</a></li>
+    				<li class="next"><a href="{{ url("app_archives_page", {"page": page-1}) }}"><span aria-hidden="true">&rarr;</span></a></li>
     			{% endif %}
     			{% if displayNext %}
-    				<li class="next"><a href="{{ url("app_archives_page", {"page": page+1}) }}">{{ "previous_plural"|trans }} <span aria-hidden="true">&rarr;</span></a></li>
+    				<li class="previous"><a href="{{ url("app_archives_page", {"page": page+1}) }}"><span aria-hidden="true">&larr;</span></a></li>
     			{% endif %}
     		</ul>
 		</nav>
@@ -70,10 +70,10 @@
 		<nav aria-label="...">
     		<ul class="pager">
     			{% if page > 1 %}
-    				<li class="previous"><a href="{{ url("app_archives_page", {"page": page-1}) }}"><span aria-hidden="true">&larr;</span> {{ "next_plural"|trans }}</a></li>
+    				<li class="next"><a href="{{ url("app_archives_page", {"page": page-1}) }}"><span aria-hidden="true">&rarr;</span></a></li>
     			{% endif %}
     			{% if displayNext %}
-    				<li class="next"><a href="{{ url("app_archives_page", {"page": page+1}) }}">{{ "previous_plural"|trans }} <span aria-hidden="true">&rarr;</span></a></li>
+    				<li class="previous"><a href="{{ url("app_archives_page", {"page": page+1}) }}"><span aria-hidden="true">&larr;</span></a></li>
     			{% endif %}
     		</ul>
 		</nav>

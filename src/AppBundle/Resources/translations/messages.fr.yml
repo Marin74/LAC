@@ -198,8 +198,6 @@ month_10: Octobre
 month_11: Novembre
 month_12: Décembre
 month_and_year: "%month% %year%"
-previous_plural: Précédents
-next_plural: Suivants
 archives: Archives
 select_no_place: Ne pas sélectionner de lieu
 select_place: Sélectionner un lieu

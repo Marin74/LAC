@@ -328,7 +328,7 @@ class DefaultController extends Controller
         ->setParameter("published", true)
         ->setParameter("displayed", true)
         ->setParameter("now", $now)
-        ->orderBy("e.endTime", "DESC")
+        ->orderBy("e.startTime", "DESC")
         ->setFirstResult($offset)
         ->setMaxResults($NB_ITEMS)
         ;
