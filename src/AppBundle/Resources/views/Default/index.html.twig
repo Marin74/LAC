@@ -21,8 +21,8 @@
     
                     {% for event in nextEvents %}
     
-    					{% if is_mobile() %}
-    					
+    					{% if is_mobile() and is_tablet() == false %}
+    						
     						<div style="padding-left: 7%; padding-right: 7%;" class="item {% if loop.index0 == 0 %}active{% endif %}" >
 								<div class="row">
 									{% include 'AppBundle:Template:event.html.twig' with {'event': event, 'hideBottom': true} %}
@@ -48,7 +48,7 @@
                 </div>
     
                 <!-- Controls -->
-                {% if (is_mobile() and nextEvents|length > 1) or nextEvents|length > 4 %}
+                {% if (is_mobile() and is_tablet() == false and nextEvents|length > 1) or nextEvents|length > 4 %}
                     <a class="left carousel-control" role="button" onClick="carouselPrev();" style="width: 7%;">
                         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>

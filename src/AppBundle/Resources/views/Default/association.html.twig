@@ -303,7 +303,7 @@
 
         		{% if event.placeEntity is not null %}
                     var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
-                    marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>{% if event.place is not empty %}<br/>{{ event.place }}{% elseif event.street is not empty %}<br/>{{ event.street }}{% endif %}{% if event.city is not empty %}<br/>{{ event.city }}{% endif %}');
+                    marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong><br/>{{ event.placeEntity.name }}');
     
                     marker.on('mouseover', function (e) {
                         this.openPopup();

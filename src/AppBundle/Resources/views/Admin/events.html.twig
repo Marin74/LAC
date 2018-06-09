@@ -105,12 +105,12 @@
                     			{% endif %}
                         	</td>
                             <td>
-                            	<a data-toggle="modal" data-target="#modal_update_{{ event.id }}" id="a_update_{{ event.id }}" style="cursor: pointer;">{{ event.name }}</a>
+                            	{{ event.name }}
                         	</td>
                             <td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
                             <td>
                             	{% if event.published %}
-                                	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "super_admin_events"}) }}">{{ "consult"|trans }}</a>
+                                	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "admin_events"}) }}">{{ "consult"|trans }}</a>
                                 {% endif %}
                             </td>
                             <td>
@@ -218,6 +218,16 @@
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.website) }}
                                 {{ form_widget(formAdd.website, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+            
+                            {{ form_label(formAdd.carpool, "carpool_url", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.carpool) }}
+                                {{ form_widget(formAdd.carpool, {'attr': {'class': 'form-control'}}) }}
+                                
+                                <p class="well well-sm"><a href="http://www.movewiz.fr" target="_blank">{{ "carpool_hint"|trans }}</a></p>
                             </div>
                         </div>
                         <div class="form-group">

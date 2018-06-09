@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\Query\Expr\Join;
 
 class DefaultController extends Controller
@@ -472,5 +473,95 @@ class DefaultController extends Controller
             'events'            => $events,
             'associations'      => $associations
         ));
+    }
+    
+    public function icsAction(Request $request) {
+        
+        // Library doc: https://packagist.org/packages/bomo/ical-bundle?q=&p=0
+        
+        $em = $this->getDoctrine()->getManager();
+        $repoEvent = $em->getRepository("AppBundle:Event");
+        $event = $repoEvent->findOneBy(array("id" => $request->get("id"), "published" => true));
+        
+        if($event != null) {
+            
+            $timezone = $this->getParameter("time_zone");
+            
+            $provider = $this->get('bomo_ical.ics_provider');
+            
+            $tz = $provider->createTimezone();
+            $tz
+            ->setTzid($timezone)
+            ->setProperty('X-LIC-LOCATION', $tz->getTzid())
+            ;
+            
+            $cal = $provider->createCalendar($tz);
+            
+            $calEvent = $cal->newEvent();
+            $calEvent
+            ->setStartDate($event->getStartTime())
+            ->setEndDate($event->getEndTime())
+            ->setName($event->getName())
+            ->setDescription($event->getDescription())
+            ->setOrganizer($event->getAssociation()->getName())
+            ;
+            
+            // Location
+            if($event->getPlaceEntity() != null) {
+                
+                $place = $event->getPlaceEntity();
+                
+                $location = $place->getName();
+                
+                if(!empty($place->getStreet())) {
+                    $location .= ", " . $place->getStreet();
+                }
+                
+                if(!empty($place->getZipCode())) {
+                    $location .= ", " . $place->getZipCode();
+                }
+                
+                if(!empty($place->getCity())) {
+                    
+                    if(empty($place->getZipCode())) {
+                        $location .= ",";
+                    }
+                    
+                    $location .= " " . $place->getCity();
+                }
+                
+                $calEvent->setLocation($location);
+            }
+            
+            $alarm = $calEvent->newAlarm();
+            $alarm
+            ->setAction('DISPLAY')
+            ->setDescription($calEvent->getProperty('description'))
+            ->setTrigger('-PT1H')//Dateinterval string format
+            ;
+            
+            // All Day event
+            /*$event = $cal->newEvent();
+            $event
+            ->isAllDayEvent()
+            ->setStartDate($datetime)
+            ->setEndDate($datetime->modify('+10 days'))
+            ->setName('All day event')
+            ->setDescription('All day visualisation')
+            ;*/
+            
+            $calStr = $cal->returnCalendar();
+            
+            return new Response(
+                $calStr,
+                200,
+                array(
+                    'Content-Type' => 'text/calendar; charset=utf-8',
+                    'Content-Disposition' => 'attachment; filename="calendar.ics"',
+                )
+            );
+        }
+        
+        die("null");
     }
 }

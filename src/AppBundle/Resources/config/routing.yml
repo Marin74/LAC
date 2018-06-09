@@ -21,6 +21,11 @@ app_association:
     defaults: { _controller: "AppBundle:Default:association" }
     requirements:
         id: \d+
+app_event_ics:
+    path:     /action/{id}/ics
+    defaults: { _controller: "AppBundle:Default:ics" }
+    requirements:
+        id: \d+
 app_event:
     path:     /action/{id}/{name}
     defaults: { _controller: "AppBundle:Default:event" }

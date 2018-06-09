@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new FOS\UserBundle\FOSUserBundle(),
         	new SunCat\MobileDetectBundle\MobileDetectBundle(),
+            new BOMO\IcalBundle\BOMOIcalBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

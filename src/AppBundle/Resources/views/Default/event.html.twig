@@ -80,12 +80,15 @@
     
             <h4>{{ "when"|trans }}</h4>
             <p>
-                {{ event.startTime|localizeddate("full", "short", locale, time_zone) }} -
+            	{{ event.startTime|localizeddate("full", "short", locale, time_zone) }} -
                 {% if event.takesLessThanOneDay %}
                     {{ event.endTime|localizeddate("none", "short", locale, time_zone) }}
                 {% else %}
                     {{ event.endTime|localizeddate("full", "short", locale, time_zone) }}
                 {% endif %}
+                <a href="{{ url("app_event_ics", {"id": event.id}) }}" title="{{ "add_to_calendar"|trans }}" type="button" class="btn btn-default btn-sm">
+                	<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                </a>
             </p>
             
             <h4>{{ "pricing"|trans }}</h4>
