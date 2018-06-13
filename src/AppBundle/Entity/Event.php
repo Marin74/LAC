@@ -512,7 +512,7 @@ class Event
         $oneDayLater = clone $this->getStartTime();
         $oneDayLater->add(new \DateInterval("PT24H"));
         
-        return $this->getEndTime() < $oneDayLater;
+        return $this->getEndTime() < $oneDayLater && ($this->getStartTime()->format("Y-m-d") == $this->getEndTime()->format("Y-m-d") || intval($this->getEndTime()->format("H")) <= 5);
     }
 
     public function getFile()
