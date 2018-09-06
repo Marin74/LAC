@@ -2,7 +2,7 @@
 
 {% block title %}
 	{% if association is null %}
-		{{ "association_unknown"|trans }}
+		{{ "workshop_unknown"|trans }}
 	{% else %}
 		{{ association.name }}
 	{% endif %}
@@ -15,13 +15,7 @@
             {% if app.request.query.get("source") == "super_admin_associations" %}
                 <nav aria-label="...">
                     <ul class="pager">
-                        <li class="previous"><a href="{{ url("app_superadmin_associations") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
-                    </ul>
-                </nav>
-            {% elseif app.request.query.get("source") == "super_admin_events" %}
-                <nav aria-label="...">
-                    <ul class="pager">
-                        <li class="previous"><a href="{{ url("app_superadmin_events") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
+                        <li class="previous"><a href="{{ url("app_admin_workshops") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
                     </ul>
                 </nav>
             {% endif %}
@@ -29,10 +23,10 @@
         
         <ol class="breadcrumb">
         	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	<li><a href="{{ url("app_associations") }}">{{ "local_associations"|trans }}</a></li>
+        	<li><a href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a></li>
         	<li class="active">
                 {% if association is null %}
-        	        {{ "association_unknown"|trans }}
+        	        {{ "workshop_unknown"|trans }}
         	    {% else %}
         	    	{{ association.name }}
         	    {% endif %}
@@ -40,102 +34,39 @@
         </ol>
 
         {% if association is null %}
-            <h1 class="page-header">{{ "association_unknown"|trans }}</h1>
+            <h1 class="page-header">{{ "workshop_unknown"|trans }}</h1>
         {% else %}
-                
-            {% if mainAssociation is defined and mainAssociation is not null and mainAssociation.id == association.id %}
-                
-                <h4>{{ "about"|trans }}</h4>
-                
-                <p>
-                    {{ "explanations_open_source"|trans }}
-                    {% if mainAssociation is defined and mainAssociation is not null %}
-                        <br/>
-                        {{ "website_help"|trans }} <a href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}">{{ "contact_us"|trans }}</a>
-                    {% endif %}
-                </p>
-                <p>
-                    {{ "url_source_code"|trans }} <a href="{{ url_source_code }}">{{ "github"|trans }}</a>
-                	<br/>
-                	<a href="https://www.gnu.org/licenses/quick-guide-gplv3.fr.html">{{ "license"|trans }}</a>
-                </p>
-            {% endif %}
-			
-			<div class="row">
-				{% set videoPath = "" %}
-                {% if association.urlVideo is not empty %}
-                	{% set videoPath = association.urlVideoPath %}
-                {% else %}
-                	{% set videoPath = "bundles/app/video/default.mov" %}
+        
+    		<p class="center">
+    	        {% if association.picture is not empty %}
+                	<a href="{{ asset(association.picturePath) }}">
+                		<img src="{{ asset(association.picturePath) }}" class="fit picture-element"/>
+            		</a>
                 {% endif %}
-                
-                <div class="col-sm-6 col-md-4" style="width:700px; max-width: 100%; ">
-                    <video  height="100%;" controls style="width:700px; max-width: 100%; ">
-    					<source src="{{ asset(videoPath) }}" type="video/mp4">
-    					{{ "error_video_player"|trans }}
-    				</video>
-				</div>
-                
-                <div class="col-sm-6 col-md-3" style="">
-            		<div class="thumbnail">
-            			<img src="{{ asset(association.picturePath) }}" style="max-height: 100px;">
-            			
-            			{% if association.fullAddress is not empty
-                            or association.phone is not empty
-                            or association.email is not empty
-                            or association.website is not empty
-                            or association.urlFacebook is not empty
-                        %}
-            				<div class="caption" style="
-            					/*background-image: url('{{ asset("bundles/app/img/pattern.png") }}');
-            					background-size:     contain;
-                				background-repeat:no-repeat;
-                				background-size: 100% 100%;*/
-                				
-            				">
-                				<p>
-                					<address>
-                                        {% if association.fullAddress is not empty %}
-                                        	{% if association.street is not empty %}
-                                        		{{ association.street }}<br/>
-                                        	{% endif %}
-                                        	{% if association.zipCode is not empty %}
-                                        		{{ association.zipCode }}{% if association.city is not empty %}, {{ association.city }}{% endif %}
-                                        	{% elseif association.city is not empty %}
-                                        		{{ association.city }}
-                                        	{% endif %}
-                                        {% endif %}
-                                    </address>
-                    
-                					<address>
-                                        {% if association.phone is not empty %}
-                                            {{ "phone_colon"|trans({"%phone%": association.phone }) }}<br/>
-                                        {% endif %}
-                                        
-                                        {% if association.email is not empty %}
-                                            {{ "email_colon"|trans({"%email%": association.email|replace({"@": "email_at_replace"|trans, ".": "email_dot_replace"|trans}) }) }}<br/>
-                                        {% endif %}
-                    
-                                        {% if association.website is not empty %}
-                                            <a href="{{ association.website }}" target="_blank">{{ "website"|trans }}</a><br/>
-                                        {% endif %}
-                    
-                                        {% if association.urlFacebook is not empty %}
-                                            <a href="{{ association.urlFacebook }}" target="_blank">{{ "facebook"|trans }}</a>
-                                        {% endif %}
-                                    </address>
-                				</p>
-                                
-                                {% if association.email is not empty %}
-                                	<div class="well well-sm" style="font-size: small;">
-                                        {{ "email_format_hint"|trans }}
-                                    </div>
-                                {% endif %}
-            				</div>
+                <h3 class="center">{{ association.name }}</h3>
+            </p>
+            
+            {% if association.phone is not empty
+		        or association.email is not empty
+            %}
+            	<p>
+					<address>
+                        {% if association.phone is not empty %}
+                            {{ "phone_colon"|trans({"%phone%": association.phone }) }}<br/>
                         {% endif %}
-            		</div>
-            	</div>
-            </div>
+                        
+                        {% if association.email is not empty %}
+                            {{ "email_colon"|trans({"%email%": association.email|replace({"@": "email_at_replace"|trans, ".": "email_dot_replace"|trans}) }) }}<br/>
+                        {% endif %}
+                    </address>
+				</p>
+				
+				{% if association.email is not empty %}
+                	<div class="well well-sm" style="font-size: small;">
+                        {{ "email_format_hint"|trans }}
+                    </div>
+                {% endif %}
+			{% endif %}
 			
             {% if association.description is not empty %}
             	<p style="font-family: 'avenir next'; font-size: 1.1em; margin-top: 20px; margin-bottom: 20px; max-width: 1000px;">

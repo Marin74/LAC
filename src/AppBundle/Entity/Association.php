@@ -114,6 +114,14 @@ class Association
      * @Assert\NotNull()
      */
     private $displayed = true;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isWorkshop", type="boolean", nullable=false)
+     * @Assert\NotNull()
+     */
+    private $isWorkshop = true;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event",mappedBy="association")
@@ -125,6 +133,11 @@ class Association
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\User",mappedBy="association")
      */
     private $owners;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\User",mappedBy="workshop")
+     */
+    private $workshopOwners;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Document",mappedBy="association")
@@ -521,10 +534,25 @@ class Association
     {
     	$this->displayed = $displayed;
     }
+    
+    public function isWorkshop()
+    {
+        return $this->isWorkshop;
+    }
+    
+    public function setIsWorkshop($isWorkshop)
+    {
+        $this->isWorkshop = $isWorkshop;
+    }
 
     public function getOwners()
     {
         return $this->owners;
+    }
+    
+    public function getWorkshopOwners()
+    {
+        return $this->workshopOwners;
     }
 
     public function getDocuments()

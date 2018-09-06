@@ -1,7 +1,11 @@
 {% extends "AppBundle:Design:design.html.twig" %}
 
 {% block title %}
-	{{ "local_associations"|trans }} - {{ parent() }}
+	{% if app.request.get('_route') == "app_workshops" %}
+	    {{ "transition_workshops"|trans }} - {{ parent() }}
+	{% else %}
+	    {{ "local_associations"|trans }} - {{ parent() }}
+	{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -9,10 +13,18 @@
         
         <ol class="breadcrumb">
         	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	<li class="active">{{ "local_associations"|trans }}</li>
+        	{% if app.request.get('_route') == "app_workshops" %}
+        	    <li class="active">{{ "transition_workshops"|trans }}</li>
+        	{% else %}
+        	    <li class="active">{{ "local_associations"|trans }}</li>
+        	{% endif %}
         </ol>
         
-        <h1 class="second-main-color center">{{ "local_associations"|trans }}</h1>
+        {% if app.request.get('_route') == "app_workshops" %}
+        	<h1 class="second-main-color center">{{ "transition_workshops"|trans }}</h1>
+    	{% else %}
+        	<h1 class="second-main-color center">{{ "local_associations"|trans }}</h1>
+    	{% endif %}
 
         <!-- Wrapper for slides -->
         <p>

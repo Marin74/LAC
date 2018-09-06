@@ -1,9 +1,6 @@
 app_index:
     path:     /
     defaults: { _controller: "AppBundle:Default:index" }
-app_license:
-    path:     /licence
-    defaults: { _controller: "AppBundle:Default:license" }
 app_associations:
     path:     /acteurs
     defaults: { _controller: "AppBundle:Default:associations" }
@@ -86,4 +83,22 @@ app_superadmin_association_document:
     defaults: { _controller: "AppBundle:SuperAdmin:associationDocument" }
     requirements:
         id: \d+
+        
+app_workshop:
+    path:     /atelier/{id}/{name}
+    defaults: { _controller: "AppBundle:Default:workshop" }
+    requirements:
+        id: \d+
+app_workshops:
+    path:     /ateliers
+    defaults: { _controller: "AppBundle:Default:workshops" }
+app_admin_workshop:
+    path:     /admin/atelier
+    defaults: { _controller: "AppBundle:Admin:workshop" }
+app_admin_workshops:
+    path:     /admin/ateliers
+    defaults: { _controller: "AppBundle:Admin:workshops" }
+app_admin_workshop_events:
+    path:     /admin/reunions
+    defaults: { _controller: "AppBundle:Admin:workshopEvents" }
 

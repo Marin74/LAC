@@ -68,68 +68,11 @@ class DefaultController extends Controller
             }
         }
         
-        
-        // Get random association
-        $randomAssociation = null;
-        
-        $qb = $repoAssociation->createQueryBuilder('a');
-        $qb->select("COUNT(a)");
-        $qb->where($qb->expr()->eq("a.displayed", ":displayed"))
-        ->setParameter("displayed", true);
-        
-        if($mainAssociation != null) {
-            $qb->andWhere(
-                $qb->expr()->neq("a.name", ":name")
-            )
-            ->setParameter("name", $mainAssociation->getName());
-        }
-        
-        $nbAssociations = $qb->getQuery()->getSingleScalarResult();
-        
-        while($nbAssociations > 1 && $randomAssociation == null) {
-            
-            $index = rand(0, $nbAssociations-1);
-            
-            $qb = $repoAssociation->createQueryBuilder('a');
-            $qb->where($qb->expr()->eq("a.displayed", ":displayed"))
-            ->setParameter("displayed", true);
-            
-            if($mainAssociation != null) {
-                $qb->andWhere(
-                    $qb->expr()->neq("a.name", ":name")
-                )
-                ->setParameter("name", $mainAssociation->getName());
-            }
-            
-            $qb->setFirstResult($index);
-            $qb->setMaxResults(1);
-            
-            $results = $qb->getQuery()->getResult();
-            
-            if(count($results) > 0) {
-                $randomAssociation = $results[0];
-            }
-        }
-        
 
         return $this->render('AppBundle:Default:index.html.twig', array(
             'mainAssociation'           => $mainAssociation,
             'nextEvents'                => $nextEvents,
-            'hasNextEventsWithPlace'    => $hasNextEventsWithPlace,
-            'randomAssociation'         => $randomAssociation
-        ));
-    }
-
-    public function licenseAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $repoAssociation = $em->getRepository("AppBundle:Association");
-        $mainAssociation = null;
-        if($this->container->hasParameter("app_name"))
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
-        
-        return $this->render('AppBundle:Default:license.html.twig', array(
-        	'mainAssociation' => $mainAssociation
+            'hasNextEventsWithPlace'    => $hasNextEventsWithPlace
         ));
     }
 
@@ -137,7 +80,7 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $repoAssociation = $em->getRepository("AppBundle:Association");
-        $association = $repoAssociation->findOneBy(array("id" => $request->get("id"), "displayed" => true));
+        $association = $repoAssociation->findOneBy(array("id" => $request->get("id"), "displayed" => true, "isWorkshop" => false));
         $mainAssociation = null;
         if($this->container->hasParameter("app_name"))
             $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
@@ -152,7 +95,7 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $repoAssociation = $em->getRepository("AppBundle:Association");
-        $associations = $repoAssociation->findBy(array("displayed" => true), array("name" => "ASC"));
+        $associations = $repoAssociation->findBy(array("displayed" => true, "isWorkshop" => false), array("name" => "ASC"));
         $mainAssociation = null;
         if($this->container->hasParameter("app_name"))
             $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
@@ -459,19 +402,44 @@ class DefaultController extends Controller
                 )
             )
             ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+            ->andWhere($qb->expr()->eq("a.isWorkshop", ":isWorkshop"))
             ->setParameter("pattern", "%".str_replace(" ", "%", $q)."%")
             ->setParameter("displayed", true)
+            ->setParameter("isWorkshop", false)
             ->orderBy("a.name", "ASC")
             ->getQuery();
             
             $associations = $qb->getQuery()->getResult();
+            
+            
+            
+            
+            // Get workshops
+            $qb = $repoAssociation->createQueryBuilder('a');
+            $qb
+            ->where(
+                $qb->expr()->orX(
+                    $qb->expr()->like($qb->expr()->concat("a.name", $qb->expr()->concat($qb->expr()->literal('%'), "a.name")), ":pattern"),
+                    $qb->expr()->like($qb->expr()->concat("a.name", $qb->expr()->concat($qb->expr()->literal('%'), "a.name")), ":pattern")
+                )
+            )
+            ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+            ->andWhere($qb->expr()->eq("a.isWorkshop", ":isWorkshop"))
+            ->setParameter("pattern", "%".str_replace(" ", "%", $q)."%")
+            ->setParameter("displayed", true)
+            ->setParameter("isWorkshop", true)
+            ->orderBy("a.name", "ASC")
+            ->getQuery();
+            
+            $workshops = $qb->getQuery()->getResult();
         }
         
         return $this->render('AppBundle:Default:search.html.twig', array(
             'mainAssociation'	=> $mainAssociation,
             'q'                 => $q,
             'events'            => $events,
-            'associations'      => $associations
+            'associations'      => $associations,
+            'workshops'         => $workshops
         ));
     }
     
@@ -515,6 +483,10 @@ class DefaultController extends Controller
                 
                 if(!empty($place->getStreet())) {
                     $location .= ", " . $place->getStreet();
+                }
+                
+                if(!empty($place->getStreet2())) {
+                    $location .= ", " . $place->getStreet2();
                 }
                 
                 if(!empty($place->getZipCode())) {
@@ -563,5 +535,35 @@ class DefaultController extends Controller
         }
         
         die("null");
+    }
+    
+    public function workshopAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $association = $repoAssociation->findOneBy(array("id" => $request->get("id"), "displayed" => true, "isWorkshop" => true));
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name"))
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+            
+            return $this->render('AppBundle:Default:workshop.html.twig', array(
+                'mainAssociation'	=> $mainAssociation,
+                'association'		=> $association
+            ));
+    }
+    
+    public function workshopsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $associations = $repoAssociation->findBy(array("displayed" => true, "isWorkshop" => true), array("name" => "ASC"));
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name"))
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+            
+            return $this->render('AppBundle:Default:associations.html.twig', array(
+                'mainAssociation' => $mainAssociation,
+                'associations' => $associations
+            ));
     }
 }

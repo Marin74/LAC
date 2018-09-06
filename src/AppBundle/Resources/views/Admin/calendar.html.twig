@@ -50,20 +50,21 @@
             	<a class="glyphicon glyphicon-flag" aria-hidden=true style="color: var(--second-main-color); cursor: pointer;" data-toggle="modal" data-target="#modal_search_volunteers_{{ event.id }}" title="{{ "search_volunteers"|trans }}"></a> 
         	{% endif %}
 
-			<strong id="event_{{ event.id }}" style="cursor: pointer;" data-toggle="popover" data-trigger="focus" data-placement="top" data-content="
-                {{ event.startTime|localizeddate("full", "short", locale, time_zone) }} -
-                {% if event.takesLessThanOneDay %}
-                    {{ event.endTime|localizeddate("none", "short", locale, time_zone) }}
-                {% else %}
-                    {{ event.endTime|localizeddate("full", "short", locale, time_zone) }}
-                {% endif %}
-			">{{ event.name }}</strong>
+			<strong id="event_{{ event.id }}">{{ event.name }}</strong>
 
 			<em> - {{ event.association.name }}</em>
 			
+			<br/>
+			{{ event.startTime|localizeddate("full", "short", locale, time_zone) }} -
+            {% if event.takesLessThanOneDay %}
+                {{ event.endTime|localizeddate("none", "short", locale, time_zone) }}
+            {% else %}
+                {{ event.endTime|localizeddate("full", "short", locale, time_zone) }}
+            {% endif %}
+			
 			{% if event.placeEntity is not null %}
-                <h4>{{ "where"|trans }}</h4>
                 <p>
+                	<br/>
     				<strong>{{ event.placeEntity.name }}</strong>
                     {% if event.placeEntity.fullAddress is not empty %}
                     	<br/>

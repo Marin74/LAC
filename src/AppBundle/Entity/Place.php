@@ -34,6 +34,13 @@ class Place
      * @ORM\Column(name="street", type="string", length=255, nullable=true)
      */
     private $street;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="street2", type="string", length=255, nullable=true)
+     */
+    private $street2;
 
     /**
      * @var string
@@ -125,6 +132,30 @@ class Place
     public function getStreet()
     {
         return $this->street;
+    }
+    
+    /**
+     * Set street2
+     *
+     * @param string $street2
+     *
+     * @return Place
+     */
+    public function setStreet2($street2)
+    {
+        $this->street2 = $street2;
+        
+        return $this;
+    }
+    
+    /**
+     * Get street2
+     *
+     * @return string
+     */
+    public function getStreet2()
+    {
+        return $this->street2;
     }
 
     /**
@@ -232,8 +263,20 @@ class Place
     {
         $address = "";
         
-        if (!empty($this->getStreet())) {
-            $address = $this->getStreet();
+        if(!empty($this->getStreet()) || !empty($this->getStreet2())) {
+            
+            if(!empty($this->getStreet())) {
+                $address = $this->getStreet();
+            }
+            
+            if(!empty($this->getStreet2())) {
+                
+                if(!empty($this->getStreet())) {
+                    $address .= " - ";
+                }
+                
+                $address .= $this->getStreet2();
+            }
             
             if (!empty($this->getZipCode()))
                 $address .= ", " . $this->getZipCode();

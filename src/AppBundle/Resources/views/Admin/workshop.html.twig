@@ -1,0 +1,249 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+	{{ "administration"|trans }} - 
+    {% if app.user.workshop is null %}
+        {{ "no_workshop_assigned"|trans }}
+    {% else %}
+        {{ app.user.workshop.name }}
+    {% endif %}
+     - {{ parent() }}
+{% endblock %}
+
+{% block page_title %}
+    {% if app.user.workshop is null %}
+        {{ "no_workshop_assigned"|trans }}
+    {% else %}
+        {{ app.user.workshop.name }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if app.user.workshop is not null %}
+        {# Open <form> #}
+        {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+        {% if app.user.workshop.picture is not empty %}
+            <p class="center">
+                <img src="{{ asset(app.user.workshop.getPicturePath()) }}" title="{{ "picture"|trans }}" style="max-height: 100px;" />
+            </p>
+        {% endif %}
+
+		<p>
+            <div class="well well-sm">
+                {{ "association_form_hint"|trans }}
+            </div>
+        </p>
+
+        <p>
+
+            {# General errors of the form #}
+            {{ form_errors(form) }}
+
+            <h3>{{ "general"|trans }}</h3>
+
+            {# Manual and exploded generation: #}
+            <div class="form-group">
+
+                {# Label. #}
+                {{ form_label(form.name, "name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+
+                    {# Display errors for this field. #}
+                    {{ form_errors(form.name) }}
+
+                    {# Input #}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.file, "picture", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.file) }}
+
+                    {{ form_widget(form.file, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.description, "description", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.description) }}
+
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 10}}) }}
+                    
+                	<p id="nb_characters_description"></p>
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.email, "email", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.email) }}
+
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.phone, "phone", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.phone) }}
+
+                    {{ form_widget(form.phone, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+
+            <div class="form-group">
+
+                <div class="col-sm-2 control-label"></div>
+
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                </div>
+            </div>
+        </p>
+        
+        {# Close <form> #}
+        {{ form_end(form) }}
+        
+		{% if formDocument != null %}
+			<hr/>
+			
+			<h3>{{ "documents"|trans }}</h3>
+    
+            <div class="well well-sm">
+                {{ "workshop_document_form_hint"|trans }}
+            </div>
+			
+			{% if app.user.workshop.documents|length > 0 %}
+				<table class="table table-striped">
+    				<thead>
+                    <tr>
+                        <th>{{ "document"|trans }}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+					{% for document in app.user.workshop.documents %}
+						<tr>
+							<td>
+								<a href="{{ asset(document.path) }}">{{ document.name }}</a>
+							</td>
+                            <td>
+                            	<a data-toggle="modal" data-target="#modal_delete_{{ document.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                            </td>
+						</tr>
+					{% endfor %}
+				</table>
+				
+				{% for document in app.user.workshop.documents %}
+					
+                    {# Form to delete the document #}
+                    <div class="modal fade" id="modal_delete_{{ document.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">{{ "delete"|trans }}</h4>
+                                </div>
+                                <form action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" method="POST">
+                                    <div class="modal-body">
+            
+                                        <input type="hidden" name="deleteId" value="{{ document.id }}"/>
+            
+                                        <p>
+                                            {{ "delete_document_confirmation"|trans({'%name%': document.name}) }}
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "cancel"|trans }}</button>
+                                        <button type="submit" class="btn btn-warning">{{ "delete"|trans }}</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+				{% endfor %}
+			{% endif %}
+			
+            {# Open <form> #}
+            {{ form_start(formDocument, {'attr': {'class': 'form-horizontal'}}) }}
+            
+    		<p>    
+                {# General errors of the form #}
+                {{ form_errors(formDocument) }}
+    			
+                <div class="form-group">
+    
+                    {# Label. #}
+                    {{ form_label(formDocument.file, "document", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+    
+                    <div class="col-sm-10">
+    
+                        {# Display errors for this field. #}
+                        {{ form_errors(formDocument.file) }}
+    
+                        {# Input #}
+                        {{ form_widget(formDocument.file, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group">
+    
+                    {{ form_label(formDocument.name, "name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+    
+                    <div class="col-sm-10">
+                        {{ form_errors(formDocument.name) }}
+    
+                        {{ form_widget(formDocument.name, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+    
+                {{ form_rest(formDocument) }}
+    
+                <div class="form-group">
+    
+                    <div class="col-sm-2 control-label"></div>
+    
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-success">{{ "add"|trans }}</button>
+                    </div>
+                </div>
+            </p>
+            
+            {# Close <form> #}
+            {{ form_end(formDocument) }}
+		{% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+	<script type="text/JavaScript">
+	{% if app.user.workshop != null %}
+		$(function() {
+			countNbCharacters();
+		});
+
+		$("#association_form_description").on('keyup', function(event) {
+			countNbCharacters();
+		});
+
+		function countNbCharacters() {
+
+			var currentString = $("#association_form_description").val();
+		    var nb = currentString.length;
+			var text = "{{ "nb_characters_description"|trans }}";
+			text = text.replace("XXX", nb);
+			
+			$("#nb_characters_description").text(text);
+		}
+	{% endif %}
+	</script>
+{% endblock %}

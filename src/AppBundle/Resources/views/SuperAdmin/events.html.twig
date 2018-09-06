@@ -234,7 +234,19 @@
                             {{ form_errors(formAdd.carpool) }}
                             {{ form_widget(formAdd.carpool, {'attr': {'class': 'form-control'}}) }}
                             
-                            <p class="well well-sm"><a href="http://www.movewiz.fr" target="_blank">{{ "carpool_hint"|trans }}</a></p>
+                            <p class="well well-sm">
+                            	<a href="http://www.movewiz.fr" target="_blank">{{ "carpool_hint"|trans }}</a>
+                            	
+                            	{% if newPlace is not null %}
+                                	<br/>
+                                	<strong>{{ newPlace.name }}</strong>
+            						
+                                    {% if newPlace.fullAddress is not empty %}
+                                    	<br/>
+                                        {{ newPlace.fullAddress }}
+                                    {% endif %}
+                                {% endif %}
+                            </p>
                         </div>
                     </div>
                     <div class="form-group">

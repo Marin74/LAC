@@ -33,9 +33,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <!--<li><a href=""></a></li>-->
                     
-    				{% if mainAssociation is defined and mainAssociation is not null %}
-                        <li class="white"><a href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}"><h4>{{ "who_are_we"|trans }} <span class="glyphicon glyphicon-question-sign"></span></h4></a></li>
-                    {% endif %}
+                    <li class="white"><a href="{{ url("app_events") }}" style="color: white; font-size: large;"><h4>{{ "show_all_events"|trans }}</h4></a></li>
                 </ul>
                 
                 <form class="navbar-form navbar-right" style="padding-top: 10px;" method="GET" action="{{ url("app_search") }}">
@@ -57,9 +55,11 @@
         	
         	<table style="width: 95%; table-layout: fixed;">
         		<tr>
-        			<td>
-        				<center><a class="btn btn-outline-inverse btn-sm" style="border-color: white;" href="{{ path("app_license") }}">{{ "about"|trans }}</a></center>
-        			</td>
+        			{% if mainAssociation is defined and mainAssociation is not null %}
+            			<td>
+            				<center><a class="btn btn-outline-inverse btn-sm" style="border-color: white;" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}">{{ "about"|trans }}</a></center>
+            			</td>
+        			{% endif %}
         			<td>
         				<center><a class="btn btn-outline-inverse btn-sm" style="border-color: white;" href="{{ path("app_archives") }}">{{ "archives"|trans }}</a></center>
         			</td>

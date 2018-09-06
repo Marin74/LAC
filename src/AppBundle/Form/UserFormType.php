@@ -21,14 +21,35 @@ class UserFormType extends AbstractType
                 'multiple'                  => false,
                 'placeholder'               => 'select_association',
                 'attr'                      => ['class' => 'form-control',],
+                'required'                  => false,
                 'query_builder'             => function(EntityRepository $repository) {
-                    return $repository->createQueryBuilder('u')->orderBy('u.name', 'ASC');
+                    
+                    $qb = $repository->createQueryBuilder('a');
+                    $qb->select("a")->where($qb->expr()->eq("a.isWorkshop", ":isWorkshop"));
+                    $qb->setParameter("isWorkshop", false);
+                    return $qb->orderBy('a.name', 'ASC');
+                },
+            ))
+            ->add('workshop',       EntityType::class, array(
+                'class'                     => 'AppBundle:Association',
+                'choice_label'              => 'name',
+                'multiple'                  => false,
+                'placeholder'               => 'select_workshop',
+                'attr'                      => ['class' => 'form-control',],
+                'required'                  => false,
+                'query_builder'             => function(EntityRepository $repository) {
+                    
+                    $qb = $repository->createQueryBuilder('a');
+                    $qb->select("a")->where($qb->expr()->eq("a.isWorkshop", ":isWorkshop"));
+                    $qb->setParameter("isWorkshop", true);
+                    return $qb->orderBy('a.name', 'ASC');
                 },
             ))
             ->add('roles',			ChoiceType::class, array(
             		'choices' => array(
             				User::ROLE_DEFAULT => User::ROLE_DEFAULT,
-            				User::ROLE_ADMIN => User::ROLE_ADMIN
+                		    User::ROLE_ADMIN => User::ROLE_ADMIN,
+                		    User::ROLE_ADMIN_WORKSHOP => User::ROLE_ADMIN_WORKSHOP
             		),
 	                'multiple'                  => true,
 	                'choice_translation_domain' => 'messages'

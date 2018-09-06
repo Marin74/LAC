@@ -17,7 +17,7 @@
         <thead>
             <tr>
                 <th>{{ "user"|trans }}</th>
-                <th>{{ "association"|trans }}</th>
+                <th>{{ "association_or_workshop"|trans }}</th>
                 <th>{{ "roles"|trans }}</th>
                 <th></th>
                 <th></th>
@@ -30,8 +30,12 @@
                         <a data-toggle="modal" data-target="#modal_update_{{ user.id }}" id="a_update_{{ user.id }}" style="cursor: pointer;">{{ user.username }}</a>
                     </td>
                     <td>
-                        {% if user.association is not empty %}
+                        {% if user.association is not empty and user.workshop is not empty %}
+                            {{ "association_and_workshop"|trans({"%association%": user.association.name, "%workshop%": user.workshop.name}) }}
+                        {% elseif user.association is not empty %}
                             {{ user.association.name }}
+                        {% elseif user.workshop is not empty %}
+                            {{ user.workshop.name }}
                         {% endif %}
                     </td>
                     <td>

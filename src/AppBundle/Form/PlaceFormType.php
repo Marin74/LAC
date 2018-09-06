@@ -19,6 +19,7 @@ class PlaceFormType extends AbstractType
         $builder
             ->add('name',		TextType::class)
             ->add('street',		TextType::class)
+            ->add('street2',	TextType::class)
             ->add('zipCode',	TextType::class)
             ->add('city',		TextType::class)
             ->add('latitude',	NumberType::class, array("scale" => 6))

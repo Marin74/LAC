@@ -14,6 +14,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 class User extends BaseUser
 {
     const ROLE_ADMIN = 'ROLE_ADMIN';// ROLE_USER and ROLE_SUPER_ADMIN already exist in the UserInterface class
+    const ROLE_ADMIN_WORKSHOP = 'ROLE_ADMIN_WORKSHOP';
     
     /**
      * @var int
@@ -29,6 +30,12 @@ class User extends BaseUser
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $association;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Association",inversedBy="workshopOwners")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     */
+    private $workshop;
 
     public function __construct()
     {
@@ -43,6 +50,16 @@ class User extends BaseUser
 
     public function getAssociation() {
         return $this->association;
+    }
+    
+    public function setWorkshop($workshop) {
+        $this->workshop = $workshop;
+        
+        return $this;
+    }
+    
+    public function getWorkshop() {
+        return $this->workshop;
     }
     
     public function isAdmin() {

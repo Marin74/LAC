@@ -25,22 +25,35 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
-                <ul class="nav nav-sidebar">
-                    <li class="{% if app.request.attributes.get('_route') == "app_admin_index" %}active{% endif %}"><a href="{{ url("app_admin_index") }}">{{ "calendar"|trans }}</a></li>
-                    {% if app.user.association != null %}
-                    	<li class="{% if app.request.attributes.get('_route') == "app_admin_events" %}active{% endif %}"><a href="{{ url("app_admin_events") }}">{{ "events"|trans }}</a></li>
-                    	<li class="{% if app.request.attributes.get('_route') == "app_admin_association" %}active{% endif %}"><a href="{{ url("app_admin_association") }}">{{ "my_association"|trans }}</a></li>
-                	{% endif %}
-                </ul>
-                {% if is_granted("ROLE_ADMIN") %}
-                    <h3>Administration</h3>
+                {% if is_granted("ROLE_USER") %}
                     <ul class="nav nav-sidebar">
+                        <li class="{% if app.request.attributes.get('_route') == "app_admin_index" %}active{% endif %}"><a href="{{ url("app_admin_index") }}">{{ "calendar"|trans }}</a></li>
+                        {% if app.user.association != null %}
+                        	<li class="{% if app.request.attributes.get('_route') == "app_admin_events" %}active{% endif %}"><a href="{{ url("app_admin_events") }}">{{ "events"|trans }}</a></li>
+                        	<li class="{% if app.request.attributes.get('_route') == "app_admin_association" %}active{% endif %}"><a href="{{ url("app_admin_association") }}">{{ "my_association"|trans }}</a></li>
+                    	{% endif %}
+                    	{% if app.user.workshop != null %}
+                        	<li class="{% if app.request.attributes.get('_route') == "app_admin_workshop" %}active{% endif %}"><a href="{{ url("app_admin_workshop") }}">{{ "my_workshop"|trans }}</a></li>
+                        	<li class="{% if app.request.attributes.get('_route') == "app_admin_workshop_events" %}active{% endif %}"><a href="{{ url("app_admin_workshop_events") }}">{{ "meetings"|trans }}</a></li>
+                    	{% endif %}
+                    </ul>
+                {% endif %}
+                
+                {% if is_granted("ROLE_ADMIN") or is_granted("ROLE_ADMIN_WORKSHOP") %}
+                    <h3>{{ "administration"|trans }}</h3>
+                {% endif %}
+                
+                <ul class="nav nav-sidebar">
+                    {% if is_granted("ROLE_ADMIN") %}
                         <li class="{% if app.request.attributes.get('_route') == "app_superadmin_users" %}active{% endif %}"><a href="{{ url("app_superadmin_users") }}">{{ "users"|trans }}</a></li>
                         <li class="{% if app.request.attributes.get('_route') == "app_superadmin_associations" %}active{% endif %}"><a href="{{ url("app_superadmin_associations") }}">{{ "associations"|trans }}</a></li>
                         <li class="{% if app.request.attributes.get('_route') == "app_superadmin_events" %}active{% endif %}"><a href="{{ url("app_superadmin_events") }}">{{ "events"|trans }}</a></li>
                         <!--<li class="{% if app.request.attributes.get('_route') == "app_superadmin_quiz_scores" %}active{% endif %}"><a href="{{ url("app_superadmin_quiz_scores") }}">{{ "quiz"|trans }}</a></li>-->
-                    </ul>
-                {% endif %}
+                    {% endif %}
+                    {% if is_granted("ROLE_ADMIN_WORKSHOP") %}
+                        <li class="{% if app.request.attributes.get('_route') == "app_admin_workshops" %}active{% endif %}"><a href="{{ url("app_admin_workshops") }}">{{ "workshops"|trans }}</a></li>
+                    {% endif %}
+                </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <h1 class="page-header">{% block page_title %}{% endblock %}</h1>

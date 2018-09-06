@@ -183,7 +183,8 @@ class SuperAdminController extends Controller
         	"passedEvents"			=> $passedEvents,
         	"allEvents"				=> $allEvents,
         	"isDuplicatingEvent"	=> $isDuplicatingEvent,
-            "displayAddForm"        => ($newEvent->getPlaceEntity() != null || $placeId == "-1")
+            "displayAddForm"        => ($newEvent->getPlaceEntity() != null || $placeId == "-1"),
+            "newPlace"              => $newEvent->getPlaceEntity()
         );
         
         if($eventToDuplicate != null) {
@@ -437,7 +438,7 @@ class SuperAdminController extends Controller
             }
         }
 
-        $associations = $repoAssociation->findBy(array(), array("name" => "ASC"));
+        $associations = $repoAssociation->findBy(array("isWorkshop" => false), array("name" => "ASC"));
 
         $forms = array();
         foreach($associations as $association) {

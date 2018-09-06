@@ -1,5 +1,4 @@
 welcome: Découvrez
-who_are_we: Qui sommes-nous
 no_events: Pas d'actions.
 no_current_events: Pas d'actions pour le moment.
 details: Détails
@@ -35,6 +34,7 @@ email: Email
 url_video: Nom de la vidéo
 phone: Téléphone
 street: Rue
+street2: Rue 2
 zipCode: Code postal
 city: Ville
 address: Adresse
@@ -65,13 +65,14 @@ delete: Supprimer
 delete_event_confirmation: 'Êtes-vous sûr de vouloir supprimer l''action "%name%" ? Elle sera effacée définitivement.'
 cancel: Annuler
 association_deleted: Le groupe est supprimé.
-delete_association_confirmation: 'Êtes-vous sûr de vouloir supprimer le groupe "%name%" ? Il sera effacé définitivement.'
+delete_association_confirmation: 'Êtes-vous sûr de vouloir supprimer "%name%" ? Il sera effacé définitivement.'
 association_created: Le groupe est créé.
 new_association: Nouveau groupe
 users: Utilisateurs
 user: Utilisateur
 roles: Rôles
 ROLE_ADMIN: Administrateur
+ROLE_ADMIN_WORKSHOP: Administrateur Ateliers
 ROLE_USER: Utilisateur
 explanations_open_source: Le site internet est open source. Cela signifie qu'il peut être utilisé et modifié par quiconque. Le code source est sous licence GPL v3.
 url_source_code: "Le code source du site est disponible ici :"
@@ -164,7 +165,7 @@ user_modified: "Compte : %name%"
 results: Résultats
 other_quiz_results: Autres Acteurs qui peuvent vous correspondre
 the_events: les Actions
-show_all_events: Voir toutes les actions
+show_all_events: Les actions
 quiz_results: Résultats du Quizz
 administration: Administration
 read_more: En savoir plus...
@@ -199,10 +200,24 @@ month_11: Novembre
 month_12: Décembre
 month_and_year: "%month% %year%"
 archives: Archives
-select_no_place: Ne pas sélectionner de lieu
+select_no_place: Pas de lieu
 select_place: Sélectionner un lieu
 highlight: À la une
 carpool: Co-voiturer
 carpool_url: Lien de co-voiturage
 carpool_hint: Organisez un co-voiturage
 add_to_calendar: Ajouter au calendrier
+workshops: Ateliers
+transition_workshops: les Ateliers de la Transition
+workshop: Atelier
+workshop_unknown: L'atelier n'existe pas.
+my_workshop: Notre atelier
+no_workshop_assigned: Aucun atelier ne vous est affecté.
+workshop_document_form_hint: Les documents peuvent être téléchargés par les internautes quand ils consultent la page de l'atelier.
+select_workshop: Sélectionner un atelier
+new_workshop: Nouvel atelier
+newsletter_name: LAC Connexion
+association_or_workshop: Groupe / Atelier
+association_and_workshop: "%association% - %workshop%"
+meetings: Réunions
+

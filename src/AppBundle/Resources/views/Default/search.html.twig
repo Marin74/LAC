@@ -30,7 +30,7 @@
         	{% endif %}
         </h1>
         
-    	{% if events|length == 0 and associations|length == 0 %}
+    	{% if events|length == 0 and associations|length == 0 and workshops|length == 0 %}
     		<p>
     		    {{ "no_result"|trans }}
     		</p>
@@ -54,6 +54,18 @@
                     	
                         {% for association in associations %}
                             {% include 'AppBundle:Template:association.html.twig' with {'association': association} %}
+                        {% endfor %}
+                    </div>
+                </p>
+            {% endif %}
+            
+            {% if workshops|length > 0 %}
+            	<p>
+                	<h4>{{ "workshops"|trans }}</h4>
+                    <div class="row">
+                    	
+                        {% for workshop in workshops %}
+                            {% include 'AppBundle:Template:association.html.twig' with {'association': workshop} %}
                         {% endfor %}
                     </div>
                 </p>

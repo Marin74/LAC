@@ -161,6 +161,7 @@
             marker.bindPopup('<strong>{{ event.placeEntity.name }}</strong>'+
                     '<br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>'+
                     '{% if event.placeEntity.street is not empty %}<br/>{{ event.placeEntity.street }}{% endif %}'+
+                    '{% if event.placeEntity.street2 is not empty %}<br/>{{ event.placeEntity.street2 }}{% endif %}'+
                     '{% if event.placeEntity.zipCode is not empty %}<br/>{{ event.placeEntity.zipCode }}{% if event.placeEntity.city is not empty %} {{ event.placeEntity.city }}{% endif %}{% endif %}'+
                     '{% if event.placeEntity.zipCode is empty and event.placeEntity.city is not empty %}<br/>{{ event.placeEntity.city }}{% endif %}'
             );
