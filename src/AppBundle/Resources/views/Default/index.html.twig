@@ -1,8 +1,26 @@
 {% extends "AppBundle:Design:design.html.twig" %}
 
 {% block content %}
+    
+    <div class="btn-group btn-group-justified" role="group" style="margin-top: -21px;">
+        <div class="btn-group" role="group">
+        	<a type="button" class="btn btn-default bg-second-main-color minorBarButton" style="border-top-left-radius: 0; border-bottom-left-radius: 0; color: white; border-color: transparent; outline: none; padding-top: 10px; padding-bottom: 10px; text-align: left;" href="{{ path("app_archives") }}">
+        		<span class="glyphicon glyphicon-list" aria-hidden="true"></span> {% if is_mobile() and is_tablet() == false %}{{ "show_passed_events_sm"|trans }}{% else %}{{ "show_passed_events"|trans }}{% endif %}
+    		</a>
+        </div>
+        <div class="btn-group" role="group">
+        	<a type="button" class="btn btn-default bg-third-main-color mainBarButton" style="color: white; border-color: transparent; padding-top: 10px; padding-bottom: 10px;" href="{{ path("app_events") }}">
+        		<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> {% if is_mobile() and is_tablet() == false %}{{ "show_next_events_sm"|trans }}{% else %}{{ "show_next_events"|trans }}{% endif %}
+    		</a>
+        </div>
+        <div class="btn-group" role="group">
+        	<a type="button" class="btn btn-default bg-second-main-color minorBarButton" style="border-top-right-radius: 0; border-bottom-right-radius: 0; color: white; border-color: transparent; padding-top: 10px; padding-bottom: 10px; text-align: right;" href="{{ path("app_map") }}">
+        		<span class="glyphicon glyphicon-globe" aria-hidden="true"></span> {% if is_mobile() and is_tablet() == false %}{{ "show_map_sm"|trans }}{% else %}{{ "show_map"|trans }}{% endif %}
+    		</a>
+        </div>
+    </div>
 
-	<div class="bg-second-main-color" style="margin-top: -20px;">
+	<div class="bg-gradient" style="padding-top: 20px; padding-bottom: 20px;">
     
         {% if nextEvents|length == 0 %}
             <div class="container">
@@ -126,27 +144,51 @@
         {% endif %}
     </div>
     
-    {% if hasNextEventsWithPlace %}
-    	<div id="mapid" class="col-md-12 map fit" style="min-width: 310px;"></div>
-    {% endif %}
-    
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="container" style="padding-top: 10px;">
-        <table class="center" style="width: 100%; table-layout: fixed; margin-top: 10px; max-width: 800px;">
-            <tr>
-                <td>
-                	<a href="{{ url("app_associations") }}"><img src="{{ asset("bundles/app/img/btn-associations.svg") }}" style="width: 250px; max-width: 50%;"/></a>
-                	<h3 class="second-main-color" style="margin-top: 5px; margin-left: 5px; margin-right: 5px;">{{ "local_associations"|trans }}</h3>
-                </td>
-                <td>
-                	<button type="button" class="btn btn-info">{{ "newsletter_name"|trans }}</button>
-                </td>
-                <td>
-                	<a href="{{ url("app_workshops") }}"><img src="{{ asset("bundles/app/img/btn-associations.svg") }}" style="width: 250px; max-width: 50%;"/></a>
-                	<h3 class="second-main-color" style="margin-top: 5px; margin-left: 5px; margin-right: 5px;">{{ "transition_workshops"|trans }}</h3>
-                </td>
-            </tr>
-        </table>
+    <div style="height: 250px;
+    	margin-bottom: -20px;
+        background-image: url('{{ asset("bundles/app/img/bg-landing-page.jpg") }}'); 
+        background-size: 100% auto; 
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: relative;">
+        <!--
+        <p style="width: 100%; vertical-align: middle;top: 0; bottom: 0; position: absolute;">
+        	<center style="width: 100%; vertical-align: middle;">
+        	
+                	<a class="btn btn-outline-inverse btn-sm bg-third-main-color" style=" vertical-align: middle;font-size: 2em; border-color: white;" href="{{ url("app_associations") }}">{{ "local_associations"|trans }}</a>
+                	
+                	<a class="btn btn-outline-inverse btn-sm bg-green" style="font-size: 2em; border-color: white;" href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a>
+        	</center>
+        </p>-->
+        
+        {% if true %}
+            <table class="center" style="height: 90%; width: 100%; table-layout: fixed; top: 0; bottom: 0; position: absolute;">
+                <tr>
+                    <td style="max-width: 100px;">
+                    	<p>
+                    		<a class="btn btn-outline-inverse btn-sm bg-third-main-color button-associations" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_associations") }}">{{ "local_associations"|trans }}</a>
+                    	</p>
+                    	{% if workshopExists != null %}
+                        	<p>
+                        		<a class="btn btn-outline-inverse btn-sm bg-green button-workshops" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a>
+                        	</p>
+                    	{% endif %}
+                    </td>
+                </tr>
+            </table>
+        {% else %}{# A supprimer #}
+            <table class="center" style="height: 90%; width: 100%; table-layout: fixed; top: 0; bottom: 0; position: absolute;">
+                <tr>
+                    <td style="max-width: 100px;">
+                    	<a class="btn btn-outline-inverse btn-sm bg-third-main-color" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_associations") }}">{{ "local_associations"|trans }}</a>
+                    </td>
+                    <td style="max-width: 100px;">
+                    	<a class="btn btn-outline-inverse btn-sm bg-green" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a>
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+        
     </div>
 {% endblock %}
 
@@ -169,59 +211,5 @@
         function carouselPrev() {
         	$("#carousel-next-events").carousel('prev');
         }
-
-        {% if hasNextEventsWithPlace %}
-            {% if nextEvents|length != 1 %}
-                var map = L.map('mapid').setView([{{ map_center }}], 11);
-            {% else %}
-                var map = L.map('mapid').setView([{{ nextEvents[0].placeEntity.latitude }}, {{ nextEvents[0].placeEntity.longitude }}], 11);
-            {% endif %}
-    
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
-                maxZoom: 18,
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                id: 'mapbox.streets'
-            }).addTo(map);
-    
-            // Prevent the zoom when we scroll the webpage
-            map.scrollWheelZoom.disable();
-    
-            var markers = [];
-            var markerClusters = L.markerClusterGroup({
-                showCoverageOnHover: false
-            });
-    
-            {% for event in nextEvents %}
-
-        		{% if event.placeEntity != null %}
-                    var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
-        
-                    marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong><br/>{{ event.placeEntity.name }}{% if event.placeEntity.street is not empty %}<br/>{{ event.placeEntity.street }}{% endif %}{% if event.placeEntity.street2 is not empty %}<br/>{{ event.placeEntity.street2 }}{% endif %}{% if event.placeEntity.city is not empty %}<br/>{{ event.placeEntity.city }}{% endif %}');
-        
-                    marker.on('mouseover', function (e) {
-                        this.openPopup();
-                    });
-                    marker.on('mouseout', function (e) {
-                        this.closePopup();
-                    });
-                    {% if is_mobile() == false %}
-                        marker.on('click', function (e) {
-                            location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}'
-                        });
-                    {% endif %}
-                    
-                    markers.push([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
-                    markerClusters.addLayer(marker);
-                {% endif %}
-            {% endfor %}
-    
-            {% if nextEvents|length > 1 %}
-                map.fitBounds(markers, { padding: [40, 40] });
-            {% endif %}
-    
-            map.addLayer(markerClusters);
-        {% endif %}
     </script>
 {% endblock %}

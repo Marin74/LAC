@@ -39,6 +39,12 @@ app_archives_page:
 app_search:
     path:     /recherche
     defaults: { _controller: "AppBundle:Default:search" }
+app_legal_terms:
+    path:     /mentions-legales
+    defaults: { _controller: "AppBundle:Default:legalTerms" }
+app_map:
+    path:     /carte
+    defaults: { _controller: "AppBundle:Default:map" }
 app_admin_association:
     path:     /admin/acteur
     defaults: { _controller: "AppBundle:Admin:index" }

@@ -4,7 +4,8 @@ no_current_events: Pas d'actions pour le moment.
 details: Détails
 association_unknown: L'acteur n'existe pas.
 event_unknown: L'action n'existe pas.
-about: À propos
+about: Mentions légales
+who_are_we: Qui sommes-nous ?
 next_events: Assistez ou participez aux prochaines actions
 coordinates: Coordonnées
 website: Site internet
@@ -165,7 +166,6 @@ user_modified: "Compte : %name%"
 results: Résultats
 other_quiz_results: Autres Acteurs qui peuvent vous correspondre
 the_events: les Actions
-show_all_events: Les actions
 quiz_results: Résultats du Quizz
 administration: Administration
 read_more: En savoir plus...
@@ -216,8 +216,14 @@ no_workshop_assigned: Aucun atelier ne vous est affecté.
 workshop_document_form_hint: Les documents peuvent être téléchargés par les internautes quand ils consultent la page de l'atelier.
 select_workshop: Sélectionner un atelier
 new_workshop: Nouvel atelier
-newsletter_name: LAC Connexion
 association_or_workshop: Groupe / Atelier
 association_and_workshop: "%association% - %workshop%"
 meetings: Réunions
+show_passed_events: Voir les actions passées
+show_next_events: Voir toutes les actions à venir
+show_map: Voir la carte
+show_passed_events_sm: Passé
+show_next_events_sm: À venir
+show_map_sm: Carte
+map: Carte
 

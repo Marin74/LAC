@@ -1,6 +1,8 @@
 :root {
     --main-color: #00A0E1;
-    --second-main-color: #ff8f00;
+    --second-main-color: #D8127D;
+    --third-main-color: #99195E;
+    --green-color: #009401;
 }
 .center{
     margin: 0 auto;
@@ -12,8 +14,31 @@
 .second-main-color{
 	color: var(--second-main-color);
 }
+.green-color{
+	color: var(--green-color);
+}
 .bg-second-main-color{
+	background: var(--second-main-color);
+}
+.bg-third-main-color{
+	background: var(--third-main-color);
+}
+.bg-green{
+	background: var(--green-color);
+}
+.minorBarButton:hover, .minorBarButton:focus, .minorBarButton:active, .minorBarButton.active {
+	background-color: var(--third-main-color);
+}
+.mainBarButton:hover, .mainBarButton:focus, .mainBarButton:active, .mainBarButton.active {
 	background-color: var(--second-main-color);
+}
+.bg-gradient{
+	background: -moz-linear-gradient(var(--third-main-color), var(--second-main-color)) no-repeat;
+	background: -webkit-gradient(var(--third-main-color), var(--second-main-color)) no-repeat;
+	background: -webkit-linear-gradient(var(--third-main-color), var(--second-main-color)) no-repeat;
+	background: -o-linear-gradient(var(--third-main-color), var(--second-main-color)) no-repeat;
+	background: -ms-linear-gradient(var(--third-main-color), var(--second-main-color)) no-repeat;
+	background: linear-gradient(var(--third-main-color), var(--second-main-color)) no-repeat;
 }
 .jumbotron h1{
 	color: var(--main-color);
@@ -120,4 +145,10 @@ body{
 }
 .marker-cluster-small div{
 	background-color: rgba(93, 173, 255, 0.6);
+}
+.button-associations:hover, .button-associations:focus, .button-associations:active, .button-associations.active {
+	color: var(--third-main-color);
+}
+.button-workshops:hover, .button-workshops:focus, .button-workshops:active, .button-workshops.active {
+	color: var(--green-color);
 }

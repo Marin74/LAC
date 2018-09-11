@@ -23,7 +23,15 @@ parameters:
     time_zone:                  Europe/Paris
     app_name:                   ~
     app_description:            ~
+    app_mail:                   ~
+    app_address:                ~
     image_folder_association:   ~
     image_folder_event:         ~
     locale:                     fr_FR
     piwik_url:                  ~
+    facebook_page:              ~
+    youtube_page:               ~
+    webmaster:                  ~
+    website:                    ~
+    web_host:                   ~
+    

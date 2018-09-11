@@ -148,6 +148,7 @@ class AdminController extends Controller
         		$newEvent->setSearchVolunteers($eventToDuplicate->getSearchVolunteers());
         		$newEvent->setStartTime($eventToDuplicate->getStartTime());
         		$newEvent->setWebsite($eventToDuplicate->getWebsite());
+        		$newEvent->setCarpool($eventToDuplicate->getCarpool());
         	}
         }
         

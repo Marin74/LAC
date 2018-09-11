@@ -12,22 +12,41 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $repoEvent = $em->getRepository("AppBundle:Event");
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $mainAssociation = null;
-        if($this->container->hasParameter("app_name"))
+        if($this->container->hasParameter("app_name")) {
             $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        }
         
         $now = new \DateTime();
         
-        $query = $em->createQuery(
+        /*$query = $em->createQuery(
             'SELECT e
             FROM AppBundle:Event e
             WHERE e.endTime > :now
         	AND e.published = true
             ORDER BY e.startTime ASC'
-        )->setParameter('now', $now);
+        )->setParameter('now', $now);*/
+        
+        $qb = $repoEvent->createQueryBuilder("e");
+        $qb
+        ->innerJoin(
+            'AppBundle:Association',
+            'a',
+            Join::WITH,
+            $qb->expr()->eq('e.association', 'a')
+        )
+        ->where($qb->expr()->eq("e.published", ":published"))
+        ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+        ->andWhere($qb->expr()->gte("e.endTime", ":now"))
+        ->setParameter("published", true)
+        ->setParameter("displayed", true)
+        ->setParameter("now", $now)
+        ->orderBy("e.startTime", "ASC")
+        ;
 
-        $tempEvents = $query->getResult();
+        $tempEvents = $qb->getQuery()->getResult();
         $tempArrayEvents = array();
         
         foreach($tempEvents as $event) {
@@ -57,22 +76,20 @@ class DefaultController extends Controller
         ksort($tempArrayEvents);
         
         $nextEvents = array();
-        $hasNextEventsWithPlace = false;
         
         foreach($tempArrayEvents as $event) {
             
             $nextEvents[] = $event;
-            
-            if($event->getPlaceEntity() != null) {
-                $hasNextEventsWithPlace = true;
-            }
         }
         
-
+        $tempWorkshop = $repoAssociation->findOneBy(array("displayed" => true, "isWorkshop" => true));
+        
+        $workshopExists = $tempWorkshop != null;
+        
         return $this->render('AppBundle:Default:index.html.twig', array(
-            'mainAssociation'           => $mainAssociation,
-            'nextEvents'                => $nextEvents,
-            'hasNextEventsWithPlace'    => $hasNextEventsWithPlace
+            'mainAssociation'   => $mainAssociation,
+            'nextEvents'        => $nextEvents,
+            'workshopExists'    => $workshopExists
         ));
     }
 
@@ -127,10 +144,11 @@ class DefaultController extends Controller
     
     public function eventsAction()
     {
-    	$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
+        $repoEvent = $em->getRepository("AppBundle:Event");
     	$repoAssociation = $em->getRepository("AppBundle:Association");
     	
-    	$query = $em->createQuery(
+    	/*$query = $em->createQuery(
     		'SELECT e
             FROM AppBundle:Event e
             WHERE e.endTime > :now
@@ -138,8 +156,25 @@ class DefaultController extends Controller
             ORDER BY e.startTime ASC'
 		)
     	->setParameter('now', new \DateTime())
-		->setParameter('published', true);
-		$tempEvents = $query->getResult();
+		->setParameter('published', true);*/
+    	$qb = $repoEvent->createQueryBuilder("e");
+    	$qb
+    	->innerJoin(
+    	    'AppBundle:Association',
+    	    'a',
+    	    Join::WITH,
+    	    $qb->expr()->eq('e.association', 'a')
+	    )
+	    ->where($qb->expr()->eq("e.published", ":published"))
+	    ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+	    ->andWhere($qb->expr()->gte("e.endTime", ":now"))
+	    ->setParameter("published", true)
+	    ->setParameter("displayed", true)
+	    ->setParameter("now", new \DateTime())
+	    ->orderBy("e.startTime", "ASC")
+	    ;
+    	
+	    $tempEvents = $qb->getQuery()->getResult();
     	
     	$events = array();
     	
@@ -558,12 +593,72 @@ class DefaultController extends Controller
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $associations = $repoAssociation->findBy(array("displayed" => true, "isWorkshop" => true), array("name" => "ASC"));
         $mainAssociation = null;
-        if($this->container->hasParameter("app_name"))
+        if($this->container->hasParameter("app_name")) {
             $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
-            
-            return $this->render('AppBundle:Default:associations.html.twig', array(
-                'mainAssociation' => $mainAssociation,
-                'associations' => $associations
-            ));
+        }
+        
+        return $this->render('AppBundle:Default:associations.html.twig', array(
+            'mainAssociation' => $mainAssociation,
+            'associations' => $associations
+        ));
+    }
+    
+    public function mapAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoEvent = $em->getRepository("AppBundle:Event");
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name")) {
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        }
+        
+        /*$query = $em->createQuery(
+            'SELECT e
+            FROM AppBundle:Event e
+            WHERE e.endTime > :now
+        	AND e.published = true
+            AND e.placeEntity IS NOT NULL
+            ORDER BY e.startTime ASC'
+        )->setParameter('now', new \DateTime());*/
+        
+        $qb = $repoEvent->createQueryBuilder("e");
+        $qb
+        ->innerJoin(
+            'AppBundle:Association',
+            'a',
+            Join::WITH,
+            $qb->expr()->eq('e.association', 'a')
+        )
+        ->where($qb->expr()->eq("e.published", ":published"))
+        ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+        ->andWhere($qb->expr()->gte("e.endTime", ":now"))
+        ->andWhere($qb->expr()->isNotNull("e.placeEntity"))
+        ->setParameter("published", true)
+        ->setParameter("displayed", true)
+        ->setParameter("now", new \DateTime())
+        ->orderBy("e.startTime", "ASC")
+        ;
+        
+        $events = $qb->getQuery()->getResult();
+        
+        return $this->render('AppBundle:Default:map.html.twig', array(
+            'mainAssociation'   => $mainAssociation,
+            'events'            => $events
+        ));
+    }
+    
+    public function legalTermsAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoAssociation = $em->getRepository("AppBundle:Association");
+        $mainAssociation = null;
+        if($this->container->hasParameter("app_name")) {
+            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        }
+        
+        return $this->render('AppBundle:Default:legalTerms.html.twig', array(
+            'mainAssociation'	=> $mainAssociation
+        ));
     }
 }
