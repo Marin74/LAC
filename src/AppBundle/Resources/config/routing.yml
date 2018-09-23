@@ -81,6 +81,14 @@ app_superadmin_event:
     defaults: { _controller: "AppBundle:SuperAdmin:event" }
     requirements:
         id: \d+
+app_superadmin_places:
+    path:     /admin/superadmin/lieu
+    defaults: { _controller: "AppBundle:SuperAdmin:places" }
+app_superadmin_place:
+    path:     /admin/superadmin/lieu/{id}
+    defaults: { _controller: "AppBundle:SuperAdmin:place" }
+    requirements:
+        id: \d+
 app_superadmin_quiz_scores:
     path:     /admin/superadmin/quizz
     defaults: { _controller: "AppBundle:SuperAdmin:quizScores" }

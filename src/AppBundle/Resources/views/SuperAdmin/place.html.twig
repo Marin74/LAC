@@ -1,0 +1,249 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+	{{ "administration"|trans }} - 
+    {% if place is not null %}
+    	{{ place.name }}
+    {% else %}
+        {{ "place"|trans }}
+    {% endif %}
+     - {{ parent() }}
+{% endblock %}
+
+{% block page_title %}
+    {% if place is not null %}
+    	{{ place.name }}{% if place.isDeleted %} <span class="label label-danger">{{ "deleted"|trans }}</span>{% endif %}
+    {% else %}
+        {{ "place"|trans }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if place is not null %}
+    	
+        {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'form_add'}}) }}
+    	
+        <p>
+
+            {# General errors of the form #}
+            {{ form_errors(form) }}
+
+            {# Manual and exploded generation: #}
+            <div class="form-group">
+
+                {# Label. #}
+                {{ form_label(form.name, "name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+
+                    {# Display errors for this field. #}
+                    {{ form_errors(form.name) }}
+
+                    {# Input #}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.street, "street", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.street) }}
+
+                    {{ form_widget(form.street, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.street2, "street2", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.street2) }}
+
+                    {{ form_widget(form.street2, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.zipCode, "zipCode", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.zipCode) }}
+
+                    {{ form_widget(form.zipCode, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.city, "city", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.city) }}
+
+                    {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+            	<div class="col-sm-2"></div>
+            	<div class="col-sm-10">
+                	<p class="well well-sm"><a href="http://www.coordonnees-gps.fr" target="_blank">coordonnees-gps.fr</a></p>
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.latitude, "latitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.latitude) }}
+
+                    {{ form_widget(form.latitude, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+
+                {{ form_label(form.longitude, "longitude", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                <div class="col-sm-10">
+                    {{ form_errors(form.longitude) }}
+
+                    {{ form_widget(form.longitude, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            {{ form_rest(form) }}
+            
+            {% if place.latitude is not empty and place.longitude is not empty %}
+                <div class="form-group">
+                	<div class="col-sm-2"></div>
+                	<div class="col-sm-10">
+            			<div id="mapid" class="map" style="height: 200px;"></div>
+                    </div>
+                </div>
+            {% endif %}
+            
+			<button type="button" class="btn btn-success" id="form_add_button_submit" onClick="getLocation('form_add');" data-loading-text="{{ "loading"|trans }}">{{ "save"|trans }}</button>
+        </p>
+
+        {# Close <form> #}
+        {{ form_end(form) }}
+        
+        <form method="post">
+        	<input type="hidden" name="action" value="{% if place.isDeleted %}undelete{% else %}delete{% endif %}"/>
+			<button type="submit" class="btn btn-{% if place.isDeleted %}warning{% else %}danger{% endif %}">{% if place.isDeleted %}{{ "undelete"|trans }}{% else %}{{ "delete"|trans }}{% endif %}</button>
+        </form>
+        
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        function getLocation(formName) {
+    		
+            // Set submit button in loading mode
+    		$('#'+formName+'_button_submit').button('loading');
+    
+    		// Get address
+    		var address = '';
+    
+    		var place = $("#"+formName+" #place_form_name").val().trim();
+    		var street = $("#"+formName+" #place_form_street").val().trim();
+    		var street2 = $("#"+formName+" #place_form_street2").val().trim();
+    		var zipCode = $("#"+formName+" #place_form_zipCode").val().trim();
+    		var city = $("#"+formName+" #place_form_city").val().trim();
+    		var lat = $("#"+formName+" #place_form_latitude").val().trim();
+    		var lng = $("#"+formName+" #place_form_longitude").val().trim();
+    
+    		if(lat && lng) {
+    			$("#"+formName).submit();
+    		}
+    		else {
+    			if(street || street2) {
+    
+        			if(street) {
+        				address = street;
+    
+        				if(street2) {
+            				address += " ";
+        				}
+        			}
+    
+    				if(street2) {
+        				address += street2;
+    				}
+    			}
+    			else if(place) {
+    				address = place;
+    			}
+    
+    			if(zipCode)
+    				address += " " + zipCode;
+    			if(city)
+    				address += " " + city;
+    
+    			if(address === '') {
+    				// Remove the loading mode on the submit button
+    				$('#'+formName+'_button_submit').button('reset');
+    				alert('{{ "no_address"|trans }}');
+    			}
+    			else {
+    
+    	        	// Send request
+    	        	$.ajax({
+    	                type: "GET",
+    	                url: 'http://api-adresse.data.gouv.fr/search/?q='+address,
+    	                dataType: 'json',
+    	                success: function(response){
+    
+    						// Send a request to the API to get the coordinates (lat/lng) of the place.
+    						// An error is displayed if the request fails, if there is no result
+    						// or if the places returned don't have a good match score. 
+    						
+    						if("features" in response
+    								&& response["features"].length > 0
+    								&& "geometry" in response["features"][0]
+    								&& "coordinates" in response["features"][0]["geometry"]
+    								&& response["features"][0]["geometry"]["coordinates"].length > 1
+    								&& "properties" in response["features"][0]
+    								&& "score" in response["features"][0]["properties"]
+    								&& response["features"][0]["properties"]["score"] > 0.60
+    						){
+    							// Set lat/lng in the field and submit the form
+    							var coordinates = response["features"][0]["geometry"]["coordinates"];
+    
+    							$("#"+formName+" #place_form_longitude").val(coordinates[0]);
+    							$("#"+formName+" #place_form_latitude").val(coordinates[1]);
+    
+    							$("#"+formName).submit();
+    						}
+    						else {
+    
+    							// Remove the loading mode on the submit button
+    							$('#'+formName+'_button_submit').button('reset');
+    							
+    							alert("{{ "error_getting_location"|trans }}");
+    						}
+    	                }
+    				});
+    			}
+    		}
+        }
+
+        {% if place.latitude is not empty and place.longitude is not empty %}
+            var map = L.map('mapid').setView([{{ place.latitude }}+0.0005, {{ place.longitude }}], 15);
+            
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
+                maxZoom: 18,
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                id: 'mapbox.streets'
+            }).addTo(map);
+    
+            // Prevent the zoom when we scroll the webpage
+            map.scrollWheelZoom.disable();
+    
+            var marker = L.marker([{{ place.latitude }}, {{ place.longitude }}]).addTo(map);
+        {% endif %}
+    </script>
+{% endblock %}

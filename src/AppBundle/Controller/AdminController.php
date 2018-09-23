@@ -425,7 +425,9 @@ class AdminController extends Controller
                     $qb->expr()->like($qb->expr()->concat("p.city", $qb->expr()->concat($qb->expr()->literal('%'), "p.name")), ":name")
                 )
             )
+            ->andWhere($qb->expr()->eq("p.deleted", ":deleted"))
             ->setParameter("name", "%".str_replace(" ", "%", trim($search))."%")
+            ->setParameter("deleted", false)
             ->orderBy("p.name", "ASC")
             ->getQuery();
             

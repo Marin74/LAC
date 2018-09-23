@@ -71,6 +71,13 @@ class Place
     private $longitude;
     
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="deleted", type="boolean", nullable=false)
+     */
+    private $deleted = false;
+    
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event",mappedBy="placeEntity")
      */
     private $events;
@@ -252,6 +259,16 @@ class Place
     public function getLongitude()
     {
         return $this->longitude;
+    }
+    
+    public function isDeleted()
+    {
+        return $this->deleted;
+    }
+    
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
     }
     
     public function getEvents()

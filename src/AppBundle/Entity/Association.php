@@ -121,7 +121,7 @@ class Association
      * @ORM\Column(name="isWorkshop", type="boolean", nullable=false)
      * @Assert\NotNull()
      */
-    private $isWorkshop = true;
+    private $isWorkshop = false;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event",mappedBy="association")

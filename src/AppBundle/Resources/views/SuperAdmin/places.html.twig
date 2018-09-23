@@ -1,0 +1,56 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+    {{ "places"|trans }}
+     - {{ parent() }}
+{% endblock %}
+
+{% block page_title %}
+    {{ "places"|trans }}
+{% endblock %}
+
+{% block content %}
+
+	<form method="POST" action="{{ url(app.request.attributes.get('_route'), {'source': app.request.get('source')}) }}">
+		<input type="hidden" name="action" value="search" />
+		<p>
+			<input type="text" class="form-control" id="name" name="name" placeholder="{{ "place"|trans }}" value="{% if search is defined %}{{ search }}{% endif %}" autofocus>
+		</p>
+		<p>
+			<button type="submit" class="btn btn-success btn-small">{{ "search"|trans }}</button>
+		</p>
+	</form>
+	
+	{% if search is not empty %}
+	
+    	{% if places|length > 0 %}
+    		<table class="table">
+    			<tr>
+    				<th>{{ "name"|trans }}</th>
+    				<th>{{ "city"|trans }}</th>
+    				<th></th>
+    			</tr>
+    			
+    			{% for place in places %}
+    				<tr>
+    					<td>
+    						<a href="{{ url("app_superadmin_place", {"id": place.id}) }}">
+    						    {{ place.name }}
+    						</a>
+    					</td>
+    					<td>{{ place.city }}</td>
+    					<td>{% if place.deleted %}<span class="label label-danger">{{ "deleted"|trans }}</span>{% endif %}</td>
+    				</tr>
+    			{% endfor %}
+    		</table>
+    	{% else %}
+    		<p>{{ "no_result"|trans }}</p>
+    	{% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block js %}
+	
+    <script type="text/javascript">
+    </script>
+{% endblock %}

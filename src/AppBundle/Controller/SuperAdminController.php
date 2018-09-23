@@ -16,6 +16,7 @@ use AppBundle\Form\ProfileFormType;
 use AppBundle\Form\ChangePasswordFormType;
 use AppBundle\Entity\Document;
 use AppBundle\Form\DocumentFormType;
+use AppBundle\Form\PlaceFormType;
 
 class SuperAdminController extends Controller
 {
@@ -646,5 +647,90 @@ class SuperAdminController extends Controller
             "association"   => $association,
             "formDocument"  => $formDocument == null ? null: $formDocument->createView()
         ));
+    }
+    
+    public function placesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoPlace = $em->getRepository("AppBundle:Place");
+        
+        $places = array();
+        $search = $request->get("name");
+        
+        if($request->isMethod('POST') && !empty($search)) {
+            
+            $qb = $repoPlace->createQueryBuilder('p');
+            $qb->where(
+                $qb->expr()->orX(
+                    $qb->expr()->like($qb->expr()->concat("p.name", $qb->expr()->concat($qb->expr()->literal('%'), "p.city")), ":name"),
+                    $qb->expr()->like($qb->expr()->concat("p.city", $qb->expr()->concat($qb->expr()->literal('%'), "p.name")), ":name")
+                )
+            )
+            ->setParameter("name", "%".str_replace(" ", "%", trim($search))."%")
+            ->orderBy("p.name", "ASC")
+            ->getQuery();
+            
+            $places = $qb->getQuery()->getResult();
+        }
+        
+        return $this->render('AppBundle:SuperAdmin:places.html.twig', array(
+            'places'    => $places,
+            'search'    => $search
+        ));
+    }
+    
+    public function placeAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get("translator");
+        $repoPlace = $em->getRepository("AppBundle:Place");
+        $form = null;
+        
+        $action = $request->get("action");
+        $placeId = $request->get("id");
+        
+        $place = $repoPlace->find($placeId);
+        
+        if($place == null) {
+            $request->getSession()->getFlashBag()->add('success', $translator->trans("place_unknown"));
+        }
+        else {
+            
+            if($action == "delete") {
+                $place->setDeleted(true);
+                
+                // Save the object
+                $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('success', $translator->trans("place_deleted"));
+            }
+            elseif($action == "undelete") {
+                $place->setDeleted(false);
+                
+                // Save the object
+                $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('success', $translator->trans("place_undeleted"));
+            }
+            
+            $form = $this->get('form.factory')->createBuilder(PlaceFormType::class, $place)->getForm();
+            
+            $form->handleRequest($request);// Set data into the form
+            
+            if ($form->isValid() && $form->isSubmitted()) {
+                
+                // Save the object
+                $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('success', $translator->trans("place_updated"));
+            }
+        }
+        
+        $params = array(
+            "form"  => ($form == null ? null : $form->createView()),
+            "place" => $place
+        );
+        
+        return $this->render('AppBundle:SuperAdmin:place.html.twig', $params);
     }
 }

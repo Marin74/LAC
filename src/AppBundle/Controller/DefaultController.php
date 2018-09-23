@@ -16,7 +16,7 @@ class DefaultController extends Controller
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $mainAssociation = null;
         if($this->container->hasParameter("app_name")) {
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
         
         $now = new \DateTime();
@@ -99,8 +99,9 @@ class DefaultController extends Controller
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $association = $repoAssociation->findOneBy(array("id" => $request->get("id"), "displayed" => true, "isWorkshop" => false));
         $mainAssociation = null;
-        if($this->container->hasParameter("app_name"))
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        if($this->container->hasParameter("app_name")) {
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
+        }
 
         return $this->render('AppBundle:Default:association.html.twig', array(
         	'mainAssociation'	=> $mainAssociation,
@@ -114,8 +115,9 @@ class DefaultController extends Controller
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $associations = $repoAssociation->findBy(array("displayed" => true, "isWorkshop" => false), array("name" => "ASC"));
         $mainAssociation = null;
-        if($this->container->hasParameter("app_name"))
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        if($this->container->hasParameter("app_name")) {
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
+        }
 
         return $this->render('AppBundle:Default:associations.html.twig', array(
         	'mainAssociation' => $mainAssociation,
@@ -130,8 +132,9 @@ class DefaultController extends Controller
         $event = $repoEvent->findOneBy(array("id" => $request->get("id"), "published" => true));
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $mainAssociation = null;
-        if($this->container->hasParameter("app_name"))
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        if($this->container->hasParameter("app_name")) {
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
+        }
         
         if($event != null && !$event->getAssociation()->isDisplayed())
         	$event = null;
@@ -184,8 +187,9 @@ class DefaultController extends Controller
     	}
     	
     	$mainAssociation = null;
-    	if($this->container->hasParameter("app_name"))
-    		$mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+    	if($this->container->hasParameter("app_name")) {
+    		$mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
+    	}
     
     	return $this->render('AppBundle:Default:events.html.twig', array(
     			'mainAssociation'	=> $mainAssociation,
@@ -201,8 +205,9 @@ class DefaultController extends Controller
     	$quizCategories = $repoQuizCategory->findBy(array(), array("order" => "ASC"));
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $mainAssociation = null;
-        if($this->container->hasParameter("app_name"))
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        if($this->container->hasParameter("app_name")) {
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
+        }
     
     	return $this->render('AppBundle:Default:quiz.html.twig', array(
     		'mainAssociation' => $mainAssociation,
@@ -221,8 +226,9 @@ class DefaultController extends Controller
     	$associationsSelected = array();
     	$associations = array();
         $mainAssociation = null;
-        if($this->container->hasParameter("app_name"))
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+        if($this->container->hasParameter("app_name")) {
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
+        }
     	
     	if(!empty($input)) {
     		$names = explode(",", $input);
@@ -279,7 +285,7 @@ class DefaultController extends Controller
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $mainAssociation = null;
         if($this->container->hasParameter("app_name")) {
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
         
         $page = intval($request->get("page"));
@@ -302,10 +308,8 @@ class DefaultController extends Controller
             $qb->expr()->eq('e.association', 'a')
         )
         ->where($qb->expr()->eq("e.published", ":published"))
-        ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
         ->andWhere($qb->expr()->lte("e.endTime", ":now"))
         ->setParameter("published", true)
-        ->setParameter("displayed", true)
         ->setParameter("now", $now)
         ->orderBy("e.startTime", "DESC")
         ->setFirstResult($offset)
@@ -330,10 +334,8 @@ class DefaultController extends Controller
             $qb->expr()->eq('e.association', 'a')
         )
         ->where($qb->expr()->eq("e.published", ":published"))
-        ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
         ->andWhere($qb->expr()->lte("e.endTime", ":now"))
         ->setParameter("published", true)
-        ->setParameter("displayed", true)
         ->setParameter("now", $now)
         ->orderBy("e.endTime", "DESC")
         //->setFirstResult($offset)
@@ -358,7 +360,7 @@ class DefaultController extends Controller
         $repoEvent = $em->getRepository("AppBundle:Event");
         $mainAssociation = null;
         if($this->container->hasParameter("app_name")) {
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
         
         $q = trim($request->get("q"));
@@ -578,13 +580,14 @@ class DefaultController extends Controller
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $association = $repoAssociation->findOneBy(array("id" => $request->get("id"), "displayed" => true, "isWorkshop" => true));
         $mainAssociation = null;
-        if($this->container->hasParameter("app_name"))
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
-            
-            return $this->render('AppBundle:Default:workshop.html.twig', array(
-                'mainAssociation'	=> $mainAssociation,
-                'association'		=> $association
-            ));
+        if($this->container->hasParameter("app_name")) {
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
+        }
+        
+        return $this->render('AppBundle:Default:workshop.html.twig', array(
+            'mainAssociation'	=> $mainAssociation,
+            'association'		=> $association
+        ));
     }
     
     public function workshopsAction()
@@ -594,7 +597,7 @@ class DefaultController extends Controller
         $associations = $repoAssociation->findBy(array("displayed" => true, "isWorkshop" => true), array("name" => "ASC"));
         $mainAssociation = null;
         if($this->container->hasParameter("app_name")) {
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
         
         return $this->render('AppBundle:Default:associations.html.twig', array(
@@ -610,7 +613,7 @@ class DefaultController extends Controller
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $mainAssociation = null;
         if($this->container->hasParameter("app_name")) {
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
         
         /*$query = $em->createQuery(
@@ -654,7 +657,7 @@ class DefaultController extends Controller
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $mainAssociation = null;
         if($this->container->hasParameter("app_name")) {
-            $mainAssociation = $repoAssociation->findOneByName($this->container->getParameter("app_name"));
+            $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
         
         return $this->render('AppBundle:Default:legalTerms.html.twig', array(

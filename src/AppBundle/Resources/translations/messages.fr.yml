@@ -4,6 +4,7 @@ no_current_events: Pas d'actions pour le moment.
 details: Détails
 association_unknown: L'acteur n'existe pas.
 event_unknown: L'action n'existe pas.
+place_unknown: Le lieu n'existe pas.
 about: Mentions légales
 who_are_we: Qui sommes-nous ?
 next_events: Assistez ou participez aux prochaines actions
@@ -45,6 +46,7 @@ association_updated: Les informations ont été mises à jour.
 error_field: Un des champs est incorrect.
 event_created: L'action est créée. Ajoutez le flyer de l'évènement dans les documents.
 event_updated: L'action est mise à jour.
+place_updated: Le lieu est mis à jour.
 new_event: Nouvelle action
 event: Action
 start: Début
@@ -103,6 +105,7 @@ association_document_form_hint: Joignez tout document utile.
 delete_document_confirmation: 'Êtes-vous sûr de vouloir supprimer le document "%name%" ? Il sera effacé définitivement.'
 document_deleted: Le document est supprimé.
 event_deleted: 'L''action est supprimée.'
+place_deleted: Le lieu est supprimé.
 free: Gratuit
 paying: Payant
 pricing_hint: Prix (si payant)
@@ -226,4 +229,9 @@ show_passed_events_sm: Passé
 show_next_events_sm: À venir
 show_map_sm: Carte
 map: Carte
+places: Lieux
+deleted: Supprimé
+place_deleted: Le lieu est supprimé.
+undelete: Annuler la suppression
+place_undeleted: Le lieu n'est plus supprimé.
 
