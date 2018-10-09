@@ -234,4 +234,7 @@ deleted: Supprimé
 place_deleted: Le lieu est supprimé.
 undelete: Annuler la suppression
 place_undeleted: Le lieu n'est plus supprimé.
+last_events: Derniers évènements
+created_on: Créé le %date%
+updated_on: Modifié le %date%
 

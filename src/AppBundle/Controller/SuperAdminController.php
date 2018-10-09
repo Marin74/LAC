@@ -683,6 +683,7 @@ class SuperAdminController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get("translator");
+        $repoEvent = $em->getRepository("AppBundle:Event");
         $repoPlace = $em->getRepository("AppBundle:Place");
         $form = null;
         
@@ -690,11 +691,26 @@ class SuperAdminController extends Controller
         $placeId = $request->get("id");
         
         $place = $repoPlace->find($placeId);
+        $lastEvents = array();
         
         if($place == null) {
             $request->getSession()->getFlashBag()->add('success', $translator->trans("place_unknown"));
         }
         else {
+            
+            $qb = $repoEvent->createQueryBuilder('e');
+            $qb->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq("e.placeEntity", ":place")
+                )
+            )
+            ->setParameter("place", $place)
+            ->orderBy("e.startTime", "DESC")
+            ->setMaxResults(10)
+            ->getQuery();
+            
+            $lastEvents = $qb->getQuery()->getResult();
+            
             
             if($action == "delete") {
                 $place->setDeleted(true);
@@ -727,8 +743,9 @@ class SuperAdminController extends Controller
         }
         
         $params = array(
-            "form"  => ($form == null ? null : $form->createView()),
-            "place" => $place
+            "form"          => ($form == null ? null : $form->createView()),
+            "place"         => $place,
+            "lastEvents"    => $lastEvents
         );
         
         return $this->render('AppBundle:SuperAdmin:place.html.twig', $params);

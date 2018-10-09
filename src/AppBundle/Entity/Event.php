@@ -135,12 +135,32 @@ class Event
     private $pricing;
     
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="creationDate", type="datetime", nullable=true)
+     */
+    private $creationDate;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updateDate", type="datetime", nullable=true)
+     */
+    private $updateDate;
+    
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Document",mappedBy="event")
      * @ORM\OrderBy({"name": "asc"})
      */
     private $documents;
 
     private $file;
+    
+    
+    public function __construct() {
+        
+        $this->setCreationDate(new \DateTime());
+    }
 
 
     /**
@@ -163,6 +183,8 @@ class Event
     public function setName($name)
     {
         $this->name = $name;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -268,6 +290,8 @@ class Event
     public function setDescription($description)
     {
         $this->description = $description;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -292,6 +316,8 @@ class Event
     public function setStartTime($startTime)
     {
         $this->startTime = $startTime;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -316,6 +342,8 @@ class Event
     public function setEndTime($endTime)
     {
         $this->endTime = $endTime;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -340,6 +368,8 @@ class Event
     public function setPicture($picture)
     {
         $this->picture = $picture;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -357,6 +387,8 @@ class Event
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -369,6 +401,8 @@ class Event
     public function setLongitude($longitude)
     {
         $this->longitude = $longitude;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -381,6 +415,8 @@ class Event
     public function setAssociation($association)
     {
         $this->association = $association;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -400,6 +436,8 @@ class Event
     public function setWebsite($website)
     {
         $this->website = $website;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -415,12 +453,16 @@ class Event
     {
         $this->carpool = $carpool;
         
+        $this->setUpdateDate(new \DateTime());
+        
         return $this;
     }
 
     public function setSearchVolunteers($searchVolunteers)
     {
         $this->searchVolunteers = $searchVolunteers;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -433,6 +475,8 @@ class Event
     public function setPublished($published)
     {
         $this->published = $published;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -445,6 +489,8 @@ class Event
     public function setFree($free)
     {
         $this->free = $free;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -457,6 +503,8 @@ class Event
     public function setPricing($pricing)
     {
         $this->pricing = $pricing;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -474,6 +522,8 @@ class Event
     public function setPlaceEntity($place)
     {
         $this->placeEntity = $place;
+        
+        $this->setUpdateDate(new \DateTime());
         
         return $this;
     }
@@ -506,6 +556,30 @@ class Event
     public function getDocuments()
     {
         return $this->documents;
+    }
+    
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+        
+        return $this;
+    }
+    
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+    
+    public function setUpdateDate($updateDate)
+    {
+        $this->updateDate = $updateDate;
+        
+        return $this;
+    }
+    
+    public function getUpdateDate()
+    {
+        return $this->updateDate;
     }
 
     public function takesLessThanOneDay() {
@@ -547,6 +621,8 @@ class Event
 
         // Saves the filename
         $this->setPicture($filename);
+        
+        $this->setUpdateDate(new \DateTime());
 
         return true;
     }

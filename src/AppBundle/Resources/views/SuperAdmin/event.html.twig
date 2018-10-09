@@ -25,6 +25,26 @@
 {% block content %}
     {% if event is not null %}
     	
+    	{% if app.user.isAdmin %}
+        	{% if event.creationDate is not null or event.updateDate is not null %}
+            	<p style="font-size: small;">
+            		<em>
+                		{% if event.creationDate is not null %}
+                			{{ "created_on"|trans({"%date%": event.creationDate|localizeddate("full", "short", locale, time_zone)}) }}
+                			
+                			{% if event.updateDate is not null %}
+                				<br/>
+                			{% endif %}
+                		{% endif %}
+                		
+                		{% if event.updateDate is not null %}
+                			{{ "updated_on"|trans({"%date%": event.updateDate|localizeddate("full", "short", locale, time_zone)}) }}
+                		{% endif %}
+            		</em>
+            	</p>
+        	{% endif %}
+    	{% endif %}
+    	
         {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'form_update'}}) }}
 		
         <p>

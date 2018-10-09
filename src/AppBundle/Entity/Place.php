@@ -78,9 +78,29 @@ class Place
     private $deleted = false;
     
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="creationDate", type="datetime", nullable=true)
+     */
+    private $creationDate;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updateDate", type="datetime", nullable=true)
+     */
+    private $updateDate;
+    
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Event",mappedBy="placeEntity")
      */
     private $events;
+    
+    
+    public function __construct() {
+        
+        $this->setCreationDate(new \DateTime());
+    }
 
 
     /**
@@ -103,6 +123,8 @@ class Place
     public function setName($name)
     {
         $this->name = $name;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -127,6 +149,8 @@ class Place
     public function setStreet($street)
     {
         $this->street = $street;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -152,6 +176,8 @@ class Place
     {
         $this->street2 = $street2;
         
+        $this->setUpdateDate(new \DateTime());
+        
         return $this;
     }
     
@@ -175,6 +201,8 @@ class Place
     public function setZipCode($zipCode)
     {
         $this->zipCode = $zipCode;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -199,6 +227,8 @@ class Place
     public function setCity($city)
     {
         $this->city = $city;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -223,6 +253,8 @@ class Place
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -247,6 +279,8 @@ class Place
     public function setLongitude($longitude)
     {
         $this->longitude = $longitude;
+        
+        $this->setUpdateDate(new \DateTime());
 
         return $this;
     }
@@ -269,6 +303,32 @@ class Place
     public function setDeleted($deleted)
     {
         $this->deleted = $deleted;
+        
+        $this->setUpdateDate(new \DateTime());
+    }
+    
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+        
+        return $this;
+    }
+    
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+    
+    public function setUpdateDate($updateDate)
+    {
+        $this->updateDate = $updateDate;
+        
+        return $this;
+    }
+    
+    public function getUpdateDate()
+    {
+        return $this->updateDate;
     }
     
     public function getEvents()

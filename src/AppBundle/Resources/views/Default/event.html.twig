@@ -31,6 +31,8 @@
         	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
         	{% if app.request.query.get("source") == "association" %}
         		<li><a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></li>
+    		{% else %}
+        		<li><a href="{{ url("app_events") }}">{{ "the_events"|trans }}</a></li>
         	{% endif %}
             {% if event is null %}
             	<li class="active">{{ "event_unknown"|trans }}</li>
