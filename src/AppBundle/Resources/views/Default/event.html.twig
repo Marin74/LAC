@@ -29,11 +29,16 @@
         
         <ol class="breadcrumb">
         	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	{% if app.request.query.get("source") == "association" %}
-        		<li><a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></li>
+        	{% if event is not null and app.request.query.get("source") == "association" %}
+        		{% if event.association.isWorkshop %}
+        			<li><a href="{{ url("app_workshop", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></li>
+        		{% else %}
+        			<li><a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></li>
+    			{% endif %}
     		{% else %}
         		<li><a href="{{ url("app_events") }}">{{ "the_events"|trans }}</a></li>
         	{% endif %}
+        	
             {% if event is null %}
             	<li class="active">{{ "event_unknown"|trans }}</li>
             {% else %}
@@ -64,7 +69,7 @@
                 </div>
             {% endif %}
             
-            <p>{{ "proposed_by"|trans }} <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></p>
+            <p>{{ "proposed_by"|trans }} <a href="{% if event.association.isWorkshop %}{{ url("app_workshop", {"id": event.association.id, "name": event.association.nameForUrl}) }}{% else %}{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}{% endif %}">{{ event.association.name }}</a></p>
     
             <p style="font-family: 'avenir next'; font-size: 1.1em; margin-top: 20px; max-width: 1000px;">{{ event.description|nl2br }}</p>
     
