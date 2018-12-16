@@ -54,8 +54,12 @@
                                     {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}
                                 {% endif %}
                             </span><br/>
-                    	
-            				<a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center;">{{ event.association.name }}</a>
+                    		
+                    		{% if event.association.isWorkshop %}
+            					<a href="{{ url("app_workshop", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center;">{{ event.association.name }}</a>
+            				{% else %}
+            					<a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center;">{{ event.association.name }}</a>
+            				{% endif %}
             			</span>
             		</td>
                     {% if event.searchVolunteers and (displaySearchVolunteers is not defined or displaySearchVolunteers) %}

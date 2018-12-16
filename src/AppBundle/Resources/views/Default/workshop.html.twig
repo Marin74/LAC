@@ -56,16 +56,19 @@
                         {% endif %}
                         
                         {% if association.email is not empty %}
-                            {{ "email_colon"|trans({"%email%": association.email|replace({"@": "email_at_replace"|trans, ".": "email_dot_replace"|trans}) }) }}<br/>
+                            {% set emailSplitted = association.email|split("@") %}
+                        	
+                        	{% if emailSplitted|length != 2 %}
+                                {{ "email_colon"|trans({"%email%": association.email }) }}
+                        	{% else %}
+                            	<span>
+                                {{ "email_colon"|trans({"%email%": emailSplitted[0] }) }} <img src="{{ asset("bundles/app/img/at_sign.png") }}"/> {{ emailSplitted[1] }}
+                                </span>
+                            {% endif %}
+                            <br/>
                         {% endif %}
                     </address>
 				</p>
-				
-				{% if association.email is not empty %}
-                	<div class="well well-sm" style="font-size: small;">
-                        {{ "email_format_hint"|trans }}
-                    </div>
-                {% endif %}
 			{% endif %}
 			
             {% if association.description is not empty %}
