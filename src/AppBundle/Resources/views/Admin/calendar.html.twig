@@ -14,7 +14,9 @@
     {{ "calendar_hint"|trans }}
 </div>
 
-{% if events|length > 0 %}
+{% if events|length == 0 %}
+	<p>{{ "no_scheduled_events"|trans }}</p>
+{% else %}
 
 	{% set now = "now"|date("Y-m-d H:i:s") %}
 	

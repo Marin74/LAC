@@ -39,7 +39,7 @@ class Association
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=100,
-     *     max="2000"
+     *     max="2500"
      * )
      */
     private $description;

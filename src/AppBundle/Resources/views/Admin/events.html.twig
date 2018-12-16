@@ -191,7 +191,7 @@
                             {{ form_label(formAdd.startTime, "start", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.startTime) }}
-                                {{ form_widget(formAdd.startTime, {'attr': {'onChange': "onChangeStart('form_add');"}}) }}
+                                {{ form_widget(formAdd.startTime, {'attr': {'onChange': "onChangeStart('form_add');", 'placeholder': "datetime_placeholder"|trans}}) }}
                             </div>
                         </div>
                         <div class="form-group">
@@ -199,7 +199,7 @@
                             {{ form_label(formAdd.endTime, "end", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.endTime) }}
-                                {{ form_widget(formAdd.endTime) }}
+                                {{ form_widget(formAdd.endTime, {'attr': {'placeholder': "datetime_placeholder"|trans}}) }}
                             </div>
                         </div>
                         <div class="form-group">
@@ -328,33 +328,37 @@
 
 {% block js %}
     <script type="text/javascript">
+    
+        $().ready(function() {
+            
+            $(".form_datetime").datetimepicker({format: 'dd-mm-yyyy hh:ii', language: 'fr', autoclose: true});
 
-        $(".form_datetime").datetimepicker({format: 'dd-mm-yyyy hh:ii', language: 'fr', autoclose: true});
+            {% if isDuplicatingEvent or displayAddForm %}
+            	$("#modal_add").modal("show");
+            {% endif %}
 
-        {% if isDuplicatingEvent or displayAddForm %}
-        	$("#modal_add").modal("show");
-        {% endif %}
+            {# Open a modal dialog if there is a error with a form #}
+            {% if formAdd.name.vars.errors|length
+                or formAdd.startTime.vars.errors|length
+                or formAdd.endTime.vars.errors|length
+                or formAdd.description.vars.errors|length
+                or formAdd.website.vars.errors|length
+                or formAdd.searchVolunteers.vars.errors|length
+                or formAdd.free.vars.errors|length
+                or formAdd.pricing.vars.errors|length
+                or formAdd.name.vars.errors|length
+                or formAdd.published.vars.errors|length
+                or formAdd.file.vars.errors|length
+            %}
 
-        {# Open a modal dialog if there is a error with a form #}
-        {% if formAdd.name.vars.errors|length
-            or formAdd.startTime.vars.errors|length
-            or formAdd.endTime.vars.errors|length
-            or formAdd.description.vars.errors|length
-            or formAdd.website.vars.errors|length
-            or formAdd.searchVolunteers.vars.errors|length
-            or formAdd.free.vars.errors|length
-            or formAdd.pricing.vars.errors|length
-            or formAdd.name.vars.errors|length
-            or formAdd.published.vars.errors|length
-            or formAdd.file.vars.errors|length
-        %}
+                $("#warning_add").attr("class", "alert alert-warning");
+                $("#warning_add").attr("role", "alert");
+                $("#warning_add").text("{{ "error_field"|trans }}");
 
-            $("#warning_add").attr("class", "alert alert-warning");
-            $("#warning_add").attr("role", "alert");
-            $("#warning_add").text("{{ "error_field"|trans }}");
-
-            $("#modal_add").modal("show");
-        {% endif %}
+                $("#modal_add").modal("show");
+            {% endif %}
+        });
+        
 
 		{% if app.user.association != null %}
     		$(function() {

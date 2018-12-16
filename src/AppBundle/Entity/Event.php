@@ -36,6 +36,10 @@ class Event
      *
      * @ORM\Column(name="description", type="text")
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min=100,
+     *     max="2500"
+     * )
      */
     private $description;
 

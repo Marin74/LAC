@@ -62,6 +62,9 @@
         				{% if youtube_page is not empty %}
         					<a href="{{ youtube_page }}"><img src="{{ asset("bundles/app/img/youtube.ico") }}"/></a>
         				{% endif %}
+        				{% if diaspora_page is not empty %}
+        					<a href="{{ diaspora_page }}"><img src="{{ asset("bundles/app/img/diaspora.png") }}"/></a>
+        				{% endif %}
         			</td>
         			<td style="text-align: right;">
                         {% if mainAssociation is defined and mainAssociation != null %}
