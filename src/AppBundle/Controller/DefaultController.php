@@ -312,7 +312,6 @@ class DefaultController extends Controller
         $events = array();
         
         // Check if there are events during the month
-        $i = 1;
         do {
             
             $firstDay->setDate(intval($firstDay->format("Y")), intval($firstDay->format("m")), 1);
@@ -323,11 +322,6 @@ class DefaultController extends Controller
             
             if($lastDay > $now) {
                 $lastDay = clone $now;
-            }
-            
-            if($i > 2) {
-                //die($firstDay->format("d/m/Y H:i:s"));
-                //die($lastDay->format("d/m/Y H:i:s"));
             }
             
             $qb = $repoEvent->createQueryBuilder("e");
@@ -348,8 +342,6 @@ class DefaultController extends Controller
             
             $events = $qb->getQuery()->getResult();
             
-            //die(var_dump(count($events)));
-            
             
             // Check if there are events before
             $qb = $repoEvent->createQueryBuilder("e");
@@ -369,11 +361,7 @@ class DefaultController extends Controller
             
             $nbOldEvents = $qb->getQuery()->getSingleScalarResult();
             
-            //die(var_dump($nbOldEvents));
-            
             $firstDay->modify("-1 month");
-            
-            $i++;
         }while($nbOldEvents > 0 && count($events) == 0);
         
         if($nbOldEvents > 0) {
@@ -382,7 +370,6 @@ class DefaultController extends Controller
         }
         
         // Get previous month
-        $i = 1;
         $firstDay->modify("+2 months");
         do {
             
@@ -416,8 +403,6 @@ class DefaultController extends Controller
             
             $nbEvents = $qb->getQuery()->getSingleScalarResult();
             
-            //die(var_dump($nbOldEvents));
-            
             if($nbEvents > 0 && $firstDay <= $now) {
                 $previousMonth = $firstDay->format("m");
                 $previousYear = $firstDay->format("Y");
@@ -425,7 +410,6 @@ class DefaultController extends Controller
             
             $firstDay->modify("+1 month");
             
-            $i++;
         }while(empty($previousMonth) && $lastDay->format("Y-m-d H:i:s") != $now->format("Y-m-d H:i:s"));
         
         
