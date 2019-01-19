@@ -31,6 +31,7 @@ parameters:
     piwik_url:                  ~
     facebook_page:              ~
     youtube_page:               ~
+    diaspora_page:              ~
     webmaster:                  ~
     website:                    ~
     web_host:                   ~
