@@ -32,10 +32,11 @@ app_archives:
     path:     /archives
     defaults: { _controller: "AppBundle:Default:archives" }
 app_archives_page:
-    path:     /archives/{page}
+    path:     /archives/{year}-{month}
     defaults: { _controller: "AppBundle:Default:archives" }
     requirements:
-        page: \d+
+        year: \d+
+        month: \d+
 app_search:
     path:     /recherche
     defaults: { _controller: "AppBundle:Default:search" }

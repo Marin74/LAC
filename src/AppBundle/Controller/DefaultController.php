@@ -288,68 +288,154 @@ class DefaultController extends Controller
             $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
         
-        $page = intval($request->get("page"));
-        if($page <= 0) {
-            $page = 1;
-        }
-        
-        $NB_ITEMS = 10;
-        
-        $offset = ($page - 1) * $NB_ITEMS;
-        
         $now = new \DateTime();
         
-        $qb = $repoEvent->createQueryBuilder("e");
-        $qb
-        ->innerJoin(
-            'AppBundle:Association',
-            'a',
-            Join::WITH,
-            $qb->expr()->eq('e.association', 'a')
-        )
-        ->where($qb->expr()->eq("e.published", ":published"))
-        ->andWhere($qb->expr()->lte("e.endTime", ":now"))
-        ->setParameter("published", true)
-        ->setParameter("now", $now)
-        ->orderBy("e.startTime", "DESC")
-        ->setFirstResult($offset)
-        ->setMaxResults($NB_ITEMS)
-        ;
+        $page = $now->format("Y-m");
         
-        $events = $qb->getQuery()->getResult();
+        $year = $request->get("year");
+        $month = $request->get("month");
+        if(!empty($year) && !empty($month)) {
+            $page = $year."-".$month;
+        }
         
-        $nbDisplayedEvents = $offset + 1 + count($events);
+        $nextMonth = null;
+        $nextYear = null;
+        $previousMonth = null;
+        $previousYear = null;
+        $nbOldEvents = 0;
         
         
-        // Check if there are events after
-        $offset += $NB_ITEMS;
+        $firstDay = \DateTime::createFromFormat('Y-m-d H:i:s', $page."-01 00:00:00");
         
-        $qb = $repoEvent->createQueryBuilder("e");
-        $qb->select('count(e.id)');
-        $qb
-        ->innerJoin(
-            'AppBundle:Association',
-            'a',
-            Join::WITH,
-            $qb->expr()->eq('e.association', 'a')
-        )
-        ->where($qb->expr()->eq("e.published", ":published"))
-        ->andWhere($qb->expr()->lte("e.endTime", ":now"))
-        ->setParameter("published", true)
-        ->setParameter("now", $now)
-        ->orderBy("e.endTime", "DESC")
-        //->setFirstResult($offset)
-        //->setMaxResults(1)
-        ;
         
-        $nbOldEvents = $qb->getQuery()->getSingleScalarResult();
+        
+        $events = array();
+        
+        // Check if there are events during the month
+        $i = 1;
+        do {
+            
+            $firstDay->setDate(intval($firstDay->format("Y")), intval($firstDay->format("m")), 1);
+            $firstDay->setTime(0, 0, 0);
+            $lastDay = clone $firstDay;
+            $lastDay->setDate(intval($firstDay->format("Y")), intval($firstDay->format("m")), intval($firstDay->format("t")));
+            $lastDay->setTime(23, 59, 59);
+            
+            if($lastDay > $now) {
+                $lastDay = clone $now;
+            }
+            
+            if($i > 2) {
+                //die($firstDay->format("d/m/Y H:i:s"));
+                //die($lastDay->format("d/m/Y H:i:s"));
+            }
+            
+            $qb = $repoEvent->createQueryBuilder("e");
+            $qb
+            ->innerJoin(
+                'AppBundle:Association',
+                'a',
+                Join::WITH,
+                $qb->expr()->eq('e.association', 'a')
+            )
+            ->where($qb->expr()->eq("e.published", ":published"))
+            ->andWhere($qb->expr()->between("e.startTime", ":firstDay", ":lastDay"))
+            ->setParameter("published", true)
+            ->setParameter("firstDay", $firstDay)
+            ->setParameter("lastDay", $lastDay)
+            ->orderBy("e.startTime", "ASC")
+            ;
+            
+            $events = $qb->getQuery()->getResult();
+            
+            //die(var_dump(count($events)));
+            
+            
+            // Check if there are events before
+            $qb = $repoEvent->createQueryBuilder("e");
+            $qb->select('count(e.id)');
+            $qb
+            ->innerJoin(
+                'AppBundle:Association',
+                'a',
+                Join::WITH,
+                $qb->expr()->eq('e.association', 'a')
+            )
+            ->where($qb->expr()->eq("e.published", ":published"))
+            ->andWhere($qb->expr()->lt("e.startTime", ":firstDay"))
+            ->setParameter("published", true)
+            ->setParameter("firstDay", $firstDay)
+            ;
+            
+            $nbOldEvents = $qb->getQuery()->getSingleScalarResult();
+            
+            //die(var_dump($nbOldEvents));
+            
+            $firstDay->modify("-1 month");
+            
+            $i++;
+        }while($nbOldEvents > 0 && count($events) == 0);
+        
+        if($nbOldEvents > 0) {
+            $nextMonth = $firstDay->format("m");
+            $nextYear = $firstDay->format("Y");
+        }
+        
+        // Get previous month
+        $i = 1;
+        $firstDay->modify("+2 months");
+        do {
+            
+            $firstDay->setDate(intval($firstDay->format("Y")), intval($firstDay->format("m")), 1);
+            $firstDay->setTime(0, 0, 0);
+            $lastDay = clone $firstDay;
+            $lastDay->setDate(intval($firstDay->format("Y")), intval($firstDay->format("m")), intval($firstDay->format("t")));
+            $lastDay->setTime(23, 59, 59);
+            
+            if($lastDay > $now) {
+                $lastDay = clone $now;
+            }
+            
+            
+            // Check if there are events after
+            $qb = $repoEvent->createQueryBuilder("e");
+            $qb->select('count(e.id)');
+            $qb
+            ->innerJoin(
+                'AppBundle:Association',
+                'a',
+                Join::WITH,
+                $qb->expr()->eq('e.association', 'a')
+            )
+            ->where($qb->expr()->eq("e.published", ":published"))
+            ->andWhere($qb->expr()->between("e.startTime", ":firstDay", ":lastDay"))
+            ->setParameter("published", true)
+            ->setParameter("firstDay", $firstDay)
+            ->setParameter("lastDay", $lastDay)
+            ;
+            
+            $nbEvents = $qb->getQuery()->getSingleScalarResult();
+            
+            //die(var_dump($nbOldEvents));
+            
+            if($nbEvents > 0 && $firstDay <= $now) {
+                $previousMonth = $firstDay->format("m");
+                $previousYear = $firstDay->format("Y");
+            }
+            
+            $firstDay->modify("+1 month");
+            
+            $i++;
+        }while(empty($previousMonth) && $lastDay->format("Y-m-d H:i:s") != $now->format("Y-m-d H:i:s"));
         
         
         return $this->render('AppBundle:Default:archives.html.twig', array(
             'mainAssociation'   => $mainAssociation,
             'events'            => $events,
-            'displayNext'       => ($nbOldEvents > $nbDisplayedEvents),
-            'page'              => $page
+            'nextMonth'         => $nextMonth,
+            'nextYear'          => $nextYear,
+            'previousMonth'     => $previousMonth,
+            'previousYear'     => $previousYear
         ));
     }
     

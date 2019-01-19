@@ -16,11 +16,11 @@
         
 		<nav aria-label="...">
     		<ul class="pager">
-    			{% if page > 1 %}
-    				<li class="next"><a href="{{ url("app_archives_page", {"page": page-1}) }}"><span aria-hidden="true">&rarr;</span></a></li>
+    			{% if previousMonth is not null %}
+    				<li class="next"><a href="{{ url("app_archives_page", {"month": previousMonth, "year": previousYear}) }}"><span aria-hidden="true">&rarr;</span></a></li>
     			{% endif %}
-    			{% if displayNext %}
-    				<li class="previous"><a href="{{ url("app_archives_page", {"page": page+1}) }}"><span aria-hidden="true">&larr;</span></a></li>
+    			{% if nextMonth is not null %}
+    				<li class="previous"><a href="{{ url("app_archives_page", {"month": nextMonth, "year": nextYear}) }}"><span aria-hidden="true">&larr;</span></a></li>
     			{% endif %}
     		</ul>
 		</nav>
@@ -69,11 +69,11 @@
         
 		<nav aria-label="...">
     		<ul class="pager">
-    			{% if page > 1 %}
-    				<li class="next"><a href="{{ url("app_archives_page", {"page": page-1}) }}"><span aria-hidden="true">&rarr;</span></a></li>
+    			{% if previousMonth is not null %}
+    				<li class="next"><a href="{{ url("app_archives_page", {"month": previousMonth, "year": previousYear}) }}"><span aria-hidden="true">&rarr;</span></a></li>
     			{% endif %}
-    			{% if displayNext %}
-    				<li class="previous"><a href="{{ url("app_archives_page", {"page": page+1}) }}"><span aria-hidden="true">&larr;</span></a></li>
+    			{% if nextMonth is not null %}
+    				<li class="previous"><a href="{{ url("app_archives_page", {"month": nextMonth, "year": nextYear}) }}"><span aria-hidden="true">&larr;</span></a></li>
     			{% endif %}
     		</ul>
 		</nav>
