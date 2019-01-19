@@ -1,6 +1,6 @@
 <div class="col-sm-6 col-md-3">
 	<a href="{% if association.isWorkshop %} {{ url("app_workshop", {"id": association.id, "name": association.nameForURl}) }} {% else %} {{ url("app_association", {"id": association.id, "name": association.nameForURl}) }} {% endif %}" style=" text-decoration: none;">
-        <div class="thumbnail" style="height: 220px; padding: 0px; background-color: #43a2ca; padding-top: 10px;">
+        <div class="thumbnail" style="height: 220px; padding: 0px; padding-top: 10px;">
             {% if association.picture is not empty %}
                 <div class="img-association" style="
     				background-image: url('{{ asset(association.picturePath) }}');
@@ -11,7 +11,7 @@
                 </div>
             {% endif %}
             <div class="caption" style="padding-bottom: 0px;">
-            	<h4 class="white" style="text-align: center;">{{ association.name }}</h4>
+            	<h4 class="{% if app.request.get('_route') == "app_workshops" %}green-color{% else %}second-main-color{% endif %}" style="text-align: center;">{{ association.name }}</h4>
             </div>
         </div>
     </a>
