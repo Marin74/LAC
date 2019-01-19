@@ -219,6 +219,10 @@ class Event
             $name = str_replace('!', "", $name);
             $name = str_replace('(', "", $name);
             $name = str_replace(')', "", $name);
+            $name = str_replace('{', "", $name);
+            $name = str_replace('}', "", $name);
+            $name = str_replace('[', "", $name);
+            $name = str_replace(']', "", $name);
             $name = str_replace('°', "", $name);
             $name = str_replace('&', "", $name);
             $name = str_replace('§', "", $name);
@@ -226,9 +230,9 @@ class Event
             $name = str_replace('%', "", $name);
             $name = str_replace(':', "", $name);
             $name = str_replace(',', "", $name);
+            $name = str_replace(';', "", $name);
             $name = str_replace('=', "", $name);
             $name = str_replace('+', "", $name);
-            $name = str_replace('%', "", $name);
             $name = str_replace('.', "", $name);
             $name = str_replace('<', "", $name);
             $name = str_replace('>', "", $name);
@@ -250,7 +254,7 @@ class Event
             $name = str_replace("ö", "o", $name);
             $name = str_replace("ù", "u", $name);
             $name = str_replace("ü", "u", $name);
-            $name = str_replace("ù", "u", $name);
+            $name = str_replace("û", "u", $name);
             $name = str_replace("î", "i", $name);
             $name = str_replace("ï", "i", $name);
             $name = str_replace("ç", "c", $name);
