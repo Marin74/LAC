@@ -44,6 +44,10 @@ class EventFormType extends AbstractType
             	'required'	=> false
         	)
             )
+            ->add('websiteTitle',		TextType::class, array(
+                'required'	=> false
+            )
+            )
             ->add('carpool',			UrlType::class, array(
                 'required'	=> false
             )

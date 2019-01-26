@@ -103,6 +103,13 @@ class Event
     /**
      * @var string
      *
+     * @ORM\Column(name="websiteTitle", type="string", length=255, nullable=true)
+     */
+    private $websiteTitle;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="carpool", type="string", length=255, nullable=true)
      */
     private $carpool;
@@ -451,6 +458,22 @@ class Event
     }
     
     /**
+     * Set websiteTitle
+     *
+     * @param string $websiteTitle
+     *
+     * @return Event
+     */
+    public function setWebsiteTitle($websiteTitle)
+    {
+        $this->websiteTitle = $websiteTitle;
+        
+        $this->setUpdateDate(new \DateTime());
+        
+        return $this;
+    }
+    
+    /**
      * Set carpool
      *
      * @param string $carpool
@@ -549,6 +572,16 @@ class Event
     public function getWebsite()
     {
         return $this->website;
+    }
+    
+    /**
+     * Get websiteTitle
+     *
+     * @return string
+     */
+    public function getWebsiteTitle()
+    {
+        return $this->websiteTitle;
     }
     
     /**

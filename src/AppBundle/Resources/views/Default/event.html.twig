@@ -74,7 +74,7 @@
             <p style="font-family: 'avenir next'; font-size: 1.1em; margin-top: 20px; max-width: 1000px;">{{ event.description|nl2br }}</p>
     
             {% if event.website is not empty %}
-                <p style="margin-bottom: 20px;"><a href="{{ event.website }}" target="_blank">{{ "read_more"|trans }}</a></p>
+                <p style="margin-bottom: 20px;"><a href="{{ event.website }}" target="_blank">{% if event.websiteTitle is not empty %}{{ event.websiteTitle }}{% else %}{{ "read_more"|trans }}{% endif %}</a></p>
             {% endif %}
             
             {% if event.documents|length > 0 %}

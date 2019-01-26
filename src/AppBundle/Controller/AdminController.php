@@ -148,7 +148,7 @@ class AdminController extends Controller
         		$newEvent->setSearchVolunteers($eventToDuplicate->getSearchVolunteers());
         		$newEvent->setStartTime($eventToDuplicate->getStartTime());
         		$newEvent->setWebsite($eventToDuplicate->getWebsite());
-        		$newEvent->setCarpool($eventToDuplicate->getCarpool());
+        		$newEvent->setWebsiteTitle($eventToDuplicate->getWebsiteTitle());
         	}
         }
         
@@ -208,8 +208,13 @@ class AdminController extends Controller
         			else {
         				
         				// Erase pricing field if it's free
-        				if($newEvent->getFree())
+        			    if($newEvent->getFree()) {
        						$newEvent->setPricing(null);
+        			    }
+        			    // Erase the website title field if there is no website
+        			    if(empty($newEvent->getWebsite()) && !empty($newEvent->getWebsiteTitle())) {
+        			        $newEvent->setWebsiteTitle(null);
+        			    }
        					
         				$em->persist($newEvent);
         				$em->flush();
@@ -356,6 +361,10 @@ class AdminController extends Controller
                             if($event->getFree()) {
                                 $event->setPricing(null);
                             }
+                            // Erase the website title field if there is no website
+                            if(empty($event->getWebsite()) && !empty($event->getWebsiteTitle())) {
+                                $event->setWebsiteTitle(null);
+                            }
                             
                             // Save the object event
                             $em->flush();
@@ -368,6 +377,9 @@ class AdminController extends Controller
                             }
                             
                             $request->getSession()->getFlashBag()->add('success', $translator->trans("event_updated"));
+                            
+                            // Refresh the form (because the event object can be modified after the creation of the form)
+                            $form = $this->get('form.factory')->createBuilder(EventFormType::class, $event)->getForm();
                         }
                     }
                 }
@@ -790,6 +802,7 @@ class AdminController extends Controller
                 $newEvent->setSearchVolunteers($eventToDuplicate->getSearchVolunteers());
                 $newEvent->setStartTime($eventToDuplicate->getStartTime());
                 $newEvent->setWebsite($eventToDuplicate->getWebsite());
+                $newEvent->setWebsiteTitle($eventToDuplicate->getWebsiteTitle());
             }
         }
         
@@ -849,32 +862,37 @@ class AdminController extends Controller
                         else {
                             
                             // Erase pricing field if it's free
-                            if($newEvent->getFree())
+                            if($newEvent->getFree()) {
                                 $newEvent->setPricing(null);
+                            }
+                            // Erase the website title field if there is no website
+                            if(empty($newEvent->getWebsite()) && !empty($newEvent->getWebsiteTitle())) {
+                                $newEvent->setWebsiteTitle(null);
+                            }
+                            
+                            $em->persist($newEvent);
+                            $em->flush();
+                            
+                            $newEvent->uploadPicture();
+                            $em->flush();
+                            
+                            if(!empty($eventToDuplicateId) && empty($newEvent->getPicture())) {
+                                $tempEvent = $repoEvent->find($eventToDuplicateId);
                                 
-                                $em->persist($newEvent);
-                                $em->flush();
-                                
-                                $newEvent->uploadPicture();
-                                $em->flush();
-                                
-                                if(!empty($eventToDuplicateId) && empty($newEvent->getPicture())) {
-                                    $tempEvent = $repoEvent->find($eventToDuplicateId);
-                                    
-                                    if($tempEvent != null) {
-                                        $newEvent->setPicture($tempEvent->getPicture());
-                                        $em->flush();
-                                    }
+                                if($tempEvent != null) {
+                                    $newEvent->setPicture($tempEvent->getPicture());
+                                    $em->flush();
                                 }
-                                
-                                if($placeId == "-1") {
-                                    $placeId = "";
-                                }
-                                
-                                $newEvent = new Event();
-                                $formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
-                                
-                                $request->getSession()->getFlashBag()->add('success', $translator->trans("event_created"));
+                            }
+                            
+                            if($placeId == "-1") {
+                                $placeId = "";
+                            }
+                            
+                            $newEvent = new Event();
+                            $formAdd = $this->get('form.factory')->createBuilder(EventFormType::class, $newEvent)->getForm();
+                            
+                            $request->getSession()->getFlashBag()->add('success', $translator->trans("event_created"));
                         }
                 }
             }

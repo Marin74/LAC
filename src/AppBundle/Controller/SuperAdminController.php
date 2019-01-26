@@ -57,7 +57,7 @@ class SuperAdminController extends Controller
         		$newEvent->setSearchVolunteers($eventToDuplicate->getSearchVolunteers());
         		$newEvent->setStartTime($eventToDuplicate->getStartTime());
         		$newEvent->setWebsite($eventToDuplicate->getWebsite());
-        		$newEvent->setCarpool($eventToDuplicate->getCarpool());
+        		$newEvent->setWebsiteTitle($eventToDuplicate->getWebsiteTitle());
         	}
         }
         
@@ -114,8 +114,13 @@ class SuperAdminController extends Controller
                 else {
         					
    					// Erase pricing field if it's free
-       				if($newEvent->getFree())
+                    if($newEvent->getFree()) {
         				$newEvent->setPricing(null);
+                    }
+                    // Erase the website title field if there is no website
+                    if(empty($newEvent->getWebsite()) && !empty($newEvent->getWebsiteTitle())) {
+                        $newEvent->setWebsiteTitle(null);
+                    }
         			
                     $em->persist($newEvent);
                     $em->flush();
@@ -252,6 +257,10 @@ class SuperAdminController extends Controller
                             if($event->getFree()) {
                                 $event->setPricing(null);
                             }
+                            // Erase the website title field if there is no website
+                            if(empty($event->getWebsite()) && !empty($event->getWebsiteTitle())) {
+                                $event->setWebsiteTitle(null);
+                            }
                             
                             // Save the object event
                             $em->flush();
@@ -264,6 +273,9 @@ class SuperAdminController extends Controller
                             }
                             
                             $request->getSession()->getFlashBag()->add('success', $translator->trans("event_updated"));
+                            
+                            // Refresh the form (because the event object can be modified after the creation of the form)
+                            $form = $this->get('form.factory')->createBuilder(SuperAdminEventFormType::class, $event)->getForm();
                         }
                     }
                 }

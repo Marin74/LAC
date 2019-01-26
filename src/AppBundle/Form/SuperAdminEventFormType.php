@@ -59,6 +59,10 @@ class SuperAdminEventFormType extends AbstractType
                 'attr'                      => ['class' => 'form-control',],
             	'required'					=> false
             ))
+            ->add('websiteTitle',   TextType::class, array(
+                'attr'                      => ['class' => 'form-control',],
+                'required'					=> false
+            ))
             ->add('carpool',        UrlType::class, array(
                 'required'                  => false
             ))
