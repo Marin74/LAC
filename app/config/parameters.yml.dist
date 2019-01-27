@@ -35,4 +35,5 @@ parameters:
     webmaster:                  ~
     website:                    ~
     web_host:                   ~
+    newsletter_url:             ~
     

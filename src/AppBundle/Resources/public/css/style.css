@@ -26,6 +26,9 @@
 .bg-green{
 	background: var(--green-color);
 }
+.bg-blue{
+	background: var(--main-color);
+}
 .minorBarButton:hover, .minorBarButton:focus, .minorBarButton:active, .minorBarButton.active {
 	background-color: var(--third-main-color);
 }
@@ -151,4 +154,7 @@ body{
 }
 .button-workshops:hover, .button-workshops:focus, .button-workshops:active, .button-workshops.active {
 	color: var(--green-color);
+}
+.button-newsletter:hover, .button-newsletter:focus, .button-newsletter:active, .button-newsletter.active {
+	color: var(--main-color);
 }

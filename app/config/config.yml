@@ -55,6 +55,7 @@ twig:
         webmaster: "%webmaster%"
         website: "%website%"
         web_host: "%web_host%"
+        newsletter_url: "%newsletter_url%"
 
 # Doctrine Configuration
 doctrine:

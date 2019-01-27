@@ -161,33 +161,25 @@
         	</center>
         </p>-->
         
-        {% if true %}
-            <table class="center" style="height: 90%; width: 100%; table-layout: fixed; top: 0; bottom: 0; position: absolute;">
-                <tr>
-                    <td style="max-width: 100px;">
+        <table class="center" style="height: 100%; width: 100%; table-layout: fixed; top: 0; bottom: 0; position: absolute;">
+            <tr>
+                <td style="max-width: 100px;">
+                	<p>
+                		<a class="btn btn-outline-inverse btn-sm bg-third-main-color button-associations" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_associations") }}">{{ "local_associations"|trans }}</a>
+                	</p>
+                	{% if workshopExists != null %}
                     	<p>
-                    		<a class="btn btn-outline-inverse btn-sm bg-third-main-color button-associations" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_associations") }}">{{ "local_associations"|trans }}</a>
+                    		<a class="btn btn-outline-inverse btn-sm bg-green button-workshops" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a>
                     	</p>
-                    	{% if workshopExists != null %}
-                        	<p>
-                        		<a class="btn btn-outline-inverse btn-sm bg-green button-workshops" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a>
-                        	</p>
-                    	{% endif %}
-                    </td>
-                </tr>
-            </table>
-        {% else %}{# A supprimer #}
-            <table class="center" style="height: 90%; width: 100%; table-layout: fixed; top: 0; bottom: 0; position: absolute;">
-                <tr>
-                    <td style="max-width: 100px;">
-                    	<a class="btn btn-outline-inverse btn-sm bg-third-main-color" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_associations") }}">{{ "local_associations"|trans }}</a>
-                    </td>
-                    <td style="max-width: 100px;">
-                    	<a class="btn btn-outline-inverse btn-sm bg-green" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a>
-                    </td>
-                </tr>
-            </table>
-        {% endif %}
+                	{% endif %}
+                    {% if newsletter_url is not empty %}
+                    	<p>
+                    		<a class="btn btn-outline-inverse btn-sm bg-blue button-newsletter" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ newsletter_url }}">{{ "subscribe"|trans }}</a>
+                    	</p>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
         
     </div>
 {% endblock %}
