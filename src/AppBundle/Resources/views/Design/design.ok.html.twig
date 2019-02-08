@@ -1,0 +1,85 @@
+{% extends "AppBundle:Design:base.html.twig" %}
+
+{% block body_style %}background: lightgrey;{% endblock %}
+
+{% block body %}
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" style="margin-top: 17px;">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url("app_index") }}" style="
+                	vertical-align: middle;
+                	height: 69px;
+                	width: 215px;
+                    background-image:url({{ asset("bundles/app/img/logo.svg") }});
+    				background-size:     contain;
+    				background-repeat:no-repeat;
+    				background-size: 100% 100%;
+                ">
+                </a>
+
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+            	<ul class="nav navbar-nav navbar-left">
+            		<li class="white">
+            		</li>
+                    <!--<li><a href=""></a></li>-->
+                </ul>
+                
+                <ul class="nav navbar-nav navbar-right">
+                    <!--<li><a href=""></a></li>-->
+                    
+                    <li class="white"><a href="{{ url("app_admin_index") }}" style="color: white; font-size: large;"><h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ "members_area"|trans }}</h4></a></li>
+                </ul>
+                
+                <form class="navbar-form navbar-left" style="padding-top: 10px;" method="GET" action="{{ url("app_search") }}">
+                	<input type="text" class="form-control" placeholder="{{ "search"|trans }}" name="q">
+                </form>
+            </div><!--/.navbar-collapse -->
+        </div>
+    </nav>
+
+	<div style="margin-top: 40px;">
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="container">
+    </div> <!-- /container -->
+
+    <footer class="footer" style="">
+        <div class="container" style="">
+        	
+        	<table style="width: 95%; table-layout: fixed;">
+        		<tr>
+        			<td>
+        				{% if facebook_page is not empty %}
+        					<a href="{{ facebook_page }}"><img src="{{ asset("bundles/app/img/facebook.ico") }}"/></a> 
+        				{% endif %}
+        				{% if youtube_page is not empty %}
+        					<a href="{{ youtube_page }}"><img src="{{ asset("bundles/app/img/youtube.ico") }}"/></a>
+        				{% endif %}
+        				{% if diaspora_page is not empty %}
+        					<a href="{{ diaspora_page }}"><img src="{{ asset("bundles/app/img/diaspora.png") }}"/></a>
+        				{% endif %}
+        			</td>
+        			<td style="text-align: right;">
+                        {% if mainAssociation is defined and mainAssociation != null %}
+                        	<a class="btn btn-outline-inverse btn-sm" style="border-color: white;" href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}">{{ "who_are_we"|trans }}</a>
+                        {% endif %}
+        				<a class="btn btn-outline-inverse btn-sm" style="border-color: white;" href="{{ path("app_legal_terms") }}">{{ "about"|trans }}</a>
+        			</td>
+        		</tr>
+        	</table>
+        </div>
+    </footer>
+
+    <!-- ================================================== -->
+    <!-- JavaScript placed at the end of the document so the pages load faster -->
+    {% block js %}{% endblock %}
+{% endblock %}
