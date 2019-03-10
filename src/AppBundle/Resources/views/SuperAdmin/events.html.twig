@@ -50,7 +50,7 @@
                             </a>
                         </td>
                         <td>
-                        	<a href="{{ url("app_admin_event_document", {"id": event.id}) }}">{{ "documents"|trans }}</a>
+                        	<a href="{{ url("app_admin_event_document", {"id": event.id}) }}" class="label label-primary"><span class="glyphicon glyphicon-folder-open" aria-hidden="true" title="{{ "documents"|trans }}"></span></a>
                         </td>
                         <td>
                         	{% if event.published %}
