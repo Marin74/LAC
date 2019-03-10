@@ -54,18 +54,18 @@
                         </td>
                         <td>
                         	{% if event.published %}
-                            	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "super_admin_events"}) }}">{{ "consult"|trans }}</a>
+                            	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "super_admin_events"}) }}" class="label label-primary"><span class="glyphicon glyphicon-eye-open" aria-hidden="true" title="{{ "consult"|trans }}"></span></a>
                             {% endif %}
                         </td>
                         <td>
-                        	<form method="post">
+                        	<form method="post" id="duplicateForm{{ event.id }}">
                         		<input type="hidden" name="action" value="duplicate"/>
                         		<input type="hidden" name="eventId" value="{{ event.id }}"/>
-                        		<button type="submit" class="btn btn-sm btn-primary">{{ "duplicate"|trans }}</button>
+                        		<a class="label label-primary" onclick="$('#duplicateForm{{ event.id }}').submit();"><span class="glyphicon glyphicon-duplicate" aria-hidden="true" title="{{ "duplicate"|trans }}"></span></a>
                         	</form>
                         </td>
                         <td>
-                            <button data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="btn btn-sm btn-warning" style="text-decoration: none;">{{ "delete"|trans }}</button>
+                            <a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="label label-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="{{ "delete"|trans }}"></span></a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -111,18 +111,18 @@
                         </td>
                         <td>
                         	{% if event.published %}
-                            	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "super_admin_events"}) }}">{{ "consult"|trans }}</a>
+                            	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "super_admin_events"}) }}" class="label label-primary"><span class="glyphicon glyphicon-eye-open" aria-hidden="true" title="{{ "consult"|trans }}"></span></a>
                             {% endif %}
                         </td>
                         <td>
-                        	<form method="post">
+                        	<form method="post" id="duplicateForm{{ event.id }}">
                         		<input type="hidden" name="action" value="duplicate"/>
                         		<input type="hidden" name="eventId" value="{{ event.id }}"/>
-                        		<button type="submit" class="btn btn-sm btn-primary">{{ "duplicate"|trans }}</button>
+                        		<a class="label label-primary" onclick="$('#duplicateForm{{ event.id }}').submit();"><span class="glyphicon glyphicon-duplicate" aria-hidden="true" title="{{ "duplicate"|trans }}"></span></a>
                         	</form>
                         </td>
                         <td>
-                            <button data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="btn btn-sm btn-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                            <a data-toggle="modal" data-target="#modal_delete_{{ event.id }}" class="label label-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="{{ "delete"|trans }}"></span></a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -338,7 +338,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "cancel"|trans }}</button>
-                            <button type="submit" class="btn btn-warning">{{ "delete"|trans }}</button>
+                            <button type="submit" class="btn btn-danger">{{ "delete"|trans }}</button>
                         </div>
                     </form>
                 </div>

@@ -49,7 +49,7 @@
                         <a data-toggle="modal" data-target="#modal_password_{{ user.id }}" class="label label-default" style="text-decoration: none;">{{ "password"|trans }}</a>
                     </td>
                     <td>
-                        <a data-toggle="modal" data-target="#modal_delete_{{ user.id }}" class="label label-warning" style="text-decoration: none;">{{ "delete"|trans }}</a>
+                        <a data-toggle="modal" data-target="#modal_delete_{{ user.id }}" class="label label-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="{{ "delete"|trans }}"></span></a>
                     </td>
                 </tr>
             {% endfor %}
@@ -184,7 +184,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "cancel"|trans }}</button>
-                            <button type="submit" class="btn btn-warning">{{ "delete"|trans }}</button>
+                            <button type="submit" class="btn btn-danger">{{ "delete"|trans }}</button>
                         </div>
                     </form>
                 </div>
