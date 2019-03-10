@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class SuperAdminEventFormType extends AbstractType
 {
@@ -63,7 +64,12 @@ class SuperAdminEventFormType extends AbstractType
                 'attr'                      => ['class' => 'form-control',],
                 'required'					=> false
             ))
+            ->add('email',          EmailType::class, array(
+                'attr'                      => ['class' => 'form-control',],
+                'required'                  => false
+            ))
             ->add('carpool',        UrlType::class, array(
+                'attr'                      => ['class' => 'form-control',],
                 'required'                  => false
             ))
             ->add('file',           FileType::class, array(

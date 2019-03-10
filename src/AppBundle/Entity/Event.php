@@ -110,6 +110,13 @@ class Event
     /**
      * @var string
      *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     */
+    private $email;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="carpool", type="string", length=255, nullable=true)
      */
     private $carpool;
@@ -471,6 +478,30 @@ class Event
         $this->setUpdateDate(new \DateTime());
         
         return $this;
+    }
+    
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Event
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+        
+        return $this;
+    }
+    
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
     
     /**

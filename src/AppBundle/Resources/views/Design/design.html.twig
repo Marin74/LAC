@@ -65,6 +65,9 @@
         				{% if diaspora_page is not empty %}
         					<a href="{{ diaspora_page }}"><img src="{{ asset("bundles/app/img/diaspora.png") }}"/></a>
         				{% endif %}
+        				{% if instagram_url is not empty %}
+        					<a href="{{ instagram_url }}"><img src="{{ asset("bundles/app/img/instagram.png") }}"/></a>
+        				{% endif %}
         				{% if newsletter_url is not empty %}
         					<a class="btn btn-outline-inverse btn-sm main-color" style="border-color: white; background-color: white;" href="{{ newsletter_url }}">{{ "subscribe"|trans }}</a>
         				{% endif %}

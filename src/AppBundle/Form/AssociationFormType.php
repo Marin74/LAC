@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class AssociationFormType extends AbstractType
 {
@@ -26,7 +27,7 @@ class AssociationFormType extends AbstractType
             		'required'	=> false
             	)
             )
-            ->add('email',              TextType::class, array(
+            ->add('email',              EmailType::class, array(
             		'required'	=> false
             	)
             )

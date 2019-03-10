@@ -149,6 +149,7 @@ class AdminController extends Controller
         		$newEvent->setStartTime($eventToDuplicate->getStartTime());
         		$newEvent->setWebsite($eventToDuplicate->getWebsite());
         		$newEvent->setWebsiteTitle($eventToDuplicate->getWebsiteTitle());
+        		$newEvent->setEmail($eventToDuplicate->getEmail());
         	}
         }
         
@@ -315,8 +316,8 @@ class AdminController extends Controller
         
         $event = $repoEvent->find($eventId);
         
-        // Only the events' association can be updated
-        if($event != null && ($user->getAssociation() == null || $event->getAssociation()->getId() != $user->getAssociation()->getId())) {
+        // Only the events' association/workshop can be updated
+        if($event != null && ($user->getAssociation() == null || ($event->getAssociation()->getId() != $user->getAssociation()->getId() && $event->getAssociation()->getId() != $user->getWorkshop()->getId()))) {
             $event = null;
         }
         
@@ -803,6 +804,7 @@ class AdminController extends Controller
                 $newEvent->setStartTime($eventToDuplicate->getStartTime());
                 $newEvent->setWebsite($eventToDuplicate->getWebsite());
                 $newEvent->setWebsiteTitle($eventToDuplicate->getWebsiteTitle());
+                $newEvent->setEmail($eventToDuplicate->getEmail());
             }
         }
         

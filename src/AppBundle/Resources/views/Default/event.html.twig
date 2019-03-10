@@ -72,9 +72,29 @@
             <p>{{ "proposed_by"|trans }} <a href="{% if event.association.isWorkshop %}{{ url("app_workshop", {"id": event.association.id, "name": event.association.nameForUrl}) }}{% else %}{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}{% endif %}">{{ event.association.name }}</a></p>
     
             <p style="font-family: 'avenir next'; font-size: 1.1em; margin-top: 20px; max-width: 1000px;">{{ event.description|nl2br }}</p>
-    
-            {% if event.website is not empty %}
-                <p style="margin-bottom: 20px;"><a href="{{ event.website }}" target="_blank">{% if event.websiteTitle is not empty %}{{ event.websiteTitle }}{% else %}{{ "read_more"|trans }}{% endif %}</a></p>
+    		
+            {% if event.website is not empty or event.email is not empty %}
+                <p style="margin-bottom: 20px;">
+                
+                	{% if event.website is not empty %}
+                		<a href="{{ event.website }}">{% if event.websiteTitle is not empty %}{{ event.websiteTitle }}{% else %}{{ "read_more"|trans }}{% endif %}</a>
+            		
+                		{% if event.email is not empty %}<br/>{% endif %}
+                	{% endif %}
+            		
+            		{% if event.email is not empty %}
+            			
+                    	{% set emailSplitted = event.email|split("@") %}
+                    	
+                    	{% if emailSplitted|length != 2 %}
+                            {{ "email_colon"|trans({"%email%": event.email }) }}
+                    	{% else %}
+                        	<span>
+                            {{ "email_colon"|trans({"%email%": emailSplitted[0] }) }} <img src="{{ asset("bundles/app/img/at_sign.png") }}"/> {{ emailSplitted[1] }}
+                            </span>
+                        {% endif %}
+                    {% endif %}
+        		</p>
             {% endif %}
             
             {% if event.documents|length > 0 %}

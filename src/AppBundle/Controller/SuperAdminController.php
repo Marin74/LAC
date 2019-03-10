@@ -58,6 +58,7 @@ class SuperAdminController extends Controller
         		$newEvent->setStartTime($eventToDuplicate->getStartTime());
         		$newEvent->setWebsite($eventToDuplicate->getWebsite());
         		$newEvent->setWebsiteTitle($eventToDuplicate->getWebsiteTitle());
+        		$newEvent->setEmail($eventToDuplicate->getEmail());
         	}
         }
         

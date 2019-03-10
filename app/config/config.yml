@@ -52,6 +52,7 @@ twig:
         facebook_page: "%facebook_page%"
         youtube_page: "%youtube_page%"
         diaspora_page: "%diaspora_page%"
+        instagram_url: "%instagram_url%"
         webmaster: "%webmaster%"
         website: "%website%"
         web_host: "%web_host%"
