@@ -7,12 +7,12 @@ app_associations:
 app_events:
     path:     /actions
     defaults: { _controller: "AppBundle:Default:events" }
-app_quiz:
-    path:     /quizz
-    defaults: { _controller: "AppBundle:Default:quiz" }
-app_quiz_result:
-    path:     /quizz/resultats
-    defaults: { _controller: "AppBundle:Default:quizResult" }
+#app_quiz:
+#    path:     /quizz
+#    defaults: { _controller: "AppBundle:Default:quiz" }
+#app_quiz_result:
+#    path:     /quizz/resultats
+#    defaults: { _controller: "AppBundle:Default:quizResult" }
 app_association:
     path:     /acteur/{id}/{name}
     defaults: { _controller: "AppBundle:Default:association" }
