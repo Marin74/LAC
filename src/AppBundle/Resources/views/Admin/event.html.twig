@@ -238,8 +238,6 @@
                     or form.file.vars.errors|length
                 %}
         
-                    {% set event = events[i] %}
-        
                     $("#warning").attr("class", "alert alert-warning");
                     $("#warning").attr("role", "alert");
                     $("#warning").text("{{ "error_field"|trans }}");
