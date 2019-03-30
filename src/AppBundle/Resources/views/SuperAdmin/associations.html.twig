@@ -36,7 +36,7 @@
                 	</td>
                     <td><a data-toggle="modal" data-target="#modal_update_{{ association.id }}" id="a_update_{{ association.id }}" style="cursor: pointer;">{{ association.name }}</a></td>
                     <td>
-                    	<a href="{{ url("app_superadmin_association_document", {"id": association.id}) }}" class="label label-primary"><span class="glyphicon glyphicon-folder-open" aria-hidden="true" title="{{ "documents"|trans }}"></span></a>
+                    	<a href="{{ url("app_superadmin_association_document", {"id": association.id}) }}" class="label label-primary"><span class="glyphicon glyphicon-folder-open" aria-hidden="true" title="{{ "add_documents"|trans }}"></span></a>
                     </td>
                     <td>
                         <a href="{{ url("app_association", {"id": association.id, "name": association.nameForUrl, "source": "super_admin_associations"}) }}" class="label label-primary"><span class="glyphicon glyphicon-eye-open" aria-hidden="true" title="{{ "consult"|trans }}"></span></a>

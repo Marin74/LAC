@@ -55,7 +55,7 @@ latitude: Latitude
 longitude: Longitude
 close: Fermer
 date: Date
-consult: Consulter
+consult: "Voir l'action"
 come_back_to_admin_page: Retour à l'administration
 error_event_dates_order: La date de fin doit être supérieure à la date de début.
 homepage: Accueil
@@ -94,6 +94,7 @@ error_getting_location: "Position géographique non trouvée. Vérifiez que les 
 nb_characters_description: XXX/2500 caractères
 document: Document
 documents: Documents
+add_documents: Ajouter des documents
 add: Ajouter
 unknown_error: Une erreur inconnue est survenue.
 document_added: Le document est ajouté.
