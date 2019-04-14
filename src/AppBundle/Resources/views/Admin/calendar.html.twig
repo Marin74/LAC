@@ -42,7 +42,9 @@
     	{% endif %}
     	
     	<div class="well well-sm">
-			{% if event.published %}
+			{% if event.isCanceled %}
+				<span class="label label-default">{{ "canceled"|trans }}</span>
+			{% elseif event.published %}
 				<span class="label label-success">{{ "event_set"|trans }}</span>
 			{% else %}
 				<span class="label label-warning">{{ "planned"|trans }}</span>

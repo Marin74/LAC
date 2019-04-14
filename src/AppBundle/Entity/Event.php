@@ -144,6 +144,13 @@ class Event
      * @Assert\NotNull()
      */
     private $free = true;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="canceled", type="boolean", nullable=false)
+     */
+    private $canceled = false;
 
     /**
      * @var boolean
@@ -560,6 +567,20 @@ class Event
     public function getFree()
     {
         return $this->free;
+    }
+    
+    public function setCanceled($canceled)
+    {
+        $this->canceled = $canceled;
+        
+        $this->setUpdateDate(new \DateTime());
+        
+        return $this;
+    }
+    
+    public function isCanceled()
+    {
+        return $this->canceled;
     }
 
     public function setPricing($pricing)

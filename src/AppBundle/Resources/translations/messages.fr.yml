@@ -238,4 +238,8 @@ no_scheduled_events: Aucune action prévue.
 datetime_placeholder: "JJ-MM-AAAA HH:MM"
 website_title: Titre du site
 subscribe: "Pour recevoir nos infos"
+carpool_available: Un covoiturage est disponible pour se rendre à cette action.
+event_canceled: L'action est annulée.
+canceled: Annulé
+cancel: Annuler
 

@@ -77,6 +77,10 @@ class EventFormType extends AbstractType
                 'required'  => false
             )
             )
+            ->add('canceled',			CheckboxType::class, array(
+                'required'  => false
+            )
+            )
         ;
     }
     

@@ -92,6 +92,10 @@ class SuperAdminEventFormType extends AbstractType
                 'attr'                      => ['class' => 'form-control',],
                 'required'                  => false,
             ))
+            ->add('canceled',			CheckboxType::class, array(
+                'attr'                      => ['class' => 'form-control',],
+                'required'                  => false,
+            ))
         ;
     }
     
