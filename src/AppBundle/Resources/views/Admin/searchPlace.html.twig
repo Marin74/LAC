@@ -60,19 +60,31 @@
     				<tr>
     					<td>
     						<a href="
-    						{% if app.request.get('source') == 'admin' %} 
-    							{% if eventId is null %}
-    						        {{ url("app_admin_events", {"placeId": place.id, "action": action}) }} 
-    							{% else %} 
-    						        {{ url("app_admin_event", {"placeId": place.id, "action": action, "id": eventId}) }} 
-    						    {% endif %} 
-						    {% else %} 
-						    	{% if eventId is null %}
-						            {{ url("app_superadmin_events", {"placeId": place.id, "action": action}) }} 
-						    	{% else %} 
-						            {{ url("app_superadmin_event", {"placeId": place.id, "action": action, "id": eventId}) }} 
-						        {% endif %} 
-						    {% endif %} ">
+                            {% if app.request.get('source') == 'admin' %} 
+                				{% if eventId is null %}
+                			        {{ url("app_admin_events", {"placeId": place.id, "action": action}) }} 
+                		        {% else %} 
+                		            {{ url("app_admin_event", {"placeId": place.id, "action": action, "id": eventId}) }} 
+                	            {% endif %} 
+                			{% elseif app.request.get('source') == 'admin_workshop' %} 
+                				{% if eventId is null %}
+                			        {{ url("app_admin_workshop_events", {"placeId": place.id, "action": action}) }} 
+                		        {% else %} 
+                		            {{ url("app_admin_event", {"placeId": place.id, "action": action, "id": eventId}) }} 
+                	            {% endif %} 
+                			{% elseif app.request.get('source') == 'superadmin_workshop' %} 
+                                {% if eventId is null %} 
+                                    {{ url("app_superadmin_workshop_events", {"placeId": place.id, "action": action}) }} 
+                                {% else %} 
+                                    {{ url("app_superadmin_event", {"placeId": place.id, "action": action, "id": eventId}) }} 
+                                {% endif %} 
+                            {% else %} 
+                                {% if eventId is null %} 
+                                    {{ url("app_superadmin_events", {"placeId": place.id, "action": action}) }} 
+                                {% else %} 
+                                    {{ url("app_superadmin_event", {"placeId": place.id, "action": action, "id": eventId}) }} 
+                                {% endif %} 
+                            {% endif %}">
     						    {{ place.name }}
     						</a>
     					</td>

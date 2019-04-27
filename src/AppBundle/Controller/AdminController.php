@@ -469,11 +469,17 @@ class AdminController extends Controller
                     if($request->get("source") == "super_admin") {
                         $route = "app_superadmin_events";
                     }
+                    elseif($request->get("source") == "admin_workshop") {
+                        $route = "app_admin_workshop_events";
+                    }
+                    elseif($request->get("source") == "superadmin_workshop") {
+                        $route = "app_superadmin_workshop_events";
+                    }
                 }
                 else {
                     $route = "app_admin_event";
                     
-                    if($request->get("source") == "super_admin") {
+                    if($request->get("source") == "super_admin" || $request->get("source") == "superadmin_workshop") {
                         $route = "app_superadmin_event";
                     }
                 }
