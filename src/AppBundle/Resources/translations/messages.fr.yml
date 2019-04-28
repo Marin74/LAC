@@ -12,7 +12,7 @@ coordinates: Coordonnées
 website: Site internet
 address_colon: "Adresse : %address%"
 phone_colon: "Tél. : %phone%"
-email_colon: "Email : %email%"
+email_colon: "Courriel : %email%"
 proposed_by: "Ajouté par :"
 when: Quand ?
 where: Où ?
@@ -30,7 +30,7 @@ events: Actions
 save: Sauvegarder
 name: Nom
 description: Description
-email: Email
+email: Courriel
 url_video: Nom de la vidéo
 phone: Téléphone
 street: Rue
