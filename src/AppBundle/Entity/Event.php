@@ -144,13 +144,6 @@ class Event
      * @Assert\NotNull()
      */
     private $free = true;
-    
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="canceled", type="boolean", nullable=false)
-     */
-    private $canceled = false;// TODO Retirer
 
     /**
      * @var boolean
