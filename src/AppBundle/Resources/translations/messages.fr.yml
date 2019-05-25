@@ -240,6 +240,10 @@ website_title: Titre du site
 subscribe: "Pour recevoir nos infos"
 carpool_available: Un covoiturage est disponible pour se rendre à cette action.
 event_canceled: L'action est annulée.
+event_postponed: L'action est reportée.
 canceled: Annulé
+postponed: Reporté
+scheduled: Planifié
 cancel: Annuler
+status:  Statut
 

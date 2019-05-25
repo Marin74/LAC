@@ -48,6 +48,8 @@
                             	<td>
                         			{% if event.isCanceled %}
                         				<span class="label label-default">{{ "canceled"|trans }}</span>
+                        			{% elseif event.isPostponed %}
+                        				<span class="label label-success">{{ "postponed"|trans }}</span>
                         			{% elseif event.published %}
                         				<span class="label label-success">{{ "event_set"|trans }}</span>
                         			{% else %}
@@ -102,6 +104,8 @@
                         	<td>
                     			{% if event.isCanceled %}
                     				<span class="label label-default">{{ "canceled"|trans }}</span>
+                    			{% elseif event.isPostponed %}
+                    				<span class="label label-success">{{ "postponed"|trans }}</span>
                     			{% elseif event.published %}
                     				<span class="label label-success">{{ "event_set"|trans }}</span>
                     			{% else %}
@@ -291,21 +295,19 @@
                         {# The published param is hidden because events of workshop are always published #}
                         <hr style="display: none;">
                         <div class="form-group" style="display: none;">
+            
+                            {{ form_label(formAdd.status, "status", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.status) }}
+                                {{ form_widget(formAdd.status, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="form-group" style="display: none;">
 
                             {{ form_label(formAdd.published, "publish", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
                             <div class="col-sm-10">
                                 {{ form_errors(formAdd.published) }}
                                 {{ form_widget(formAdd.published, {'attr': {'class': 'form-control'}}) }}
-                                
-                                <p class="well well-sm">{{ "publish_hint"|trans }}</p>
-                            </div>
-                        </div>
-                        <div class="form-group" style="display: none;">
-
-                            {{ form_label(formAdd.canceled, "cancel", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-                            <div class="col-sm-10">
-                                {{ form_errors(formAdd.canceled) }}
-                                {{ form_widget(formAdd.canceled, {'attr': {'class': 'form-control'}}) }}
                                 
                                 <p class="well well-sm">{{ "publish_hint"|trans }}</p>
                             </div>

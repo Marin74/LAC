@@ -65,6 +65,8 @@
             
             {% if event.isCanceled %}
             	<div class="alert alert-info" role="alert">{{ "event_canceled"|trans }}</div>
+            {% elseif event.isPostponed %}
+            	<div class="alert alert-info" role="alert">{{ "event_postponed"|trans }}</div>
             {% endif %}
             
             {% if event.searchVolunteers %}

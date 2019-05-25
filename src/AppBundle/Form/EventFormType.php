@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -13,6 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use AppBundle\Entity\Event;
 
 class EventFormType extends AbstractType
 {
@@ -73,11 +75,17 @@ class EventFormType extends AbstractType
                 'required'  => false
             )
             )
+            ->add('status',             ChoiceType::class, array(
+                'choice_translation_domain' => 'messages',
+                'required'					=> true,
+                'choices'                   => [
+                    "scheduled"  => Event::STATUS_SCHEDULED,
+                    "postponed"  => Event::STATUS_POSTPONED,
+                    "canceled"   => Event::STATUS_CANCELED
+                ]
+            )
+            )
             ->add('published',			CheckboxType::class, array(
-                'required'  => false
-            )
-            )
-            ->add('canceled',			CheckboxType::class, array(
                 'required'  => false
             )
             )

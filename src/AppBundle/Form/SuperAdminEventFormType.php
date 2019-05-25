@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -15,6 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use AppBundle\Entity\Event;
 
 class SuperAdminEventFormType extends AbstractType
 {
@@ -88,11 +90,17 @@ class SuperAdminEventFormType extends AbstractType
                 'attr'                      => ['class' => 'form-control',],
                 'required'                  => false,
             ))
-            ->add('published',			CheckboxType::class, array(
+            ->add('status',             ChoiceType::class, array(
                 'attr'                      => ['class' => 'form-control',],
-                'required'                  => false,
+                'choice_translation_domain' => 'messages',
+                'required'					=> true,
+                'choices'                   => [
+                    "scheduled" => Event::STATUS_SCHEDULED,
+                    "postponed" => Event::STATUS_POSTPONED,
+                    "canceled"  => Event::STATUS_CANCELED
+                ]
             ))
-            ->add('canceled',			CheckboxType::class, array(
+            ->add('published',			CheckboxType::class, array(
                 'attr'                      => ['class' => 'form-control',],
                 'required'                  => false,
             ))

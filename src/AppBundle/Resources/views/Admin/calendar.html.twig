@@ -44,6 +44,8 @@
     	<div class="well well-sm">
 			{% if event.isCanceled %}
 				<span class="label label-default">{{ "canceled"|trans }}</span>
+			{% elseif event.isPostponed %}
+				<span class="label label-default">{{ "postponed"|trans }}</span>
 			{% elseif event.published %}
 				<span class="label label-success">{{ "event_set"|trans }}</span>
 			{% else %}

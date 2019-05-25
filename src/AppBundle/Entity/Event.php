@@ -150,7 +150,7 @@ class Event
      *
      * @ORM\Column(name="canceled", type="boolean", nullable=false)
      */
-    private $canceled = false;
+    private $canceled = false;// TODO Retirer
 
     /**
      * @var boolean
@@ -158,6 +158,13 @@ class Event
      * @ORM\Column(name="pricing", type="string", length=255, nullable=true)
      */
     private $pricing;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="string", length=1, nullable=false)
+     */
+    private $status;
     
     /**
      * @var \DateTime
@@ -181,10 +188,15 @@ class Event
 
     private $file;
     
+    const STATUS_CANCELED = "C";
+    const STATUS_POSTPONED = "P";
+    const STATUS_SCHEDULED = "S";
+    
     
     public function __construct() {
         
         $this->setCreationDate(new \DateTime());
+        $this->setStatus(Event::STATUS_SCHEDULED);
     }
 
 
@@ -577,11 +589,6 @@ class Event
         
         return $this;
     }
-    
-    public function isCanceled()
-    {
-        return $this->canceled;
-    }
 
     public function setPricing($pricing)
     {
@@ -595,6 +602,30 @@ class Event
     public function getPricing()
     {
         return $this->pricing;
+    }
+    
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        
+        $this->setUpdateDate(new \DateTime());
+        
+        return $this;
+    }
+    
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    
+    public function isCanceled()
+    {
+        return $this->getStatus() == Event::STATUS_CANCELED;
+    }
+    
+    public function isPostponed()
+    {
+        return $this->getStatus() == Event::STATUS_POSTPONED;
     }
 
     public function getQuizzScores()

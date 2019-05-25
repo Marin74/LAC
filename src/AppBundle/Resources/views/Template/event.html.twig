@@ -25,6 +25,9 @@
 				{% if event.isCanceled %}
     				<div style="width: 100%; height: 100%; background-color: #000000; opacity: 0.5;"></div>
     				<div style="position: absolute; bottom: 0; margin-left: 1rem; margin-bottom: 1rem; color: white;"><strong>{{ "canceled"|trans|upper }}</strong></div>
+				{% elseif event.isPostponed %}
+    				<div style="width: 100%; height: 100%; background-color: #000000; opacity: 0.5;"></div>
+    				<div style="position: absolute; bottom: 0; margin-left: 1rem; margin-bottom: 1rem; color: white;"><strong>{{ "postponed"|trans|upper }}</strong></div>
             	{% endif %}
             </div>
         </a>
