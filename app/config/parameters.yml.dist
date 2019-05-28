@@ -37,4 +37,5 @@ parameters:
     website:                    ~
     web_host:                   ~
     newsletter_url:             ~
+    environment:                ~
     

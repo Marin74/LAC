@@ -57,6 +57,7 @@ twig:
         website: "%website%"
         web_host: "%web_host%"
         newsletter_url: "%newsletter_url%"
+        environment: "%environment%"
 
 # Doctrine Configuration
 doctrine:

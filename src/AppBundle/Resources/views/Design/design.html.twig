@@ -21,6 +21,11 @@
     				background-size: 100% 100%;
                 ">
                 </a>
+                {% if environment == "dev" %}
+                	<a class="navbar-brand" style="color: orange; margin-top: 10px; margin-left: 1rem;">{{ "environment_dev"|trans|upper }}</a>
+                {% elseif environment == "test" %}
+                	<a class="navbar-brand" style="color: orange; margin-top: 10px; margin-left: 1rem;">{{ "environment_test"|trans|upper }}</a>
+                {% endif %}
 
             </div>
             <div id="navbar" class="navbar-collapse collapse">

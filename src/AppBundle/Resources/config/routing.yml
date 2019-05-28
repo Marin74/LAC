@@ -50,7 +50,7 @@ app_admin_association:
     path:     /admin/acteur
     defaults: { _controller: "AppBundle:Admin:index" }
 app_admin_events:
-    path:     /admin/actions
+    path:     /admin/action
     defaults: { _controller: "AppBundle:Admin:events" }
 app_admin_index:
     path:     /admin
