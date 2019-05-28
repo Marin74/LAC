@@ -78,6 +78,7 @@ class EventFormType extends AbstractType
             ->add('status',             ChoiceType::class, array(
                 'choice_translation_domain' => 'messages',
                 'required'					=> true,
+                'expanded' => true,
                 'choices'                   => [
                     "scheduled"  => Event::STATUS_SCHEDULED,
                     "postponed"  => Event::STATUS_POSTPONED,
