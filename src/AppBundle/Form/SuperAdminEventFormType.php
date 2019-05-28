@@ -94,6 +94,7 @@ class SuperAdminEventFormType extends AbstractType
                 'attr'                      => ['class' => 'form-control',],
                 'choice_translation_domain' => 'messages',
                 'required'					=> true,
+                'expanded'                  => true,
                 'choices'                   => [
                     "scheduled" => Event::STATUS_SCHEDULED,
                     "postponed" => Event::STATUS_POSTPONED,
