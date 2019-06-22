@@ -49,10 +49,8 @@
                 
                 <p>
                     {{ "explanations_open_source"|trans }}
-                    {% if mainAssociation is defined and mainAssociation is not null %}
-                        <br/>
-                        {{ "website_help"|trans }} <a href="{{ url("app_association", {"id": mainAssociation.id, "name": mainAssociation.nameForUrl}) }}">{{ "contact_us"|trans }}</a>
-                    {% endif %}
+                    <br/>
+                    {{ "website_help"|trans }}
                 </p>
                 <p>
                     {{ "url_source_code"|trans }} <a href="{{ url_source_code }}">{{ "github"|trans }}</a>
@@ -76,7 +74,7 @@
         					{{ "error_video_player"|trans }}
         				</video>
         			{% else %}
-            			<img src="{{ asset(association.illustrationPath) }}" style="max-height: 700px; max-width: 100%;">
+            			<img src="{{ asset(association.illustrationPath) }}" style="max-height: 300px; width:700px; max-width: 100%;">
     				{% endif %}
 				</div>
                 
