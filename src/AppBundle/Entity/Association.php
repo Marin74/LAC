@@ -106,6 +106,13 @@ class Association
      * @ORM\Column(name="picture", type="string", length=255, nullable=true)
      */
     private $picture;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="illustration", type="string", length=255, nullable=true)
+     */
+    private $illustration;
 
     /**
      * @var boolean
@@ -525,6 +532,16 @@ class Association
         $this->picture = $picture;
     }
     
+    public function getIllustration()
+    {
+        return $this->illustration;
+    }
+    
+    public function setIllustration($illustration)
+    {
+        $this->illustration = $illustration;
+    }
+    
     public function isDisplayed()
     {
     	return $this->displayed;
@@ -627,6 +644,16 @@ class Association
             return null;
         
         return $this->getUploadDir()."/".$this->getPicture();
+    }
+    
+    public function getIllustrationPath()
+    {
+        // Returns path + filename
+        
+        if(empty($this->getIllustration()))
+            return null;
+            
+            return "upload/img/association_illustration/".$this->getIllustration();
     }
 
     public function getUrlVideoPath()

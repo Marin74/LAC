@@ -65,15 +65,19 @@
 				{% set videoPath = "" %}
                 {% if association.urlVideo is not empty %}
                 	{% set videoPath = association.urlVideoPath %}
-                {% else %}
+                {% elseif association.illustration is empty %}
                 	{% set videoPath = "bundles/app/video/default.mov" %}
                 {% endif %}
                 
                 <div class="col-sm-6 col-md-4" style="width:700px; max-width: 100%; ">
-                    <video  height="100%;" controls style="width:700px; max-width: 100%; ">
-    					<source src="{{ asset(videoPath) }}" type="video/mp4">
-    					{{ "error_video_player"|trans }}
-    				</video>
+                    {% if videoPath != "" %}
+                        <video  height="100%;" controls style="width:700px; max-width: 100%; ">
+        					<source src="{{ asset(videoPath) }}" type="video/mp4">
+        					{{ "error_video_player"|trans }}
+        				</video>
+        			{% else %}
+            			<img src="{{ asset(association.illustrationPath) }}" style="max-height: 700px; max-width: 100%;">
+    				{% endif %}
 				</div>
                 
                 <div class="col-sm-6 col-md-3" style="">
