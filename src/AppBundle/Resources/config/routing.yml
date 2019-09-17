@@ -99,6 +99,17 @@ app_superadmin_association_document:
     requirements:
         id: \d+
         
+app_newsletter:
+    path:     /lettre/{startY}-{startM}-{startD}/{endY}-{endM}-{endD}
+    defaults: { _controller: "AppBundle:Default:newsletter" }
+    requirements:
+        startY: \d+
+        startM: \d+
+        startD: \d+
+        endY: \d+
+        endM: \d+
+        endD: \d+
+        
 app_workshop:
     path:     /atelier/{id}/{name}
     defaults: { _controller: "AppBundle:Default:workshop" }

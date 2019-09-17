@@ -734,4 +734,37 @@ class DefaultController extends Controller
             'mainAssociation'	=> $mainAssociation
         ));
     }
+    
+    public function newsletterAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repoEvent = $em->getRepository("AppBundle:Event");
+        
+        $start = \DateTime::createFromFormat("Y-m-d H:i:s", $request->get("startY")."-".$request->get("startM")."-".$request->get("startD")." 00:00:00");
+        $end = \DateTime::createFromFormat("Y-m-d H:i:s", $request->get("endY")."-".$request->get("endM")."-".$request->get("endD")." 23:59:59");
+        
+        $qb = $repoEvent->createQueryBuilder("e");
+        $qb
+        ->innerJoin(
+            'AppBundle:Association',
+            'a',
+            Join::WITH,
+            $qb->expr()->eq('e.association', 'a')
+        )
+        ->where($qb->expr()->eq("e.published", ":published"))
+        ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+        ->andWhere($qb->expr()->between("e.startTime", ":start", ":end"))
+        ->setParameter("published", true)
+        ->setParameter("displayed", true)
+        ->setParameter("start", $start)
+        ->setParameter("end", $end)
+        ->orderBy("e.startTime", "ASC")
+        ;
+        
+        $events = $qb->getQuery()->getResult();
+        
+        return $this->render('AppBundle:Default:newsletter.html.twig', array(
+            'events'	=> $events
+        ));
+    }
 }
