@@ -36,7 +36,7 @@
 	display: table-row-group;
 }
    </style>
-    <title>L'accroche : les infos de LAC-Chablais</title>
+    <title>{{ "newsletter_name"|trans }}</title>
   </head>
   <body>
     <div class="divTable" style="width: 700px;">
@@ -44,7 +44,7 @@
         <div class="divTableRow">
           <div class="divTableCell" style="text-align: center;"><a href="{{ website }}"><img
                 src="{{ asset("bundles/app/img/newsletter_header.png") }}"
-                alt="bandeau-laccroche"
+                alt="{{ "newsletter_name"|trans }}"
                 style="width: 600px;"></a>
             <hr style="color: #004d7f; align: center; width: 350px; height: 2px;"></div>
         </div>
@@ -68,13 +68,10 @@
             <div class="divTableRow">
               <div class="divTableText" style="text-align: center;">
                 {{ event.name }}<br>
-                {% set now = "now"|date("Y-m-d H:i:s") %}
-            	{% if event.startTime|date("Y-m-d H:i:s") <= now and now < event.endTime|date("Y-m-d H:i:s") %}
-            		{{ "in_progress"|trans }}
-        		{% else %}
-                    {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}
-                {% endif %}<br>
-                {{ event.placeEntity.city }}<br>
+                {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}<br>
+                {% if event.placeEntity is not null %}
+                    {{ event.placeEntity.city }}<br>
+                {% endif %}
                 <hr style="color: #004d7f; align: center; width: 350px; height: 2px;"></div>
             </div>
         {% endfor %}

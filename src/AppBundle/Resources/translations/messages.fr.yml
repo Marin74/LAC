@@ -248,4 +248,7 @@ cancel: Annuler
 status:  Statut
 environment_test: Test
 environment_dev: Dev
+newsletter_name: "L'accroche : les infos de LAC-Chablais"
+newsletters: Lettres de diffusion
+newsletter_unknown: "La liste de diffusion n'existe pas."
 
