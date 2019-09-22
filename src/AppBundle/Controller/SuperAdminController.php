@@ -4,8 +4,11 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Association;
 use AppBundle\Entity\Event;
+use AppBundle\Entity\Newsletter;
+use AppBundle\Entity\NewsletterEvent;
 use AppBundle\Entity\User;
 use AppBundle\Form\AssociationFormType;
+use AppBundle\Form\NewsletterFormType;
 use AppBundle\Form\SuperAdminEventFormType;
 use AppBundle\Form\UserFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -17,6 +20,7 @@ use AppBundle\Form\ChangePasswordFormType;
 use AppBundle\Entity\Document;
 use AppBundle\Form\DocumentFormType;
 use AppBundle\Form\PlaceFormType;
+use Doctrine\ORM\Query\Expr\Join;
 
 class SuperAdminController extends Controller
 {
@@ -762,5 +766,236 @@ class SuperAdminController extends Controller
         );
         
         return $this->render('AppBundle:SuperAdmin:place.html.twig', $params);
+    }
+    
+    public function newslettersAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get("translator");
+        $repoNewsletter = $em->getRepository("AppBundle:Newsletter");
+        
+        $deleteId = trim($request->get("deleteId"));
+        
+        if(!empty($deleteId)) {
+            $newsletter = $repoNewsletter->find($deleteId);
+            
+            if($newsletter != null) {
+                $em->remove($newsletter);
+                $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('success', $translator->trans("newsletter_deleted"));
+            }
+        }
+        
+        $newNewsletter = new Newsletter();
+        $formAdd = $this->get('form.factory')->createBuilder(NewsletterFormType::class, $newNewsletter)->getForm();
+        
+        // Add form
+        if ($request->isMethod('POST')) {
+            
+            $formAdd->handleRequest($request);
+            
+            if ($formAdd->isValid()) {
+                
+                $tz = new \DateTimeZone($this->getParameter("time_zone"));
+                $tzUTC = new \DateTimeZone("UTC");
+                
+                $start = clone $newNewsletter->getStartTime();
+                
+                $start->setTimezone($tz);
+                $start->setTime(0, 0, 0);
+                $start->setTimezone($tzUTC);
+                $newNewsletter->setStartTime($start);
+                
+                $end = clone $newNewsletter->getEndTime();
+                
+                $end->setTimezone($tz);
+                $end->setTime(23, 59, 59);
+                $end->setTimezone($tzUTC);
+                
+                $newNewsletter->setEndTime($end);
+                
+                
+                if ($newNewsletter->getStartTime() > $newNewsletter->getEndTime()) {
+                    $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_event_dates_order"));
+                }
+                else {
+                    
+                    
+                    $em->persist($newNewsletter);
+                    $em->flush();
+                    
+                    $newNewsletter = new Newsletter();
+                    $formAdd = $this->get('form.factory')->createBuilder(NewsletterFormType::class, $newNewsletter)->getForm();
+                    
+                    $request->getSession()->getFlashBag()->add('success', $translator->trans("newsletter_created"));
+                }
+            }
+        }
+        
+        return $this->render('AppBundle:SuperAdmin:newsletters.html.twig', array(
+            'newsletters'   => $repoNewsletter->findBy(array(), array("id" => "DESC"), 20),
+            'formAdd'       => $formAdd->createView()
+        ));
+    }
+    
+    public function highlightInNewsletterAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get("translator");
+        $repoEvent = $em->getRepository("AppBundle:Event");
+        $repoNewsletter = $em->getRepository("AppBundle:Newsletter");
+        $repoNewsletterEvent = $em->getRepository("AppBundle:NewsletterEvent");
+        
+        $newsletter = $repoNewsletter->find($request->get("id"));
+        $search = trim($request->get("search"));
+        $addId = trim($request->get("addId"));
+        $removeId = trim($request->get("removeId"));
+        $upId = trim($request->get("upId"));
+        $downId = trim($request->get("downId"));
+        
+        if(!empty($addId)) {
+            // Add a highlight event
+            
+            $event = $repoEvent->find($addId);
+            
+            if($event != null) {
+                $lastPosition = 1;
+                
+                $nbHighlights = count($newsletter->getNewsletterEvents());
+                
+                $highlightAlreadyExists = false;
+                
+                foreach($newsletter->getNewsletterEvents() as $newsletterEvent) {
+                    if($newsletterEvent->getEvent()->getId() == $event->getId()) {
+                        $highlightAlreadyExists = true;
+                    }
+                }
+                
+                if($nbHighlights > 0 && !$highlightAlreadyExists) {
+                    
+                    $lastPosition = $newsletter->getNewsletterEvents()[$nbHighlights-1]->getPosition();
+                    
+                    $newsletterEvent = new NewsletterEvent();
+                    $newsletterEvent->setPosition($lastPosition+1);
+                    $newsletterEvent->setNewsletter($newsletter);
+                    $newsletterEvent->setEvent($event);
+                    $em->persist($newsletterEvent);
+                    $em->flush();
+                    
+                    $request->getSession()->getFlashBag()->add('success', $translator->trans("event_added"));
+                    $em->refresh($newsletter);
+                }
+            }
+        }
+        
+        if(!empty($removeId)) {
+            // Remove a highlight event
+            
+            $event = $repoEvent->find($removeId);
+            
+            if($event != null) {
+                
+                $newsletterEvents = $repoNewsletterEvent->findBy(array("newsletter" => $newsletter, "event" => $event));
+                
+                foreach($newsletterEvents as $newsletterEvent) {
+                    
+                    $em->remove($newsletterEvent);
+                }
+                
+                if(count($newsletterEvents) > 0) {
+                    $em->flush();
+                    $em->refresh($newsletter);
+                    
+                    // Reset positions
+                    $position = 1;
+                    foreach($newsletter->getNewsletterEvents() as $newsletterEvent) {
+                        $newsletterEvent->setPosition($position);
+                        $position = $position + 1;
+                    }
+                    $em->flush();
+                    $em->refresh($newsletter);
+                    
+                    $request->getSession()->getFlashBag()->add('success', $translator->trans("event_removed"));
+                }
+            }
+        }
+        
+        if(!empty($upId)) {
+            
+            $event = $repoEvent->find($upId);
+            
+            if($event != null) {
+                
+                $currrentNewsletterEvent = $repoNewsletterEvent->findOneBy(array("newsletter" => $newsletter, "event" => $event));
+                
+                $newsletterEvent = $repoNewsletterEvent->findOneBy(array("newsletter" => $newsletter, "position" => $currrentNewsletterEvent->getPosition()-1));
+                
+                if($newsletterEvent != null) {
+                    $newsletterEvent->setPosition($newsletterEvent->getPosition() + 1);
+                }
+                
+                $currrentNewsletterEvent->setPosition($newsletterEvent->getPosition() - 1);
+                
+                $em->flush();
+            }
+        }
+        
+        if(!empty($downId)) {
+            
+            $event = $repoEvent->find($downId);
+            
+            if($event != null) {
+                
+                $currrentNewsletterEvent = $repoNewsletterEvent->findOneBy(array("newsletter" => $newsletter, "event" => $event));
+                
+                $newsletterEvent = $repoNewsletterEvent->findOneBy(array("newsletter" => $newsletter, "position" => $currrentNewsletterEvent->getPosition()+1));
+                
+                if($newsletterEvent != null) {
+                    $newsletterEvent->setPosition($newsletterEvent->getPosition() - 1);
+                }
+                
+                $currrentNewsletterEvent->setPosition($newsletterEvent->getPosition() + 1);
+                
+                $em->flush();
+            }
+        }
+        
+        $results = array();
+        
+        if(!empty($search)) {
+            
+            $ids = array();
+            foreach($newsletter->getNewsletterEvents() as $newsletterEvent) {
+                $ids[] = $newsletterEvent->getEvent()->getId();
+            }
+            
+            $qb = $repoEvent->createQueryBuilder("e");
+            $qb
+            ->innerJoin(
+                'AppBundle:Association',
+                'a',
+                Join::WITH,
+                $qb->expr()->eq('e.association', 'a')
+            )
+            ->where($qb->expr()->eq("e.published", ":published"))
+            ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+            ->andWhere($qb->expr()->gte("e.endTime", ":start"))
+            ->andWhere($qb->expr()->notIn("e.id", ":ids"))
+            ->andWhere($qb->expr()->like("e.name", $qb->expr()->literal("%".$search."%")))
+            ->setParameter("published", true)
+            ->setParameter("displayed", true)
+            ->setParameter("start", $newsletter->getStartTime())
+            ->setParameter("ids", $ids)
+            ->orderBy("e.startTime", "ASC")
+            ;
+            
+            $results = $qb->getQuery()->getResult();
+        }
+        
+        return $this->render('AppBundle:SuperAdmin:highlight_in_newsletter.html.twig', array(
+            'newsletter'    => $newsletter,
+            'results'       => $results
+        ));
     }
 }

@@ -48,6 +48,43 @@
                 style="width: 600px;"></a>
             <hr style="color: #004d7f; align: center; width: 350px; height: 2px;"></div>
         </div>
+        {% if highlights|length > 0 %}
+        	
+        	<div class="divTableRow">
+				<div class="divTableText" style="text-align: center;">
+        			<h3>{{ "highlight"|trans }}</h3>
+        		</div>
+        	</div>
+        	
+            {% for event in highlights %}
+            
+                {% set picturePath = null %}
+            	{% if event.picturePath is not empty %}
+                    {% set picturePath = event.picturePath %}
+                {% elseif event.association.picturePath is not empty %}
+                    {% set picturePath = event.association.picturePath %}
+                {% endif %}
+                
+                {% if picturePath is not empty %}
+                    <div class="divTableRow">
+                      <div class="divTableCell" style="text-align: center;"><a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><img
+                            src="{{ asset(picturePath) }}"
+                            style="width: 350px;"></a>
+                      </div>
+                    </div>
+                {% endif %}
+                <div class="divTableRow">
+                  <div class="divTableText" style="text-align: center;">
+                    {{ event.name }}<br>
+                    {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}<br>
+                    {% if event.placeEntity is not null %}
+                        {{ event.placeEntity.city }}<br>
+                    {% endif %}
+                    <hr style="color: #004d7f; align: center; width: 350px; height: 2px;"></div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
         {% for event in events %}
         
             {% set picturePath = null %}

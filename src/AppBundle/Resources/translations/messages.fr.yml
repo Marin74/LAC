@@ -251,4 +251,13 @@ environment_dev: Dev
 newsletter_name: "L'accroche : les infos de LAC-Chablais"
 newsletters: Lettres de diffusion
 newsletter_unknown: "La liste de diffusion n'existe pas."
+search_event: Rechercher un évènement...
+id: ID
+order: Ordre
+event_added: "L'évènement est ajouté."
+event_removed: "L'évènement est retiré."
+remove: Retirer
+newsletter_deleted: La lettre de diffusion est supprimée.
+new_newsletter: Nouvelle lettre de diffusion
+newsletter_created: La lettre de diffusion est créée.
 

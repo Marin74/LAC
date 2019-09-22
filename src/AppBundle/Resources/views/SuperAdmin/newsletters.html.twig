@@ -1,0 +1,120 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+    {{ "newsletters"|trans }}
+     - {{ parent() }}
+{% endblock %}
+
+{% block page_title %}
+    {{ "newsletters"|trans }}
+{% endblock %}
+
+{% block content %}
+    <p>
+        <a class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_newsletter"|trans }}</a>
+    </p>
+	
+	{% if newsletters|length > 0 %}
+		<table class="table">
+			<tr>
+				<th>{{ "id"|trans }}</th>
+				<th>{{ "start"|trans }}</th>
+				<th>{{ "end"|trans }}</th>
+				<th>{{ "highlight"|trans }}</th>
+				<th></th>
+				<th></th>
+			</tr>
+			
+			{% for newsletter in newsletters %}
+				<tr>
+					<td>
+						{{ newsletter.id }}
+					</td>
+					<td>{{ newsletter.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
+					<td>{{ newsletter.endTime|localizeddate("long", "none", locale, time_zone) }}</td>
+					<td>{% if newsletter.newsletterEvents|length > 0 %}{{ newsletter.newsletterEvents|length }}{% endif %}</td>
+					<td>
+						<a class="label label-primary" href="{{ url("app_superadmin_newsletters_highlight", {"id": newsletter.id}) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true" title="{{ "highlight"|trans }}"></span></a>
+						<a href="{{ url("app_newsletter_id", {"id": newsletter.id}) }}" class="label label-primary"><span class="glyphicon glyphicon-eye-open" aria-hidden="true" title="{{ "consult"|trans }}"></span></a>
+					</td>
+					<td>
+						<a href="{{ url("app_superadmin_newsletters", {"deleteId": newsletter.id}) }}" class="label label-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="{{ "delete"|trans }}"></span></a>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	{% endif %}
+	
+	{# Form to add newsletter #}
+    <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{ "newsletter"|trans }}</h4>
+                </div>
+                {{ form_start(formAdd, {'attr': {'class': 'form-horizontal', 'id': 'form_add'}}) }}
+                <div class="modal-body">
+
+                    <div id="warning_add"></div>
+
+                    <p>
+
+                        {# General errors of the form #}
+                        {{ form_errors(formAdd) }}
+
+                        {# Manual and exploded generation: #}
+                        <div class="form-group">
+    
+                            {{ form_label(formAdd.startTime, "start", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.startTime) }}
+                                {{ form_widget(formAdd.startTime, {'attr': {'onChange': "onChangeStart('form_add');", 'placeholder': "datetime_placeholder"|trans}}) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+    
+                            {{ form_label(formAdd.endTime, "end", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+                            <div class="col-sm-10">
+                                {{ form_errors(formAdd.endTime) }}
+                                {{ form_widget(formAdd.endTime, {'attr': {'placeholder': "datetime_placeholder"|trans}}) }}
+                            </div>
+                        </div>
+    
+                        {{ form_rest(formAdd) }}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                    <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                </div>
+
+                {# Close <form> #}
+                {{ form_end(formAdd) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+	
+    <script type="text/javascript">
+        $().ready(function() {
+    		
+        	$(".form_datetime").datetimepicker({format: 'dd-mm-yyyy hh:ii', language: 'fr', autoclose: true});
+    		
+    		
+            {# Open a modal dialog if there is a error with a form #}
+            {% if formAdd.startTime.vars.errors|length
+                or formAdd.endTime.vars.errors|length
+            %}
+    
+                $("#warning_add").attr("class", "alert alert-warning");
+                $("#warning_add").attr("role", "alert");
+                $("#warning_add").text("{{ "error_field"|trans }}");
+    
+                $("#modal_add").modal("show");
+            {% endif %}
+        });
+    </script>
+{% endblock %}

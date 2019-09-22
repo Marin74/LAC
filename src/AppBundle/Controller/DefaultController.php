@@ -739,32 +739,55 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $repoEvent = $em->getRepository("AppBundle:Event");
+        $repoNewsletter = $em->getRepository("AppBundle:Newsletter");
         
-        $start = \DateTime::createFromFormat("Y-m-d H:i:s", $request->get("startY")."-".$request->get("startM")."-".$request->get("startD")." 00:00:00");
-        $end = \DateTime::createFromFormat("Y-m-d H:i:s", $request->get("endY")."-".$request->get("endM")."-".$request->get("endD")." 23:59:59");
+        $events = array();
+        $highlights = array();
+        $start = null;
+        $end = null;
         
-        $qb = $repoEvent->createQueryBuilder("e");
-        $qb
-        ->innerJoin(
-            'AppBundle:Association',
-            'a',
-            Join::WITH,
-            $qb->expr()->eq('e.association', 'a')
-        )
-        ->where($qb->expr()->eq("e.published", ":published"))
-        ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
-        ->andWhere($qb->expr()->between("e.startTime", ":start", ":end"))
-        ->setParameter("published", true)
-        ->setParameter("displayed", true)
-        ->setParameter("start", $start)
-        ->setParameter("end", $end)
-        ->orderBy("e.startTime", "ASC")
-        ;
+        if(!empty($request->get("id"))) {
+            $newsletter = $repoNewsletter->find($request->get("id"));
+            
+            if($newsletter != null) {
+                $start = $newsletter->getStartTime();
+                $end = $newsletter->getEndTime();
+                
+                foreach($newsletter->getNewsletterEvents() as $newsletterEvent) {
+                    $highlights[] = $newsletterEvent->getEvent();
+                }
+            }
+        }
+        else {
+            $start = \DateTime::createFromFormat("Y-m-d H:i:s", $request->get("startY")."-".$request->get("startM")."-".$request->get("startD")." 00:00:00");
+            $end = \DateTime::createFromFormat("Y-m-d H:i:s", $request->get("endY")."-".$request->get("endM")."-".$request->get("endD")." 23:59:59");
+        }
         
-        $events = $qb->getQuery()->getResult();
+        if($start != null && $end != null) {
+            $qb = $repoEvent->createQueryBuilder("e");
+            $qb
+            ->innerJoin(
+                'AppBundle:Association',
+                'a',
+                Join::WITH,
+                $qb->expr()->eq('e.association', 'a')
+            )
+            ->where($qb->expr()->eq("e.published", ":published"))
+            ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
+            ->andWhere($qb->expr()->between("e.startTime", ":start", ":end"))
+            ->setParameter("published", true)
+            ->setParameter("displayed", true)
+            ->setParameter("start", $start)
+            ->setParameter("end", $end)
+            ->orderBy("e.startTime", "ASC")
+            ;
+            
+            $events = $qb->getQuery()->getResult();
+        }
         
         return $this->render('AppBundle:Default:newsletter.html.twig', array(
-            'events'	=> $events
+            'events'        => $events,
+            'highlights'    => $highlights
         ));
     }
 }

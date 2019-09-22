@@ -1,0 +1,78 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+    {{ "highlight"|trans }}
+     - {{ parent() }}
+{% endblock %}
+
+{% block page_title %}
+    {{ "highlight"|trans }}
+{% endblock %}
+
+{% block content %}
+	
+	{% if newsletter is not null %}
+	
+		{% if newsletter.newsletterEvents|length > 0 %}
+    		<table class="table">
+    			<tr>
+    				<th>{{ "order"|trans }}</th>
+    				<th>{{ "name"|trans }}</th>
+    				<th>{{ "start"|trans }}</th>
+    				<th></th>
+    				<th></th>
+    			</tr>
+    			
+    			{% for newsletterEvent in newsletter.newsletterEvents %}
+    				<tr>
+    					<td>
+    						{{ newsletterEvent.position }}
+    					</td>
+    					<td>{{ newsletterEvent.event.name }}</td>
+    					<td>{{ newsletterEvent.event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
+						<td><a href="{{ url("app_superadmin_newsletters_highlight", {"id": newsletter.id, "removeId": newsletterEvent.event.id}) }}" class="label label-danger">{{ "remove"|trans }}</a></td>
+						<td>
+							{% if loop.index > 1 %}
+								<a href="{{ url("app_superadmin_newsletters_highlight", {"id": newsletter.id, "upId": newsletterEvent.event.id}) }}" class="label label-primary"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>
+							{% endif %}
+							{% if loop.index < newsletter.newsletterEvents|length %}
+								<a href="{{ url("app_superadmin_newsletters_highlight", {"id": newsletter.id, "downId": newsletterEvent.event.id}) }}" class="label label-primary"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></a>
+							{% endif %}
+						</td>
+    				</tr>
+    			{% endfor %}
+    		</table>
+		{% endif %}
+		
+		<form method="GET">
+    		<p>
+    			<input type="text" class="form-control" name="search" placeholder="{{ "search_event"|trans }}" value="{% if search is defined %}{{ search }}{% endif %}" autofocus>
+    		</p>
+    	</form>
+    	
+    	{% if results|length > 0 %}
+    		<table class="table">
+        		<tr>
+        			<th>{{ "id"|trans }}</th>
+        			<th>{{ "name"|trans }}</th>
+    				<th>{{ "start"|trans }}</th>
+    				<th></th>
+				</tr>
+				{% for event in results %}
+					<tr>
+						<td>{{ event.id }}</td>
+						<td>{{ event.name }}</td>
+						<td>{{ event.startTime|localizeddate("long", "none", locale, time_zone) }}</td>
+						<td><a href="{{ url("app_superadmin_newsletters_highlight", {"id": newsletter.id, "addId": event.id}) }}" class="label label-primary">{{ "add"|trans }}</a></td>
+					</tr>
+				{% endfor %}
+    		</table>
+    	{% endif %}
+	{% endif %}
+{% endblock %}
+
+{% block js %}
+	
+    <script type="text/javascript">
+    </script>
+{% endblock %}

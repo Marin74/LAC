@@ -99,6 +99,15 @@ app_superadmin_association_document:
     requirements:
         id: \d+
         
+app_superadmin_newsletters:
+    path:     /admin/superadmin/lettre
+    defaults: { _controller: "AppBundle:SuperAdmin:newsletters" }
+app_superadmin_newsletters_highlight:
+    path:     /admin/superadmin/lettre/{id}/actions
+    defaults: { _controller: "AppBundle:SuperAdmin:highlightInNewsletter" }
+    requirements:
+        id: \d+
+        
 app_newsletter:
     path:     /lettre/{startY}-{startM}-{startD}/{endY}-{endM}-{endD}
     defaults: { _controller: "AppBundle:Default:newsletter" }
@@ -109,6 +118,11 @@ app_newsletter:
         endY: \d+
         endM: \d+
         endD: \d+
+app_newsletter_id:
+    path:     /lettre/{id}
+    defaults: { _controller: "AppBundle:Default:newsletter" }
+    requirements:
+        id: \d+
         
 app_workshop:
     path:     /atelier/{id}/{name}
