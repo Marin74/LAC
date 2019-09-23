@@ -856,11 +856,9 @@ class SuperAdminController extends Controller
         
         if(!empty($addId)) {
             // Add a highlight event
-            
             $event = $repoEvent->find($addId);
             
             if($event != null) {
-                $lastPosition = 1;
                 
                 $nbHighlights = count($newsletter->getNewsletterEvents());
                 
@@ -872,9 +870,13 @@ class SuperAdminController extends Controller
                     }
                 }
                 
-                if($nbHighlights > 0 && !$highlightAlreadyExists) {
+                if(!$highlightAlreadyExists) {
                     
-                    $lastPosition = $newsletter->getNewsletterEvents()[$nbHighlights-1]->getPosition();
+                    $lastPosition = 0;
+                    
+                    if($nbHighlights > 0) {
+                        $lastPosition = $newsletter->getNewsletterEvents()[$nbHighlights-1]->getPosition();
+                    }
                     
                     $newsletterEvent = new NewsletterEvent();
                     $newsletterEvent->setPosition($lastPosition+1);
