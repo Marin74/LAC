@@ -981,14 +981,17 @@ class SuperAdminController extends Controller
             ->where($qb->expr()->eq("e.published", ":published"))
             ->andWhere($qb->expr()->eq("a.displayed", ":displayed"))
             ->andWhere($qb->expr()->gte("e.endTime", ":start"))
-            ->andWhere($qb->expr()->notIn("e.id", ":ids"))
             ->andWhere($qb->expr()->like("e.name", $qb->expr()->literal("%".$search."%")))
             ->setParameter("published", true)
             ->setParameter("displayed", true)
             ->setParameter("start", $newsletter->getStartTime())
-            ->setParameter("ids", $ids)
             ->orderBy("e.startTime", "ASC")
             ;
+            
+            if(count($ids) > 0) {
+                $qb->andWhere($qb->expr()->notIn("e.id", ":ids"))
+                ->setParameter("ids", $ids);
+            }
             
             $results = $qb->getQuery()->getResult();
         }
