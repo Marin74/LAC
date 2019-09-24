@@ -8,7 +8,7 @@
   	<center>
 		<div style="width: 700px; max-width: 95%; text-align: center; font-family: 'Avenir next'; font-size: 18px; color: #004d7f;">
 			<a href="{{ website }}"><img
-				src="{{ asset("bundles/app/img/newsletter_header.png") }}"
+				src="{{ absolute_url(asset("bundles/app/img/newsletter_header.png")) }}"
 				alt="{{ "newsletter_name"|trans }}"
 				style="width: 600px; max-width: 100%;"></a>
 			<hr style="color: #004d7f; align: center; width: 350px; max-width: 100%; height: 2px;">
@@ -24,7 +24,7 @@
                 
                 {% if picturePath is not empty %}
                       <a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><img
-                        src="{{ asset(picturePath) }}"
+                        src="{{ absolute_url(asset(picturePath)) }}"
                         style="width: 350px; max-width: 100%;"></a><br>
                 {% endif %}
                 {{ event.name }}<br>
@@ -38,11 +38,11 @@
             {% if highlights|length > 0 %}
                 
             	<a href="{{ website }}"><img
-                src="{{ asset("bundles/app/img/website.jpeg") }}"
+                src="{{ absolute_url(asset("bundles/app/img/website.jpeg")) }}"
                 style="width: 350px; max-width: 100%;"></a>
             
             	<img
-                src="{{ asset("bundles/app/img/highlight_events.jpeg") }}"
+                src="{{ absolute_url(asset("bundles/app/img/highlight_events.jpeg")) }}"
                 style="width: 350px; max-width: 100%;">
             	
                 {% for event in highlights %}
@@ -56,7 +56,7 @@
                     
                     {% if picturePath is not empty %}
                         <a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><img
-                            src="{{ asset(picturePath) }}"
+                            src="{{ absolute_url(asset(picturePath)) }}"
                             style="width: 350px; max-width: 100%;"></a><br>
                     {% endif %}
                     {{ event.name }}<br>
