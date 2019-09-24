@@ -185,7 +185,7 @@ event_documents: "Documents de %event%"
 association_documents: "Documents de %association%"
 place_changed: Le lieu est modifié.
 change: Modifier
-upload_picture_hint: "Sélectionnez une belle photo pour mettre en valeur votre évènement !"
+upload_picture_hint: "Sélectionnez une belle photo pour mettre en valeur votre évènement ! Et c'est encore mieux si elle fait moins de 500 Ko. :)"
 in_progress: En cours
 month_01: Janvier
 month_02: Février
