@@ -74,7 +74,7 @@
         					<a href="{{ instagram_url }}"><img src="{{ asset("bundles/app/img/instagram.png") }}"/></a>
         				{% endif %}
         				{% if newsletter_url is not empty %}
-        					<a class="btn btn-outline-inverse btn-sm main-color" style="border-color: white; background-color: white;" href="{{ newsletter_url }}">{{ "subscribe"|trans }}</a>
+        					<a class="btn btn-outline-inverse btn-sm main-color" style="border-color: white; background-color: white;" data-toggle="modal" data-target="#modal_newsletter">{{ "subscribe"|trans }}</a>
         				{% endif %}
         			</td>
         			<td style="text-align: right;">
@@ -87,6 +87,30 @@
         	</table>
         </div>
     </footer>
+    
+    
+    
+    {% if newsletter_url is not empty %}
+        <div class="modal fade" id="modal_newsletter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                    	<iframe class="mj-w-res-iframe" 
+                    	frameborder="0" 
+                    	scrolling="no" 
+                    	marginheight="0" 
+                    	marginwidth="0" 
+                    	src="https://app.mailjet.com/widget/iframe/4qxE/j81" width="100%"></iframe>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script type="text/javascript" src="{{ newsletter_url }}"></script>
+    {% endif %}
 
     <!-- ================================================== -->
     <!-- JavaScript placed at the end of the document so the pages load faster -->
