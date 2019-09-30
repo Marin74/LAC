@@ -143,7 +143,7 @@
                 {% endif %}
                 
                 <p>
-                    {% if event.carpool is not empty %}
+                    {% if event.carpool is not empty and event.endTime > "now"|date %}
                     	
                     	<table>
                     		<tr>
