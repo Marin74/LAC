@@ -15,23 +15,34 @@
             
             {% for event in events %}
             
-                {% set picturePath = null %}
-            	{% if event.picturePath is not empty %}
-                    {% set picturePath = event.picturePath %}
-                {% elseif event.association.picturePath is not empty %}
-                    {% set picturePath = event.association.picturePath %}
+            	{% if loop.index <= 4 %}
+                    {% set picturePath = null %}
+                	{% if event.picturePath is not empty %}
+                        {% set picturePath = event.picturePath %}
+                    {% elseif event.association.picturePath is not empty %}
+                        {% set picturePath = event.association.picturePath %}
+                    {% endif %}
+                    
+                    {% if picturePath is not empty %}
+                          <a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><img
+                            src="{{ absolute_url(asset(picturePath)) }}"
+                            style="width: 350px; max-width: 100%;"></a><br>
+                    {% endif %}
+                    
+                    {{ event.name }}<br>
+                    {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}<br>
+                    {% if event.placeEntity is not null %}
+                        {{ event.placeEntity.city }}<br>
+                    {% endif %}
+                    
+                {% else %}
+                	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}">{{ event.name }}</a><br>
+                    {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}<br>
+                    {% if event.placeEntity is not null %}
+                        {{ event.placeEntity.city }}<br>
+                    {% endif %}
                 {% endif %}
                 
-                {% if picturePath is not empty %}
-                      <a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}"><img
-                        src="{{ absolute_url(asset(picturePath)) }}"
-                        style="width: 350px; max-width: 100%;"></a><br>
-                {% endif %}
-                {{ event.name }}<br>
-                {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}<br>
-                {% if event.placeEntity is not null %}
-                    {{ event.placeEntity.city }}<br>
-                {% endif %}
                 <hr style="color: #004d7f; align: center; width: 350px; max-width: 100%; height: 2px;">
             {% endfor %}
             
