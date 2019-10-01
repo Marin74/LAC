@@ -260,5 +260,5 @@ remove: Retirer
 newsletter_deleted: La lettre de diffusion est supprimée.
 new_newsletter: Nouvelle lettre de diffusion
 newsletter_created: La lettre de diffusion est créée.
-newsletter_sent_to: "Cet email à été envoyé à [[EMAIL_TO]]."
+newsletter_sent_to: "Cet email a été envoyé à [[EMAIL_TO]]."
 unsubscribe_newsletter: Cliquez ici pour vous désabonner
