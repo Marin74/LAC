@@ -15,7 +15,7 @@
             
             {% for event in events %}
             
-            	{% if loop.index <= 4 %}
+            	{% if loop.index <= 6 %}
                     {% set picturePath = null %}
                 	{% if event.picturePath is not empty %}
                         {% set picturePath = event.picturePath %}
@@ -32,14 +32,14 @@
                     {{ event.name }}<br>
                     {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}<br>
                     {% if event.placeEntity is not null %}
-                        {{ event.placeEntity.city }}<br>
+                        {{ event.placeEntity.city|upper }}<br>
                     {% endif %}
                     
                 {% else %}
                 	<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl}) }}">{{ event.name }}</a><br>
                     {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}<br>
                     {% if event.placeEntity is not null %}
-                        {{ event.placeEntity.city }}<br>
+                        {{ event.placeEntity.city|upper }}<br>
                     {% endif %}
                 {% endif %}
                 
@@ -73,7 +73,7 @@
                     {{ event.name }}<br>
                     {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}<br>
                     {% if event.placeEntity is not null %}
-                        {{ event.placeEntity.city }}<br>
+                        {{ event.placeEntity.city|upper }}<br>
                     {% endif %}
                     <hr style="color: #004d7f; align: center; width: 350px; max-width: 100%; height: 2px;">
                 {% endfor %}
