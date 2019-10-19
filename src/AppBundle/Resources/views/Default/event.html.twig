@@ -138,7 +138,7 @@
     		{% if event.placeEntity is not null %}
                 <h4>{{ "where"|trans }}</h4>
                 
-                {% if event.carpool is not empty %}
+                {% if event.carpool is not empty and event.endTime > "now"|date %}
                 	<div class="alert alert-success" role="alert">{{ "carpool_available"|trans }}</div>
                 {% endif %}
                 
