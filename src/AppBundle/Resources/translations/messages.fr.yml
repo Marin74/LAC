@@ -75,7 +75,7 @@ roles: Rôles
 ROLE_ADMIN: Administrateur
 ROLE_ADMIN_WORKSHOP: Administrateur Ateliers
 ROLE_USER: Utilisateur
-explanations_open_source: Le site internet est open source. Cela signifie qu'il peut être utilisé et modifié par quiconque. Le code source est sous licence GPL v3.
+explanations_open_source: Le site internet est libre. Cela signifie qu'il peut être utilisé et modifié par quiconque. Le code source est sous licence GPL v3.
 url_source_code: "Le code source du site est disponible ici :"
 github: GitHub
 license: La licence GPL v3
