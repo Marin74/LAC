@@ -286,6 +286,24 @@ class Event
             $name = str_replace("æ", "ae", $name);
             $name = str_replace("œ", "oe", $name);
             
+            // Uppercase
+            $name = str_replace("É", "e", $name);
+            $name = str_replace("È", "e", $name);
+            $name = str_replace("Ê", "e", $name);
+            $name = str_replace("Ë", "e", $name);
+            $name = str_replace("Â", "a", $name);
+            $name = str_replace("À", "a", $name);
+            $name = str_replace("Ä", "a", $name);
+            $name = str_replace("Ô", "o", $name);
+            $name = str_replace("Ö", "o", $name);
+            $name = str_replace("Ù", "u", $name);
+            $name = str_replace("Ü", "u", $name);
+            $name = str_replace("Î", "i", $name);
+            $name = str_replace("Ï", "i", $name);
+            $name = str_replace("Ç", "c", $name);
+            $name = str_replace("Æ", "ae", $name);
+            $name = str_replace("Œ", "oe", $name);
+            
             while(strpos($name, "--") !== false) {
             	
             	$name = str_replace("--", "-", $name);
