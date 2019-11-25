@@ -200,9 +200,9 @@ class Association
         $name = "acteur";
 
         if (!empty($this->getName())) {
-            $name = $this->getName();
+            $name = strtolower(trim($this->getName()));
             
-            $name = str_replace("'", "", $name);
+            $name = str_replace("'", "-", $name);
             $name = str_replace('"', "", $name);
             $name = str_replace("/", "", $name);
             $name = str_replace("|", "", $name);
@@ -230,7 +230,6 @@ class Association
             $name = trim($name);
             $name = str_replace(" ", "-", $name);
             
-            // Lowercase
             $name = str_replace("é", "e", $name);
             $name = str_replace("è", "e", $name);
             $name = str_replace("ê", "e", $name);
@@ -248,24 +247,6 @@ class Association
             $name = str_replace("ç", "c", $name);
             $name = str_replace("æ", "ae", $name);
             $name = str_replace("œ", "oe", $name);
-
-            // Uppercase
-            $name = str_replace("É", "E", $name);
-            $name = str_replace("È", "E", $name);
-            $name = str_replace("Ê", "E", $name);
-            $name = str_replace("Ë", "E", $name);
-            $name = str_replace("Â", "A", $name);
-            $name = str_replace("À", "A", $name);
-            $name = str_replace("Ä", "A", $name);
-            $name = str_replace("Ô", "O", $name);
-            $name = str_replace("Ö", "O", $name);
-            $name = str_replace("Ù", "U", $name);
-            $name = str_replace("Ü", "U", $name);
-            $name = str_replace("Î", "I", $name);
-            $name = str_replace("Ï", "I", $name);
-            $name = str_replace("Ç", "C", $name);
-            $name = str_replace("Æ", "AE", $name);
-            $name = str_replace("Œ", "OE", $name);
             
             while(strpos($name, "--") !== false) {
             	
