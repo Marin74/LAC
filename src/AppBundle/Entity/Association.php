@@ -202,6 +202,7 @@ class Association
         if (!empty($this->getName())) {
             $name = strtolower(trim($this->getName()));
             
+            $name = str_replace("’", "-", $name);
             $name = str_replace("'", "-", $name);
             $name = str_replace('"', "", $name);
             $name = str_replace("/", "", $name);
