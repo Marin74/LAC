@@ -48,11 +48,13 @@
             
             {% if association.phone is not empty
 		        or association.email is not empty
+		        or association.website is not empty
             %}
             	<p>
 					<address>
                         {% if association.phone is not empty %}
-                            {{ "phone_colon"|trans({"%phone%": association.phone }) }}<br/>
+                            {{ "phone_colon"|trans({"%phone%": association.phone }) }}
+                        	<br/>
                         {% endif %}
                         
                         {% if association.email is not empty %}
@@ -65,8 +67,14 @@
                                 {{ "email_colon"|trans({"%email%": emailSplitted[0] }) }} <img src="{{ asset("bundles/app/img/at_sign.png") }}"/> {{ emailSplitted[1] }}
                                 </span>
                             {% endif %}
-                            <br/>
+                        	<br/>
                         {% endif %}
+                        
+                        {% if association.website is not empty %}
+                        	<a href="{{ association.website }}">{{ "website"|trans }}</a>
+                        	<br/>
+                        {% endif %}
+                        
                     </address>
 				</p>
 			{% endif %}

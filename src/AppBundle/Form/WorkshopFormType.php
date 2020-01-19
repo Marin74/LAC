@@ -30,6 +30,10 @@ class WorkshopFormType extends AbstractType
             		'required'	=> false
             	)
             )
+            ->add('website',            UrlType::class, array(
+                    'required'	=> false
+                )
+            )
             ->add('file',               FileType::class, array(
             		'required'	=> false
             	)
