@@ -31,11 +31,11 @@
         "friendsofsymfony/user-bundle": "dev-master",
         "suncat/mobile-detect-bundle": "^1.0",
         "twig/extensions": "^1.4",
-        "bomo/ical-bundle": "^1.0"
+        "bomo/ical-bundle": "^1.0",
+        "symfony/phpunit-bridge": "*@dev"
     },
     "require-dev": {
-        "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "sensio/generator-bundle": "^3.0"
     },
     "scripts": {
         "post-install-cmd": [

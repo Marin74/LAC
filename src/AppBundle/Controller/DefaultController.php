@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\Query\Expr\Join;
@@ -439,6 +440,7 @@ class DefaultController extends Controller
         
         $events = array();
         $associations = array();
+        $workshops = array();
         
         /*
         $qb = $repoPlace->createQueryBuilder('p');
@@ -641,7 +643,9 @@ class DefaultController extends Controller
             );
         }
         
-        die("null");
+        return new JsonResponse(
+            array("success" => false, "error" => "Event not found")
+        );
     }
     
     public function workshopAction(Request $request)
