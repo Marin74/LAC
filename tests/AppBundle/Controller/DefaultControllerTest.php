@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class DefaultControllerTest extends WebTestCase
 {
 
-    public function testIndex()
+    public function testIndexIsUp()
     {
         $client = static::createClient();
 
@@ -17,7 +17,7 @@ class DefaultControllerTest extends WebTestCase
         //$this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
     }
 
-    public function testAssociations()
+    public function testAssociationsIsUp()
     {
         $client = static::createClient();
 
@@ -26,7 +26,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testEvents()
+    public function testEventsIsUp()
     {
         $client = static::createClient();
 
@@ -35,7 +35,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testAssociation()
+    public function testAssociationIsUp()
     {
         $client = static::createClient();
 
@@ -44,7 +44,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testEventIcs()
+    public function testEventIcsIsUp()
     {
         $client = static::createClient();
 
@@ -53,7 +53,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testEvent()
+    public function testEventIsUp()
     {
         $client = static::createClient();
 
@@ -62,7 +62,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testArchives()
+    public function testArchivesIsUp()
     {
         $client = static::createClient();
 
@@ -71,7 +71,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testArchivesPage()
+    public function testArchivesPageIsUp()
     {
         $client = static::createClient();
 
@@ -80,7 +80,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testSearch()
+    public function testSearchIsUp()
     {
         $client = static::createClient();
 
@@ -89,7 +89,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testLegalTerms()
+    public function testLegalTermsIsUp()
     {
         $client = static::createClient();
 
@@ -98,7 +98,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testMap()
+    public function testMapIsUp()
     {
         $client = static::createClient();
 
@@ -107,7 +107,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testAdminAssociation()
+    public function testAdminAssociationIsUp()
     {
         $client = static::createClient();
 
@@ -116,7 +116,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testAdminEvents()
+    public function testAdminEventsIsUp()
     {
         $client = static::createClient();
 
@@ -125,7 +125,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testAdminIndex()
+    public function testAdminIndexIsUp()
     {
         $client = static::createClient();
 
@@ -134,7 +134,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testAdminEvent()
+    public function testAdminEventIsUp()
     {
         $client = static::createClient();
 
@@ -143,7 +143,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testAdminEventDocument()
+    public function testAdminEventDocumentIsUp()
     {
         $client = static::createClient();
 
@@ -152,7 +152,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testAdminSearchPlace()
+    public function testAdminSearchPlaceIsUp()
     {
         $client = static::createClient();
 
@@ -161,7 +161,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testSuperadminUsers()
+    public function testSuperadminUsersIsUp()
     {
         $client = static::createClient();
 
@@ -170,7 +170,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testSuperadminAssociations()
+    public function testSuperadminAssociationsIsUp()
     {
         $client = static::createClient();
 
@@ -179,7 +179,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testSuperadminEvents()
+    public function testSuperadminEventsIsUp()
     {
         $client = static::createClient();
 
@@ -188,7 +188,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testSuperadminEvent()
+    public function testSuperadminEventIsUp()
     {
         $client = static::createClient();
 
@@ -197,7 +197,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testSuperadminPlaces()
+    public function testSuperadminPlacesIsUp()
     {
         $client = static::createClient();
 
@@ -206,7 +206,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testSuperadminPlace()
+    public function testSuperadminPlaceIsUp()
     {
         $client = static::createClient();
 
@@ -215,7 +215,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testSuperadminQuizScores()
+    public function testSuperadminQuizScoresIsUp()
     {
         $client = static::createClient();
 
@@ -224,7 +224,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testSuperadminAssociationDocument()
+    public function testSuperadminAssociationDocumentIsUp()
     {
         $client = static::createClient();
 
@@ -233,7 +233,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testSuperadminNewsletters()
+    public function testSuperadminNewslettersIsUp()
     {
         $client = static::createClient();
 
@@ -242,7 +242,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testSuperadminNewslettersHighlight()
+    public function testSuperadminNewslettersHighlightIsUp()
     {
         $client = static::createClient();
 
@@ -251,7 +251,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testAdminWorkshop()
+    public function testAdminWorkshopIsUp()
     {
         $client = static::createClient();
 
@@ -260,7 +260,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testAdminWorkshops()
+    public function testAdminWorkshopsIsUp()
     {
         $client = static::createClient();
 
@@ -269,7 +269,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testAdminWorkshopEvents()
+    public function testAdminWorkshopEventsIsUp()
     {
         $client = static::createClient();
 
@@ -278,7 +278,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-    public function testNewsletter()
+    public function testNewsletterIsUp()
     {
         $client = static::createClient();
 
@@ -287,7 +287,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testNewsletterId()
+    public function testNewsletterIdIsUp()
     {
         $client = static::createClient();
 
@@ -296,7 +296,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testWorkshop()
+    public function testWorkshopIsUp()
     {
         $client = static::createClient();
 
@@ -305,7 +305,7 @@ class DefaultControllerTest extends WebTestCase
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 
-    public function testWorkshops()
+    public function testWorkshopsIsUp()
     {
         $client = static::createClient();
 
