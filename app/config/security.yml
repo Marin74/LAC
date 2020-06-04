@@ -26,6 +26,7 @@ security:
                 login_path: /login
                 default_target_path: /admin
             logout:       true
+            logout_on_user_change: true
             anonymous:    true
             remember_me:
                 secret:   '%secret%'
