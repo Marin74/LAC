@@ -107,6 +107,16 @@ app_superadmin_newsletters_highlight:
     defaults: { _controller: "AppBundle:SuperAdmin:highlightInNewsletter" }
     requirements:
         id: \d+
+
+app_admin_workshop:
+    path:     /admin/atelier
+    defaults: { _controller: "AppBundle:Admin:workshop" }
+app_admin_workshops:
+    path:     /admin/ateliers
+    defaults: { _controller: "AppBundle:Admin:workshops" }
+app_admin_workshop_events:
+    path:     /admin/reunions
+    defaults: { _controller: "AppBundle:Admin:workshopEvents" }
         
 app_newsletter:
     path:     /lettre/{startY}-{startM}-{startD}/{endY}-{endM}-{endD}
@@ -132,13 +142,4 @@ app_workshop:
 app_workshops:
     path:     /ateliers
     defaults: { _controller: "AppBundle:Default:workshops" }
-app_admin_workshop:
-    path:     /admin/atelier
-    defaults: { _controller: "AppBundle:Admin:workshop" }
-app_admin_workshops:
-    path:     /admin/ateliers
-    defaults: { _controller: "AppBundle:Admin:workshops" }
-app_admin_workshop_events:
-    path:     /admin/reunions
-    defaults: { _controller: "AppBundle:Admin:workshopEvents" }
 
