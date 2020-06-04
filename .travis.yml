@@ -1,0 +1,9 @@
+language: php
+php:
+  - '7.2'
+
+script:
+   - composer install
+   - vendor/bin/simple-phpunit
+
+
