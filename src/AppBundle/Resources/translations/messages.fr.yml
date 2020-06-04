@@ -244,7 +244,6 @@ event_postponed: L'action est reportée.
 canceled: Annulé
 postponed: Reporté
 scheduled: Planifié
-cancel: Annuler
 status:  Statut
 environment_test: Test
 environment_dev: Dev
