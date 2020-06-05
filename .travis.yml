@@ -4,6 +4,6 @@ php:
 
 script:
    - composer install
-#   - vendor/bin/simple-phpunit
+   - vendor/bin/simple-phpunit
 
 
