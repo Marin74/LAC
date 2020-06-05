@@ -4,7 +4,7 @@ php:
 
 script:
    - composer install
-   - bin/console assets:install
-   - vendor/bin/simple-phpunit
+#   - bin/console assets:install
+#   - vendor/bin/simple-phpunit
 
 
