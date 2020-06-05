@@ -9,7 +9,6 @@ $loader = require __DIR__.'/../app/autoload.php';
 include_once __DIR__.'/../var/bootstrap.php.cache';
 
 $kernel = new AppKernel('prod', false);
-Request::setTrustedHeaderName(Request::HEADER_FORWARDED, null);
 Request::setTrustedProxies(['192.0.0.1', '10.0.0.0/8']);
 //$kernel = new AppCache($kernel);
 
