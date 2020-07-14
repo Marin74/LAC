@@ -6,11 +6,13 @@
 
 {% block content %}
     <div class="container">
-        
-        <ol class="breadcrumb">
-        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	<li class="active">{{ "about"|trans }}</li>
-        </ol>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url("app_index") }}">{{ "homepage"|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ "about"|trans }}</li>
+            </ol>
+        </nav>
     </div>
 
     <div class="container">
@@ -71,7 +73,7 @@
 
         <h2>5. Propriété intellectuelle et contrefaçons.</h2>
 
-        <p>Le site internet est libre. Cela signifie qu'il peut être utilisé et modifié par quiconque. Le code source est sous licence GPL v3.
+        <p>Le site internet est libre. Cela signifie qu'il peut être utilisé et modifié par quiconque. Le code source est sous <a href="https://www.gnu.org/licenses/quick-guide-gplv3.fr.html">licence GPL v3</a>.
         <br/>Le code source du site est <a href="{{ url_source_code }}">disponible ici</a>.</p>
 
         <h2>6. Limitations de responsabilité.</h2>

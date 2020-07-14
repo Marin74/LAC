@@ -1,18 +1,15 @@
-<div class="col-sm-6 col-md-3">
-	<a href="{% if association.isWorkshop %} {{ url("app_workshop", {"id": association.id, "name": association.nameForURl}) }} {% else %} {{ url("app_association", {"id": association.id, "name": association.nameForURl}) }} {% endif %}" style=" text-decoration: none;">
-        <div class="thumbnail" style="height: 230px; padding: 0px; padding-top: 10px;">
-            {% if association.picture is not empty %}
-                <div class="img-association" style="
-    				background-image: url('{{ asset(association.picturePath) }}');
-    				position: relative;
-    				float: center;
-    				background-position: 50% 50%;
-    				background-size:     contain;">
-                </div>
-            {% endif %}
-            <div class="caption" style="padding-bottom: 0px;">
-            	<h4 class="{% if app.request.get('_route') == "app_workshops" %}green-color{% else %}second-main-color{% endif %}" style="text-align: center;">{{ association.name }}</h4>
-            </div>
+<a href="{% if association.isWorkshop %}
+            {{ url("app_workshop", {"id": association.id, "name": association.nameForURl}) }}
+        {% else %}
+            {{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}
+        {% endif %}
+        " style="text-decoration: none;">
+    <div class="card border-main-color h-100">
+        <div class="center-cropped"
+             style="background-image: url('{{ asset(association.picturePath) }}');">
         </div>
-    </a>
-</div>
+        <div class="card-body center">
+            <h6 class="{% if association.isWorkshop %}green{% else %}third-main-color{% endif %}" style="margin-bottom: 0;">{{ association.name }}</h6>
+        </div>
+    </div>
+</a>

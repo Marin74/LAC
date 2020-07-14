@@ -1,39 +1,43 @@
 {% extends "AppBundle:Design:design.html.twig" %}
 
 {% block title %}
-	{% if app.request.get('_route') == "app_workshops" %}
-	    {{ "transition_workshops"|trans }} - {{ parent() }}
-	{% else %}
-	    {{ "local_associations"|trans }} - {{ parent() }}
-	{% endif %}
+    {% if app.request.get('_route') == "app_workshops" %}
+        {{ "transition_workshops"|trans }} - {{ parent() }}
+    {% else %}
+        {{ "local_associations"|trans }} - {{ parent() }}
+    {% endif %}
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        
-        <ol class="breadcrumb">
-        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	{% if app.request.get('_route') == "app_workshops" %}
-        	    <li class="active">{{ "transition_workshops"|trans }}</li>
-        	{% else %}
-        	    <li class="active">{{ "local_associations"|trans }}</li>
-        	{% endif %}
-        </ol>
-        
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url("app_index") }}">{{ "homepage"|trans }}</a></li>
+                {% if app.request.get('_route') == "app_workshops" %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ "transition_workshops"|trans }}</li>
+                {% else %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ "local_associations"|trans }}</li>
+                {% endif %}
+            </ol>
+        </nav>
+
         {% if app.request.get('_route') == "app_workshops" %}
-        	<h1 class="green-color center">{{ "transition_workshops"|trans }}</h1>
-    	{% else %}
-        	<h1 class="second-main-color center">{{ "local_associations"|trans }}</h1>
-    	{% endif %}
+            <h1 class="green center">{{ "transition_workshops"|trans }}</h1>
+        {% else %}
+            <h1 class="third-main-color center">{{ "local_associations"|trans }}</h1>
+        {% endif %}
 
         <!-- Wrapper for slides -->
         <p>
-            <div class="row">
-            	
-                {% for association in associations %}
+        <div class="row">
+
+            {% for association in associations %}
+                <div class="col-sm-6 col-md-4 mb-4">
                     {% include 'AppBundle:Template:association.html.twig' with {'association': association} %}
-                {% endfor %}
-            </div>
+                </div>
+            {% endfor %}
+        </div>
         </p>
     </div>
 {% endblock %}

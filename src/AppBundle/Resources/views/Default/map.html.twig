@@ -6,11 +6,13 @@
 
 {% block content %}
     <div class="container">
-        
-        <ol class="breadcrumb">
-        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	<li class="active">{{ "map"|trans }}</li>
-        </ol>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url("app_index") }}">{{ "homepage"|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ "map"|trans }}</li>
+            </ol>
+        </nav>
     </div>
 
 	<div id="mapid" style="min-height: 60vh"></div>

@@ -1,83 +1,61 @@
-<div class="col-sm-6 col-md-3">
-    <div class="thumbnail" style="padding-bottom: 0px; {% if hideBottom is defined and hideBottom %}margin-bottom: 0px;{% endif %}">
-        {% if event.picturePath is not empty %}
-            {% set picturePath = event.picturePath %}
-        {% elseif event.association.picturePath is not empty %}
-            {% set picturePath = event.association.picturePath %}
-        {% endif %}
-        
-        {% set eventURL = null %}
-        {% if source is defined %}
-            {% set eventURL = url("app_event", {"id": event.id, "name": event.nameForUrl, "source": source}) %}
-    	{% else %}
-    	    {% set eventURL = url("app_event", {"id": event.id, "name": event.nameForUrl}) %}
-	    {% endif %}
-	    
-		<a href="{{ eventURL }}" style="text-decoration: none;">
-            <div class="img" style="
-				background-image: url('{{ asset(picturePath) }}');
-				position: relative;
-				float: center;
-				background-position: 50% 50%;
-				background-size:     cover">
-				{# For background-size: contain or cover #}
-				
-				{% if event.isCanceled %}
-    				<div style="width: 100%; height: 100%; background-color: #000000; opacity: 0.5;"></div>
-    				<div style="position: absolute; bottom: 0; margin-left: 1rem; margin-bottom: 1rem; color: white;"><strong>{{ "canceled"|trans|upper }}</strong></div>
-				{% elseif event.isPostponed %}
-    				<div style="width: 100%; height: 100%; background-color: #000000; opacity: 0.5;"></div>
-    				<div style="position: absolute; bottom: 0; margin-left: 1rem; margin-bottom: 1rem; color: white;"><strong>{{ "postponed"|trans|upper }}</strong></div>
-            	{% endif %}
-            </div>
-        </a>
-        <div class="caption" style="padding-bottom: 0px; height: 80px;">
-        	<table class="table" style="padding: 0px; margin: 0px;">
-            	<tr style="padding: 0px; margin: 0px;">
-            		<td style="padding: 0px; border: none;">
-            			<span style="
-                                      /* Style to limit the number or lines */
-                                      display: block;
-                                      text-overflow: ellipsis;
-                                      word-wrap: break-word;
-                                      overflow: hidden;
-                                      max-height: 2.2em;
-                                      line-height: 1.1em;">
-                			<strong>{{ event.name }}</strong><br/>
-                        </span>
-                        <span style="
-                                      /* Style to limit the number or lines */
-                                      display: block;
-                                      text-overflow: ellipsis;
-                                      word-wrap: break-word;
-                                      overflow: hidden;
-                                      max-height: 2.2em;
-                                      line-height: 1.1em;">
-                            <span style="font-size: 12px">
-                            	{% set now = "now"|date("Y-m-d H:i:s") %}
-                            	{% if event.startTime|date("Y-m-d H:i:s") <= now and now < event.endTime|date("Y-m-d H:i:s") %}
-                            		{{ "in_progress"|trans }}
-                        		{% else %}
-                                    {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}
-                                {% endif %}
-                            </span><br/>
-                    		
-                    		{% if event.association.isWorkshop %}
-            					<a href="{{ url("app_workshop", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center;">{{ event.association.name }}</a>
-            				{% else %}
-            					<a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center;">{{ event.association.name }}</a>
-            				{% endif %}
-            			</span>
-            		</td>
-                    {% if event.searchVolunteers and (displaySearchVolunteers is not defined or displaySearchVolunteers) %}
-                    	<td style="padding: 0px; border: none;">
-                        	<span style="font-size: 2em; float: right;">
-                        		<a class="glyphicon glyphicon-flag" aria-hidden=true style="color: var(--second-main-color); cursor: pointer;" data-toggle="modal" data-target="#modal_search_volunteers_{{ event.id }}" title="{{ "search_volunteers"|trans }}"></a>
-                    		</span>
-                		</td>
-                    {% endif %}
-            	</tr>
-        	</table>
-        </div>
+{% set picturePath = "" %}
+{% if event.picturePath is not empty %}
+    {% set picturePath = event.picturePath %}
+{% elseif event.association.picturePath is not empty %}
+    {% set picturePath = event.association.picturePath %}
+{% endif %}
+
+{% set eventURL = null %}
+{% if source is defined %}
+    {% set eventURL = url("app_event", {"id": event.id, "name": event.nameForUrl, "source": source}) %}
+{% else %}
+    {% set eventURL = url("app_event", {"id": event.id, "name": event.nameForUrl}) %}
+{% endif %}
+
+<div class="card border-second-main-color h-100">
+
+    <a href="{{ eventURL }}" style="text-decoration: none;">
+    <div class="center-cropped"
+         style="background-image: url('{{ asset(picturePath) }}');">
+    </div>
+    </a>
+    <div class="card-body">
+        <h6 class="black" style="margin-bottom: 0;">
+            {% if event.searchVolunteers and (displaySearchVolunteers is not defined or displaySearchVolunteers) %}
+                <svg width="1em" height="1em"
+                     style="display: inline-block; cursor: pointer;"
+                     data-toggle="modal" data-target="#modal_search_volunteers_{{ event.id }}"
+                     viewBox="0 0 16 16" class="main-color bi bi-flag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M3.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z"/>
+                    <path fill-rule="evenodd" d="M3.762 2.558C4.735 1.909 5.348 1.5 6.5 1.5c.653 0 1.139.325 1.495.562l.032.022c.391.26.646.416.973.416.168 0 .356-.042.587-.126a8.89 8.89 0 0 0 .593-.25c.058-.027.117-.053.18-.08.57-.255 1.278-.544 2.14-.544a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5c-.638 0-1.18.21-1.734.457l-.159.07c-.22.1-.453.205-.678.287A2.719 2.719 0 0 1 9 9.5c-.653 0-1.139-.325-1.495-.562l-.032-.022c-.391-.26-.646-.416-.973-.416-.833 0-1.218.246-2.223.916A.5.5 0 0 1 3.5 9V3a.5.5 0 0 1 .223-.416l.04-.026z"/>
+                </svg>
+            {% endif %}
+            <div style="display: inline-block;">{{ event.name }}</div>
+        </h6>
+        <span style="
+
+
+            /* Style to limit the number or lines */
+            display: block;
+            text-overflow: ellipsis;
+            word-wrap: break-word;
+            overflow: hidden;
+            max-height: 2.2em;
+            line-height: 1.1em;">
+            <span style="font-size: 12px">
+                {% set now = "now"|date("Y-m-d H:i:s") %}
+                {% if event.startTime|date("Y-m-d H:i:s") <= now and now < event.endTime|date("Y-m-d H:i:s") %}
+                    {{ "in_progress"|trans }}
+                {% else %}
+                    {{ event.startTime|localizeddate("full", "short", locale, time_zone) }}
+                {% endif %}
+            </span><br/>
+
+            {% if event.association.isWorkshop %}
+                <a href="{{ url("app_workshop", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center; color: var(--second-main-color);">{{ event.association.name }}</a>
+            {% else %}
+                <a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}" style="text-align: center; color: var(--second-main-color);">{{ event.association.name }}</a>
+            {% endif %}
+        </span>
     </div>
 </div>

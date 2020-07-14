@@ -84,13 +84,73 @@ class DefaultController extends Controller
         }
         
         $tempWorkshop = $repoAssociation->findOneBy(array("displayed" => true, "isWorkshop" => true));
-        
         $workshopExists = $tempWorkshop != null;
+
+
+        // Get all ids of associations
+        $qb = $repoAssociation->createQueryBuilder("a");
+        $qb
+            ->select("a.id")
+            ->where($qb->expr()->eq("a.displayed", ":displayed"))
+            ->andWhere($qb->expr()->eq("a.isWorkshop", ":isWorkshop"))
+            ->setParameter("displayed", true)
+            ->setParameter("isWorkshop", false)
+        ;
+
+        $associationIds = $qb->getQuery()->getResult();
+        // Keep only 2 association ids
+        $randomAssociationKeys = array_rand($associationIds, 2);
+        $randomAssociationIds = array();
+        foreach($randomAssociationKeys as $randomAssociationKey) {
+            $randomAssociationIds[] = $associationIds[$randomAssociationKey];
+        }
+
+        // Get the 2 associations
+        $qb = $repoAssociation->createQueryBuilder("a");
+        $qb
+            ->where($qb->expr()->in("a.id", ":ids"))
+            ->setParameter("ids", $randomAssociationIds)
+        ;
+
+        $randomAssociations = $qb->getQuery()->getResult();
+
+
+
+
+        // Get all ids of associations
+        $qb = $repoAssociation->createQueryBuilder("a");
+        $qb
+            ->select("a.id")
+            ->where($qb->expr()->eq("a.displayed", ":displayed"))
+            ->andWhere($qb->expr()->eq("a.isWorkshop", ":isWorkshop"))
+            ->setParameter("displayed", true)
+            ->setParameter("isWorkshop", true)
+        ;
+
+        $workshopIds = $qb->getQuery()->getResult();
+        // Keep only 2 association ids
+        $randomWorkshopKeys = array_rand($workshopIds, 2);
+        $randomWorkshopIds = array();
+        foreach($randomWorkshopKeys as $randomWorkshopKey) {
+            $randomWorkshopIds[] = $workshopIds[$randomWorkshopKey];
+        }
+
+        // Get the 2 associations
+        $qb = $repoAssociation->createQueryBuilder("a");
+        $qb
+            ->where($qb->expr()->in("a.id", ":ids"))
+            ->setParameter("ids", $randomWorkshopIds)
+        ;
+
+        $randomWorkshops = $qb->getQuery()->getResult();
+
         
-        return $this->render('AppBundle:Default:index.html.twig', array(
-            'mainAssociation'   => $mainAssociation,
-            'nextEvents'        => $nextEvents,
-            'workshopExists'    => $workshopExists
+        return $this->render('@App/Default/index.html.twig', array(
+            'mainAssociation'       => $mainAssociation,
+            'nextEvents'            => $nextEvents,
+            'workshopExists'        => $workshopExists,
+            'randomAssociations'    => $randomAssociations,
+            'randomWorkshops'       => $randomWorkshops
         ));
     }
 
@@ -120,9 +180,9 @@ class DefaultController extends Controller
             $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
 
-        return $this->render('AppBundle:Default:associations.html.twig', array(
-        	'mainAssociation' => $mainAssociation,
-            'associations' => $associations
+        return $this->render('associations.html.twig', array(
+        	'mainAssociation'   => $mainAssociation,
+            'associations'      => $associations
         ));
     }
 
@@ -674,9 +734,9 @@ class DefaultController extends Controller
             $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
         
-        return $this->render('AppBundle:Default:associations.html.twig', array(
-            'mainAssociation' => $mainAssociation,
-            'associations' => $associations
+        return $this->render('associations.html.twig', array(
+            'mainAssociation'   => $mainAssociation,
+            'associations'      => $associations
         ));
     }
     

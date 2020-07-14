@@ -6,11 +6,13 @@
 
 {% block content %}
     <div class="container">
-        
-        <ol class="breadcrumb">
-        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	<li class="active">{{ "the_events"|trans }}</li>
-        </ol>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url("app_index") }}">{{ "homepage"|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ "the_events"|trans }}</li>
+            </ol>
+        </nav>
         
         <h1 class="second-main-color center">{{ "the_events"|trans }}</h1>
 
@@ -19,115 +21,117 @@
             {% if events|length == 0 %}
             	{{ "no_current_events"|trans }}
         	{% else %}
-                <div class="row">
-                    
-                	{% set now = "now"|date("Y-m-d H:i:s") %}
-                	
-                	{% set lastEvent = events[0] %}
-                	{% set inProgressTitleDisplayed = false %}
-                	
-                    {% for event in events %}
-                    	
-                    	{% if loop.index == 1 
-                    	or event.startTime|date("Y-m") != lastEvent.startTime|date("Y-m") 
-                    	or (event.startTime|date("Y-m-d H:i:s") > now and lastEvent.startTime|date("Y-m-d H:i:s") <= now )
-                    	%}
-                    	    
-                    	    {% if event.startTime|date("Y-m-d H:i:s") <= now and now < event.endTime|date("Y-m-d H:i:s") %}
-                    	    	{# Set "In progress" title if it was never displayed it before #}
-                    	    	
-                    	    	{% if inProgressTitleDisplayed == false %}
-                    	    		{% set inProgressTitleDisplayed = true %}
-                    	    		
-                    	    		{% if loop.index > 1 %}
-                    	    			</div>
-                					{% endif %}
-                					
-                    	    		<h4>{{ "in_progress"|trans }}</h4>
-                    	    		
-            						<div class="row">
-                	    		{% endif %}
-                    		{% else %}
-                    			
-                	    		{% if loop.index > 1 %}
-                	    			</div>
-            					{% endif %}
-            					
-            					
-        						{% set month = ("month_"~event.startTime|date("m"))|trans %}
-        						
-            					{% if now|date("Y") != event.startTime|date("Y") %}
-                    				<h4>{{ "month_and_year"|trans({"%month%": month, "%year%": event.startTime|date("Y")}) }}</h4>
-    							{% else %}
-    								<h4>{{ month }}</h4>
-    							{% endif %}
-    							
-        						<div class="row">
-                			{% endif %}
-                    		
-                    	{% endif %}
-                    	
+
+                {% set now = "now"|date("Y-m-d H:i:s") %}
+
+                {% set lastEvent = events[0] %}
+                {% set inProgressTitleDisplayed = false %}
+
+                {% for event in events %}
+
+                    {% if loop.index == 1
+                    or event.startTime|date("Y-m") != lastEvent.startTime|date("Y-m")
+                    or (event.startTime|date("Y-m-d H:i:s") > now and lastEvent.startTime|date("Y-m-d H:i:s") <= now )
+                    %}
+
+                        {% if event.startTime|date("Y-m-d H:i:s") <= now and now < event.endTime|date("Y-m-d H:i:s") %}
+                            {# Set "In progress" title if it was never displayed it before #}
+
+                            {% if inProgressTitleDisplayed == false %}
+                                {% set inProgressTitleDisplayed = true %}
+
+                                {% if loop.index > 1 %}
+                                    </div>
+                                {% endif %}
+
+                                <h2>{{ "in_progress"|trans }}</h2>
+
+                                <div class="row">
+                            {% endif %}
+                        {% else %}
+
+                            {% if loop.index > 1 %}
+                                </div>
+                            {% endif %}
+
+
+                            {% set month = ("month_"~event.startTime|date("m"))|trans %}
+
+                            {% if now|date("Y") != event.startTime|date("Y") %}
+                                <h2>{{ "month_and_year"|trans({"%month%": month, "%year%": event.startTime|date("Y")}) }}</h2>
+                            {% else %}
+                                <h2>{{ month }}</h2>
+                            {% endif %}
+
+                            <div class="row">
+                        {% endif %}
+
+                    {% endif %}
+
+                    <div class="col-sm-6 col-md-4 mb-4">
                         {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
-                        
-	                    {% set lastEvent = event %}
-                    {% endfor %}
-                    
                     </div>
+
+                    {% set lastEvent = event %}
+                {% endfor %}
+
                 </div>
             {% endif %}
         </p>
-        
+
         {% for event in events %}
-			
+
             {# Searching volunteers hint #}
             {% if event.searchVolunteers %}
-                <div class="modal fade" id="modal_search_volunteers_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
+                <div class="modal fade" tabindex="-1" role="dialog" id="modal_search_volunteers_{{ event.id }}">
+                    <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">{{ "search_volunteers"|trans }}</h4>
+                                <h5 class="modal-title">{{ "search_volunteers"|trans }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                             <div class="modal-body">
-                            	<p>
-                            		{{ "search_volunteers_message"|trans }}
-                            	</p>
-                            	
-                            	{% set association = event.association %}
-                            	
-                            	{% if association.fullAddress is not empty
+                                <p>
+                                    {{ "search_volunteers_message"|trans }}
+                                </p>
+
+                                {% set association = event.association %}
+
+                                {% if association.fullAddress is not empty
                                     or association.phone is not empty
                                     or association.website is not empty
                                     or association.urlFacebook is not empty
                                     or event.website is not empty
                                 %}
-                            		<h5>{{ "contacts"|trans }}</h5>
+                                    <h5>{{ "contacts"|trans }}</h5>
                                     <ul>
                                         {% if association.fullAddress is not empty %}
-                    
+
                                             <li>
                                                 {{ "address_colon"|trans({"%address%": association.fullAddress }) }}
                                             </li>
                                         {% endif %}
-                    
+
                                         {% if association.phone is not empty %}
                                             <li>
                                                 {{ "phone_colon"|trans({"%phone%": association.phone }) }}
                                             </li>
                                         {% endif %}
-                    
+
                                         {% if association.website is not empty %}
                                             <li>
                                                 <a href="{{ association.website }}" target="_blank">{{ "website"|trans }}</a>
                                             </li>
                                         {% endif %}
-                    
+
                                         {% if association.urlFacebook is not empty %}
                                             <li>
                                                 <a href="{{ association.urlFacebook }}" target="_blank">{{ "facebook"|trans }}</a>
                                             </li>
                                         {% endif %}
-                    
+
                                         {% if event.website is not empty %}
                                             <li>
                                                 <a href="{{ event.website }}" target="_blank">{{ "event_website"|trans }}</a>

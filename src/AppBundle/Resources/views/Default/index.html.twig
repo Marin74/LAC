@@ -1,202 +1,166 @@
-{% extends "AppBundle:Design:design.html.twig" %}
+{% extends "@App/Design/design.html.twig" %}
+
+{% block body_style %}background-color: #FFF8F4;{% endblock %}
 
 {% block content %}
-    
-    <div class="btn-group btn-group-justified" role="group" style="margin-top: -21px;">
-        <div class="btn-group" role="group">
-        	<a type="button" class="btn btn-default bg-second-main-color minorBarButton" style="border-top-left-radius: 0; border-bottom-left-radius: 0; color: white; border-color: transparent; outline: none; padding-top: 10px; padding-bottom: 10px; text-align: left;" href="{{ path("app_archives") }}">
-        		<span class="glyphicon glyphicon-list" aria-hidden="true"></span> {% if is_mobile() and is_tablet() == false %}{{ "show_passed_events_sm"|trans }}{% else %}{{ "show_passed_events"|trans }}{% endif %}
-    		</a>
+
+
+    <div id="carouselExampleIndicators" class="carousel slide pt-3" data-ride="carousel">
+        <div class="carousel-inner">
+            {% set nbNextEvents = nextEvents|length %}
+            {% set nbElements = 3 %}
+            {% set nbSlides = nbNextEvents/nbElements %}
+            {% set offset = 0 %}
+            {% for i in range(0, nbSlides) %}
+                <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+
+                    <div class="row center" style="width: 80%;">
+                        {% if offset < nbNextEvents-1 %}
+                            <div class="col mb-4">
+                                {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset]} %}
+                            </div>
+                        {% endif %}
+                        {% if (offset+1) < nbNextEvents-1 %}
+                            <div class="col mb-4">
+                                {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+1]} %}
+                            </div>
+                        {% endif %}
+                        {% if (offset+2) < nbNextEvents-1 %}
+                            <div class="col mb-4">
+                                {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+2]} %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% set offset = offset + nbElements %}
+                </div>
+            {% endfor %}
         </div>
-        <div class="btn-group" role="group">
-        	<a type="button" class="btn btn-default bg-third-main-color mainBarButton" style="color: white; border-color: transparent; padding-top: 10px; padding-bottom: 10px;" href="{{ path("app_events") }}">
-        		<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> {% if is_mobile() and is_tablet() == false %}{{ "show_next_events_sm"|trans }}{% else %}{{ "show_next_events"|trans }}{% endif %}
-    		</a>
-        </div>
-        <div class="btn-group" role="group">
-        	<a type="button" class="btn btn-default bg-second-main-color minorBarButton" style="border-top-right-radius: 0; border-bottom-right-radius: 0; color: white; border-color: transparent; padding-top: 10px; padding-bottom: 10px; text-align: right;" href="{{ path("app_map") }}">
-        		<span class="glyphicon glyphicon-globe" aria-hidden="true"></span> {% if is_mobile() and is_tablet() == false %}{{ "show_map_sm"|trans }}{% else %}{{ "show_map"|trans }}{% endif %}
-    		</a>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">{{ "previous"|trans }}</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">{{ "next"|trans }}</span>
+        </a>
+    </div>
+
+    <div class="container">
+        <div style="text-align: center;">
+            <a type="button" class="btn btn-outline-secondary mb-1 mr-4" href="{{ path("app_archives") }}">{{ "show_passed_events"|trans }}</a>
+            <a type="button" class="btn btn-outline-secondary mb-1 mr-4" href="{{ path("app_map") }}">{{ "show_map"|trans }}</a>
+            <a type="button" class="btn btn-outline-secondary mb-1" href="{{ path("app_events") }}">{{ "show_next_events"|trans }}</a>
         </div>
     </div>
 
-	<div class="bg-gradient" style="padding-top: 20px; padding-bottom: 20px;">
-    
-        {% if nextEvents|length == 0 %}
-            <div class="container">
-                <p class="white">{{ "no_current_events"|trans }}</p>
-            </div>
-        {% else %}
-        	
-        	<div id="carousel-next-events" class="carousel slide">
-    
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner" role="listbox">
-    
-                    {% for event in nextEvents %}
-    
-    					{% if is_mobile() and is_tablet() == false %}
-    						
-    						<div style="padding-left: 7%; padding-right: 7%;" class="item {% if loop.index0 == 0 %}active{% endif %}" >
-								<div class="row">
-									{% include 'AppBundle:Template:event.html.twig' with {'event': event, 'hideBottom': true} %}
-								</div>
-							</div>
-    					{% else %}
-                            {% if loop.index0%4 == 0 %}
-        
-                                <div style="padding-left: 7%; padding-right: 7%;" class="item {% if loop.index0 == 0 %}active{% endif %}" >
-                                <div class="row">
-                            {% endif %}
-        
-                            {% include 'AppBundle:Template:event.html.twig' with {'event': event, 'hideBottom': true} %}
-        
-                            {% if loop.index0%4 == 3 or loop.index >= nextEvents|length %}
-        
-                                </div>
-                                </div>
-                            {% endif %}
-                        {% endif %}
-    
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6">
+                <div style="text-align: center;">
+                    <h1>{{ "local_associations"|trans }}</h1>
+                </div>
+
+                <div class="row row-cols-1 row-cols-md-2">
+                    {% for association in randomAssociations %}
+                        <div class="col mb-4">
+                            {% include 'AppBundle:Template:association.html.twig' with {'association': association} %}
+                        </div>
                     {% endfor %}
                 </div>
-    
-                <!-- Controls -->
-                {% if (is_mobile() and is_tablet() == false and nextEvents|length > 1) or nextEvents|length > 4 %}
-                    <a class="left carousel-control" role="button" onClick="carouselPrev();" style="width: 7%;">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" role="button" onClick="carouselNext();" style="width: 7%;">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                {% endif %}
+
+                <div style="text-align: center;">
+                    <a type="button" class="btn btn-outline-primary" href="{{ url("app_associations") }}">{{ "show_associations"|trans }}</a>
+                </div>
             </div>
-            
-            {% for event in nextEvents %}
-    			
-                {# Searching volunteers hint #}
-                {% if event.searchVolunteers %}
-                    <div class="modal fade" id="modal_search_volunteers_{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">{{ "search_volunteers"|trans }}</h4>
-                                </div>
-                                <div class="modal-body">
-                                	<p>
-                                		{{ "search_volunteers_message"|trans }}
-                                	</p>
-                                	
-                                	{% set association = event.association %}
-                                	
-                                	{% if association.fullAddress is not empty
-                                        or association.phone is not empty
-                                        or association.website is not empty
-                                        or association.urlFacebook is not empty
-                                        or event.website is not empty
-                                    %}
-                                		<h5>{{ "contacts"|trans }}</h5>
-                                        <ul>
-                                            {% if association.fullAddress is not empty %}
-                        
-                                                <li>
-                                                    {{ "address_colon"|trans({"%address%": association.fullAddress }) }}
-                                                </li>
-                                            {% endif %}
-                        
-                                            {% if association.phone is not empty %}
-                                                <li>
-                                                    {{ "phone_colon"|trans({"%phone%": association.phone }) }}
-                                                </li>
-                                            {% endif %}
-                        
-                                            {% if association.website is not empty %}
-                                                <li>
-                                                    <a href="{{ association.website }}" target="_blank">{{ "website"|trans }}</a>
-                                                </li>
-                                            {% endif %}
-                        
-                                            {% if association.urlFacebook is not empty %}
-                                                <li>
-                                                    <a href="{{ association.urlFacebook }}" target="_blank">{{ "facebook"|trans }}</a>
-                                                </li>
-                                            {% endif %}
-                        
-                                            {% if event.website is not empty %}
-                                                <li>
-                                                    <a href="{{ event.website }}" target="_blank">{{ "event_website"|trans }}</a>
-                                                </li>
-                                            {% endif %}
-                                        </ul>
+            <div class="col-sm-12 col-lg-6">
+                <div style="text-align: center;">
+                    <h1>{{ "transition_workshops"|trans }}</h1>
+                </div>
+
+                <div class="row row-cols-1 row-cols-md-2">
+                    {% for workshop in randomWorkshops %}
+                        <div class="col mb-4">
+                            {% include 'AppBundle:Template:association.html.twig' with {'association': workshop} %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div style="text-align: center;">
+                    <a type="button" class="btn btn-outline-primary" href="{{ url("app_workshops") }}">{{ "show_workshops"|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for event in nextEvents %}
+
+        {# Searching volunteers hint #}
+        {% if event.searchVolunteers %}
+            <div class="modal fade" tabindex="-1" role="dialog" id="modal_search_volunteers_{{ event.id }}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ "search_volunteers"|trans }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                {{ "search_volunteers_message"|trans }}
+                            </p>
+
+                            {% set association = event.association %}
+
+                            {% if association.fullAddress is not empty
+                                or association.phone is not empty
+                                or association.website is not empty
+                                or association.urlFacebook is not empty
+                                or event.website is not empty
+                            %}
+                                <h5>{{ "contacts"|trans }}</h5>
+                                <ul>
+                                    {% if association.fullAddress is not empty %}
+
+                                        <li>
+                                            {{ "address_colon"|trans({"%address%": association.fullAddress }) }}
+                                        </li>
                                     {% endif %}
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
-                                </div>
-                            </div>
+
+                                    {% if association.phone is not empty %}
+                                        <li>
+                                            {{ "phone_colon"|trans({"%phone%": association.phone }) }}
+                                        </li>
+                                    {% endif %}
+
+                                    {% if association.website is not empty %}
+                                        <li>
+                                            <a href="{{ association.website }}" target="_blank">{{ "website"|trans }}</a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if association.urlFacebook is not empty %}
+                                        <li>
+                                            <a href="{{ association.urlFacebook }}" target="_blank">{{ "facebook"|trans }}</a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if event.website is not empty %}
+                                        <li>
+                                            <a href="{{ event.website }}" target="_blank">{{ "event_website"|trans }}</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
                         </div>
                     </div>
-                {% endif %}
-            {% endfor %}
+                </div>
+            </div>
         {% endif %}
-    </div>
-    
-    <div style="height: 500px;
-    	margin-bottom: -20px;
-        background-image: url('{{ asset("bundles/app/img/bg-landing-page.jpeg") }}'); 
-        background-size: 100% auto; 
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: relative;">
-        <!--
-        <p style="width: 100%; vertical-align: middle;top: 0; bottom: 0; position: absolute;">
-        	<center style="width: 100%; vertical-align: middle;">
-        	
-                	<a class="btn btn-outline-inverse btn-sm bg-third-main-color" style=" vertical-align: middle;font-size: 2em; border-color: white;" href="{{ url("app_associations") }}">{{ "local_associations"|trans }}</a>
-                	
-                	<a class="btn btn-outline-inverse btn-sm bg-green" style="font-size: 2em; border-color: white;" href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a>
-        	</center>
-        </p>-->
-        
-        <table class="center" style="height: 50%; width: 100%; table-layout: fixed; bottom: 0; position: absolute;">
-            <tr>
-                <td style="max-width: 100px;">
-                	<p>
-                		<a class="btn btn-outline-inverse btn-sm bg-third-main-color button-associations" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_associations") }}">{{ "local_associations"|trans }}</a>
-                	</p>
-                	{% if workshopExists != null %}
-                    	<p>
-                    		<a class="btn btn-outline-inverse btn-sm bg-green button-workshops" style="opacity: 0.75; font-size: 2em; border-color: white;" href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a>
-                    	</p>
-                	{% endif %}
-                </td>
-            </tr>
-        </table>
-        
-    </div>
-{% endblock %}
+    {% endfor %}
 
-{% block js %}
-    <script type="application/javascript">
-
-        $(function() {
-        	$("#carousel-next-events").carousel('pause');
-
-        	// Stops the carousel after the sliding effect
-        	$("#carousel-next-events").on('slid.bs.carousel', function () {
-        		$("#carousel-next-events").carousel('pause');
-            });
-        });
-
-        function carouselNext() {
-        	$("#carousel-next-events").carousel('next');
-        }
-
-        function carouselPrev() {
-        	$("#carousel-next-events").carousel('prev');
-        }
-    </script>
 {% endblock %}

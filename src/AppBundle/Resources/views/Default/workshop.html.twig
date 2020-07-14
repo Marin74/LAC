@@ -11,6 +11,7 @@
 
 {% block content %}
     <div class="container">
+        {# TODO #}
         {% if app.request.query.has("source") %}
             {% if app.request.query.get("source") == "super_admin_associations" %}
                 <nav aria-label="...">
@@ -20,21 +21,23 @@
                 </nav>
             {% endif %}
         {% endif %}
-        
-        <ol class="breadcrumb">
-        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	<li><a href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a></li>
-        	<li class="active">
-                {% if association is null %}
-        	        {{ "workshop_unknown"|trans }}
-        	    {% else %}
-        	    	{{ association.name }}
-        	    {% endif %}
-        	</li>
-        </ol>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url("app_index") }}">{{ "homepage"|trans }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ url("app_workshops") }}">{{ "transition_workshops"|trans }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {% if association is null %}
+                        {{ "workshop_unknown"|trans }}
+                    {% else %}
+                        {{ association.name }}
+                    {% endif %}
+                </li>
+            </ol>
+        </nav>
 
         {% if association is null %}
-            <h1 class="page-header">{{ "workshop_unknown"|trans }}</h1>
+            <h1>{{ "workshop_unknown"|trans }}</h1>
         {% else %}
         
     		<p class="center">
@@ -80,7 +83,7 @@
 			{% endif %}
 			
             {% if association.description is not empty %}
-            	<p style="font-family: 'avenir next'; font-size: 1.1em; margin-top: 20px; margin-bottom: 20px; max-width: 1000px;">
+            	<p style="font-family: 'Roboto Condensed Light', 'Roboto Condensed Regular', serif; font-size: 1.1em; margin-top: 20px; margin-bottom: 20px; max-width: 1000px;">
                     {{ association.description|nl2br }}
                 </p>
             {% endif %}
@@ -118,9 +121,11 @@
                                     <div style="padding-left: 7%; padding-right: 7%;" class="item {% if loop.index0 == 0 %}active{% endif %}" >
                                     <div class="row">
                                 {% endif %}
-    							
-                                {% include 'AppBundle:Template:event.html.twig' with {'event': event, 'source': 'association', 'hideBottom': true} %}
-            
+
+                                <div class="col-12 col-sm-6 col-md-3 mb-4">
+                                    {% include 'AppBundle:Template:event.html.twig' with {'event': event, 'source': 'association', 'hideBottom': true} %}
+                                </div>
+
                                 {% if loop.index0%4 == 3 or loop.index >= association.nextEvents|length %}
             
                                     </div>

@@ -22,6 +22,7 @@ parameters:
     url_source_code:            ~
     time_zone:                  Europe/Paris
     app_name:                   ~
+    app_full_name:              ~
     app_description:            ~
     app_mail:                   ~
     app_address:                ~
@@ -29,6 +30,7 @@ parameters:
     image_folder_event:         ~
     locale:                     fr_FR
     piwik_url:                  ~
+    piwik_site_id:              ~
     facebook_page:              ~
     youtube_page:               ~
     diaspora_page:              ~

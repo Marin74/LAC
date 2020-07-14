@@ -6,77 +6,74 @@
 
 {% block content %}
     <div class="container">
-        
-        <ol class="breadcrumb">
-        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	<li class="active">{{ "archives"|trans }}</li>
-        </ol>
+
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="{{ url("app_index") }}">{{ "homepage"|trans }}</a></li>
+				<li class="breadcrumb-item active" aria-current="page">{{ "archives"|trans }}</li>
+			</ol>
+		</nav>
         
         <h1 class="second-main-color center">{{ "archives"|trans }}</h1>
-        
-		<nav aria-label="...">
-    		<ul class="pager">
-    			{% if previousMonth is not null %}
-    				<li class="next"><a href="{{ url("app_archives_page", {"month": previousMonth, "year": previousYear}) }}"><span aria-hidden="true">&rarr;</span></a></li>
-    			{% endif %}
-    			{% if nextMonth is not null %}
-    				<li class="previous"><a href="{{ url("app_archives_page", {"month": nextMonth, "year": nextYear}) }}"><span aria-hidden="true">&larr;</span></a></li>
-    			{% endif %}
-    		</ul>
-		</nav>
 
-        <!-- Wrapper for slides -->
-        <p>
-            {% if events|length == 0 %}
-            	{{ "no_events"|trans }}
-        	{% else %}
-                <div class="row">
-                    
-                	{% set now = "now"|date("Y-m-d H:i:s") %}
-                	
-                	{% set lastEvent = events[0] %}
-                	{% set inProgressTitleDisplayed = false %}
-                	
-                    {% for event in events %}
-                    	
-                    	{% if loop.index == 1 or event.startTime|date("Y-m") != lastEvent.startTime|date("Y-m") %}
-                    	   	
-            	    		{% if loop.index > 1 %}
-            	    			</div>
-        					{% endif %}
-        					
-        					
-    						{% set month = ("month_"~event.startTime|date("m"))|trans %}
-    						
-        					{% if now|date("Y") != event.startTime|date("Y") %}
-                				<h4>{{ "month_and_year"|trans({"%month%": month, "%year%": event.startTime|date("Y")}) }}</h4>
-							{% else %}
-								<h4>{{ month }}</h4>
-							{% endif %}
-							
-    						<div class="row">
-            			{% endif %}
-                    	
-                        {% include 'AppBundle:Template:event.html.twig' with {'event': event, 'displaySearchVolunteers': false} %}
-                        
-	                    {% set lastEvent = event %}
-                    {% endfor %}
-                    
-                    </div>
-                </div>
-            {% endif %}
-        </p>
-        
-		<nav aria-label="...">
-    		<ul class="pager">
-    			{% if previousMonth is not null %}
-    				<li class="next"><a href="{{ url("app_archives_page", {"month": previousMonth, "year": previousYear}) }}"><span aria-hidden="true">&rarr;</span></a></li>
-    			{% endif %}
-    			{% if nextMonth is not null %}
-    				<li class="previous"><a href="{{ url("app_archives_page", {"month": nextMonth, "year": nextYear}) }}"><span aria-hidden="true">&larr;</span></a></li>
-    			{% endif %}
-    		</ul>
-		</nav>
+		{% if events|length == 0 %}
+			<p>{{ "no_events"|trans }}</p>
+		{% else %}
+			<p>
+				<div style="display: inline-block; width: 100%;">
+					{% if nextMonth is not null %}
+						<a type="button" class="btn btn-light" href="{{ url("app_archives_page", {"month": nextMonth, "year": nextYear}) }}">{{ "previous"|trans }}</a>
+					{% endif %}
+					{% if previousMonth is not null %}
+						<a type="button" class="btn btn-light" style="float: right;" href="{{ url("app_archives_page", {"month": previousMonth, "year": previousYear}) }}">{{ "next"|trans }}</a>
+					{% endif %}
+				</div>
+			</p>
+			<p>
+				{% set now = "now"|date("Y-m-d H:i:s") %}
+
+				{% set lastEvent = events[0] %}
+				{% set inProgressTitleDisplayed = false %}
+
+				{% for event in events %}
+
+					{% if loop.index == 1 or event.startTime|date("Y-m") != lastEvent.startTime|date("Y-m") %}
+
+						{% if loop.index > 1 %}
+							</div>
+						{% endif %}
+
+
+						{% set month = ("month_"~event.startTime|date("m"))|trans %}
+
+						{% if now|date("Y") != event.startTime|date("Y") %}
+							<h2>{{ "month_and_year"|trans({"%month%": month, "%year%": event.startTime|date("Y")}) }}</h2>
+						{% else %}
+							<h2>{{ month }}</h2>
+						{% endif %}
+
+						<div class="row">
+					{% endif %}
+					<div class="col-sm-6 col-md-4 mb-4">
+						{% include 'AppBundle:Template:event.html.twig' with {'event': event, 'displaySearchVolunteers': false} %}
+					</div>
+					{% set lastEvent = event %}
+				{% endfor %}
+
+				</div>
+			</p>
+
+			<p>
+				<div style="display: inline-block; width: 100%;">
+					{% if nextMonth is not null %}
+						<a type="button" class="btn btn-light" href="{{ url("app_archives_page", {"month": nextMonth, "year": nextYear}) }}">{{ "previous"|trans }}</a>
+					{% endif %}
+					{% if previousMonth is not null %}
+						<a type="button" class="btn btn-light" style="float: right;" href="{{ url("app_archives_page", {"month": previousMonth, "year": previousYear}) }}">{{ "next"|trans }}</a>
+					{% endif %}
+				</div>
+			</p>
+		{% endif %}
     </div>
 {% endblock %}
 

@@ -11,6 +11,7 @@
 
 {% block content %}
     <div class="container">
+        {# TODO #}
         {% if app.request.query.has("source") %}
             {% if app.request.query.get("source") == "admin_events" %}
                 <nav aria-label="...">
@@ -26,28 +27,32 @@
                 </nav>
             {% endif %}
         {% endif %}
-        
-        <ol class="breadcrumb">
-        	<li><a href="{{ url("app_index") }}"><span class="glyphicon glyphicon-home"></span></a></li>
-        	{% if event is not null and app.request.query.get("source") == "association" %}
-        		{% if event.association.isWorkshop %}
-        			<li><a href="{{ url("app_workshop", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></li>
-        		{% else %}
-        			<li><a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></li>
-    			{% endif %}
-    		{% else %}
-        		<li><a href="{{ url("app_events") }}">{{ "the_events"|trans }}</a></li>
-        	{% endif %}
-        	
-            {% if event is null %}
-            	<li class="active">{{ "event_unknown"|trans }}</li>
-            {% else %}
-            	<li class="active">{{ event.name }}</li>
-            {% endif %}
-        </ol>
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url("app_index") }}">{{ "homepage"|trans }}</a></li>
+
+                {% if event is not null and app.request.query.get("source") == "association" %}
+                    {% if event.association.isWorkshop %}
+                        <li class="breadcrumb-item"><a href="{{ url("app_workshop", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></li>
+                    {% else %}
+                        <li class="breadcrumb-item"><a href="{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}">{{ event.association.name }}</a></li>
+                    {% endif %}
+                {% else %}
+                    <li class="breadcrumb-item"><a href="{{ url("app_events") }}">{{ "the_events"|trans }}</a></li>
+                {% endif %}
+                <li class="breadcrumb-item active" aria-current="page">
+                    {% if event is null %}
+                        {{ "event_unknown"|trans }}
+                    {% else %}
+                        {{ event.name }}
+                    {% endif %}
+                </li>
+            </ol>
+        </nav>
 
         {% if event is null %}
-            <h1 class="page-header">{{ "event_unknown"|trans }}</h1>
+            <h1>{{ "event_unknown"|trans }}</h1>
         {% else %}
         
     		<p class="center">
@@ -71,13 +76,17 @@
             
             {% if event.searchVolunteers %}
             	<div class="alert alert-success" role="alert">
-                    <span class="glyphicon glyphicon-flag" style="color: var(--second-main-color);" title="{{ "search_volunteers"|trans }}"></span> {{ "search_volunteers_message"|trans }}
+                    <svg width="1em" height="1em"
+                         viewBox="0 0 16 16" class="bi bi-flag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M3.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z"/>
+                        <path fill-rule="evenodd" d="M3.762 2.558C4.735 1.909 5.348 1.5 6.5 1.5c.653 0 1.139.325 1.495.562l.032.022c.391.26.646.416.973.416.168 0 .356-.042.587-.126a8.89 8.89 0 0 0 .593-.25c.058-.027.117-.053.18-.08.57-.255 1.278-.544 2.14-.544a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5c-.638 0-1.18.21-1.734.457l-.159.07c-.22.1-.453.205-.678.287A2.719 2.719 0 0 1 9 9.5c-.653 0-1.139-.325-1.495-.562l-.032-.022c-.391-.26-.646-.416-.973-.416-.833 0-1.218.246-2.223.916A.5.5 0 0 1 3.5 9V3a.5.5 0 0 1 .223-.416l.04-.026z"/>
+                    </svg> {{ "search_volunteers_message"|trans }}
                 </div>
             {% endif %}
             
             <p>{{ "proposed_by"|trans }} <a href="{% if event.association.isWorkshop %}{{ url("app_workshop", {"id": event.association.id, "name": event.association.nameForUrl}) }}{% else %}{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}{% endif %}">{{ event.association.name }}</a></p>
     
-            <p style="font-family: 'avenir next'; font-size: 1.1em; margin-top: 20px; max-width: 1000px;">{{ event.description|nl2br }}</p>
+            <p style="font-family: 'Roboto Condensed Light', 'Roboto Condensed Regular', serif; font-size: 1.1em; margin-top: 20px; max-width: 1000px;">{{ event.description|nl2br }}</p>
     		
             {% if event.website is not empty or event.email is not empty %}
                 <p style="margin-bottom: 20px;">
@@ -119,8 +128,10 @@
                 {% else %}
                     {{ event.endTime|localizeddate("full", "short", locale, time_zone) }}
                 {% endif %}
-                <a href="{{ url("app_event_ics", {"id": event.id}) }}" title="{{ "add_to_calendar"|trans }}" type="button" class="btn btn-default btn-sm">
-                	<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                <a href="{{ url("app_event_ics", {"id": event.id}) }}" title="{{ "add_to_calendar"|trans }}" type="button" class="btn btn-dark btn-sm">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-calendar-event-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM0 5h16v9a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5zm12.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"/>
+                    </svg>
                 </a>
             </p>
             
@@ -175,7 +186,7 @@
         {% endif %}
     </div>
     {% if event is not null and event.placeEntity is not null %}
-    	<div id="mapid" class="map"></div>
+    	<div id="mapid" class="map" style=""></div>
     {% endif %}
 {% endblock %}
 

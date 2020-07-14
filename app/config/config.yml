@@ -39,6 +39,7 @@ twig:
     # Global variables
     globals:
         app_name: "%app_name%"
+        app_full_name: "%app_full_name%"
         app_mail: "%app_mail%"
         app_address: "%app_address%"
         mapbox_access_token: "%mapbox_access_token%"
@@ -47,6 +48,7 @@ twig:
         time_zone: "%time_zone%"
         locale: "%locale%"
         piwik_url: "%piwik_url%"
+        piwik_site_id: "%piwik_site_id%"
         app_description: "%app_description%"
         facebook_page: "%facebook_page%"
         youtube_page: "%youtube_page%"
