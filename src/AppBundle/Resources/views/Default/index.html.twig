@@ -7,34 +7,49 @@
 
     <div id="carouselExampleIndicators" class="carousel slide pt-3" data-ride="carousel">
         <div class="carousel-inner">
-            {% set nbNextEvents = nextEvents|length %}
-            {% set nbElements = 3 %}
-            {% set nbSlides = nbNextEvents/nbElements %}
-            {% set offset = 0 %}
-            {% for i in range(0, nbSlides) %}
-                <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+            {% if is_mobile() %}
 
-                    <div class="row center" style="width: 80%;">
-                        {% if offset < nbNextEvents-1 %}
+                {% for event in nextEvents %}
+                    <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+
+                        <div class="row center" style="width: 80%;">
                             <div class="col mb-4">
-                                {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset]} %}
+                                {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
                             </div>
-                        {% endif %}
-                        {% if (offset+1) < nbNextEvents-1 %}
-                            <div class="col mb-4">
-                                {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+1]} %}
-                            </div>
-                        {% endif %}
-                        {% if (offset+2) < nbNextEvents-1 %}
-                            <div class="col mb-4">
-                                {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+2]} %}
-                            </div>
-                        {% endif %}
+                        </div>
                     </div>
+                {% endfor %}
 
-                    {% set offset = offset + nbElements %}
-                </div>
-            {% endfor %}
+            {% else %}
+                {% set nbNextEvents = nextEvents|length %}
+                {% set nbElements = 3 %}
+                {% set nbSlides = nbNextEvents/nbElements %}
+                {% set offset = 0 %}
+                {% for i in range(0, nbSlides) %}
+                    <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+
+                        <div class="row center" style="width: 80%;">
+                            {% if offset < nbNextEvents-1 %}
+                                <div class="col mb-4">
+                                    {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset]} %}
+                                </div>
+                            {% endif %}
+                            {% if (offset+1) < nbNextEvents-1 %}
+                                <div class="col mb-4">
+                                    {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+1]} %}
+                                </div>
+                            {% endif %}
+                            {% if (offset+2) < nbNextEvents-1 %}
+                                <div class="col mb-4">
+                                    {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+2]} %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {% set offset = offset + nbElements %}
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
