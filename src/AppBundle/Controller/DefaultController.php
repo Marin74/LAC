@@ -180,7 +180,7 @@ class DefaultController extends Controller
             $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
 
-        return $this->render('associations.html.twig', array(
+        return $this->render('@App/Default/associations.html.twig', array(
         	'mainAssociation'   => $mainAssociation,
             'associations'      => $associations
         ));
