@@ -1,71 +1,84 @@
 {% extends "@App/Design/design.html.twig" %}
 
-{% block body_style %}background-color: #FFF8F4;{% endblock %}
+{% block body_style %}background-color: #F4F4F4;{% endblock %}
+
+{% block top %}{% endblock %}
 
 {% block content %}
 
-
-    <div id="carouselExampleIndicators" class="carousel slide pt-3" data-ride="carousel">
-        <div class="carousel-inner">
-            {% if is_mobile() %}
-
-                {% for event in nextEvents %}
-                    <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
-
-                        <div class="row center" style="width: 80%;">
-                            <div class="col mb-4">
-                                {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-
-            {% else %}
-                {% set nbNextEvents = nextEvents|length %}
-                {% set nbElements = 3 %}
-                {% set nbSlides = nbNextEvents/nbElements %}
-                {% set offset = 0 %}
-                {% for i in range(0, nbSlides) %}
-                    <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
-
-                        <div class="row center" style="width: 80%;">
-                            {% if offset < nbNextEvents-1 %}
-                                <div class="col mb-4">
-                                    {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset]} %}
-                                </div>
-                            {% endif %}
-                            {% if (offset+1) < nbNextEvents-1 %}
-                                <div class="col mb-4">
-                                    {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+1]} %}
-                                </div>
-                            {% endif %}
-                            {% if (offset+2) < nbNextEvents-1 %}
-                                <div class="col mb-4">
-                                    {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+2]} %}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        {% set offset = offset + nbElements %}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">{{ "previous"|trans }}</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">{{ "next"|trans }}</span>
-        </a>
+    <div style="background-color: #D6D6D6;">
+        <br><br><br>
     </div>
 
-    <div class="container">
-        <div style="text-align: center;">
-            <a type="button" class="btn btn-outline-secondary mb-1 mr-4" href="{{ path("app_archives") }}">{{ "show_passed_events"|trans }}</a>
-            <a type="button" class="btn btn-outline-secondary mb-1 mr-4" href="{{ path("app_map") }}">{{ "show_map"|trans }}</a>
-            <a type="button" class="btn btn-outline-secondary mb-1" href="{{ path("app_events") }}">{{ "show_next_events"|trans }}</a>
+    <div class="pb-4" style="background-color: #D6D6D6;">
+
+        <div id="carouselExampleIndicators" class="carousel slide pt-3" data-interval="false" data-ride="carousel">
+            <div class="carousel-inner">
+                {% if is_mobile() %}
+
+                    {% for event in nextEvents %}
+                        <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+
+                            <div class="row center" style="width: 80%;">
+                                <div class="col mb-4">
+                                    {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                {% else %}
+                    {% set nbNextEvents = nextEvents|length %}
+                    {% set nbElements = 4 %}
+                    {% set nbSlides = nbNextEvents/nbElements %}
+                    {% set offset = 0 %}
+                    {% for i in range(0, nbSlides) %}
+                        <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+
+                            <div class="row center" style="width: 80%;">
+                                {% if offset < nbNextEvents-1 %}
+                                    <div class="col mb-3">
+                                        {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset]} %}
+                                    </div>
+                                {% endif %}
+                                {% if (offset+1) < nbNextEvents-1 %}
+                                    <div class="col mb-3">
+                                        {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+1]} %}
+                                    </div>
+                                {% endif %}
+                                {% if (offset+2) < nbNextEvents-1 %}
+                                    <div class="col mb-3">
+                                        {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+2]} %}
+                                    </div>
+                                {% endif %}
+                                {% if (offset+3) < nbNextEvents-1 %}
+                                    <div class="col mb-3">
+                                        {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+3]} %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            {% set offset = offset + nbElements %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">{{ "previous"|trans }}</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">{{ "next"|trans }}</span>
+            </a>
+        </div>
+
+        <div class="container">
+            <div style="text-align: center;">
+                <a class="btn btn-outline-secondary mb-1 mr-4" href="{{ path("app_archives") }}">{{ "show_passed_events"|trans }}</a>
+                <a class="btn btn-outline-secondary mb-1 mr-4" href="{{ path("app_map") }}">{{ "show_map"|trans }}</a>
+                <a class="btn btn-outline-secondary mb-1" href="{{ path("app_events") }}">{{ "show_next_events"|trans }}</a>
+            </div>
         </div>
     </div>
 
@@ -85,12 +98,12 @@
                 </div>
 
                 <div style="text-align: center;">
-                    <a type="button" class="btn btn-outline-primary" href="{{ url("app_associations") }}">{{ "show_associations"|trans }}</a>
+                    <a class="btn btn-outline-primary" href="{{ url("app_associations") }}">{{ "show_associations"|trans }}</a>
                 </div>
             </div>
             <div class="col-sm-12 col-lg-6">
                 <div style="text-align: center;">
-                    <h1>{{ "transition_workshops"|trans }}</h1>
+                    <h1 class="green">{{ "transition_workshops"|trans }}</h1>
                 </div>
 
                 <div class="row row-cols-1 row-cols-md-2">
@@ -102,7 +115,7 @@
                 </div>
 
                 <div style="text-align: center;">
-                    <a type="button" class="btn btn-outline-primary" href="{{ url("app_workshops") }}">{{ "show_workshops"|trans }}</a>
+                    <a class="btn btn-outline-green" href="{{ url("app_workshops") }}">{{ "show_workshops"|trans }}</a>
                 </div>
             </div>
         </div>

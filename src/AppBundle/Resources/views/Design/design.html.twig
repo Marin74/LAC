@@ -33,7 +33,7 @@
             </ul>
             <form class="form-inline my-2 my-lg-0" method="GET" action="{{ url("app_search") }}">
                 <input class="form-control mr-sm-2" type="text" placeholder="{{ "search"|trans }}" aria-label="{{ "search"|trans }}" name="q">
-                <a class="btn btn-outline-white my-2 my-sm-0" type="button" href="{{ url("app_admin_index") }}">{{ "members_area"|trans }}</a>
+                <a class="btn btn-outline-white my-2 my-sm-0" href="{{ url("app_admin_index") }}">{{ "members_area"|trans }}</a>
             </form>
         </div>
     </nav>
@@ -41,7 +41,7 @@
     <main role="main">
 
         <div class="padding-top: 40px;">{# TODO Margin #}
-            <br><br><br>
+            {% block top %}<br><br><br>{% endblock %}
             {% block content %}{% endblock %}
         </div>
 

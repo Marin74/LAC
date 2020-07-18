@@ -22,10 +22,10 @@
 			<p>
 				<div style="display: inline-block; width: 100%;">
 					{% if nextMonth is not null %}
-						<a type="button" class="btn btn-light" href="{{ url("app_archives_page", {"month": nextMonth, "year": nextYear}) }}">{{ "previous"|trans }}</a>
+						<a class="btn btn-light" href="{{ url("app_archives_page", {"month": nextMonth, "year": nextYear}) }}">{{ "previous"|trans }}</a>
 					{% endif %}
 					{% if previousMonth is not null %}
-						<a type="button" class="btn btn-light" style="float: right;" href="{{ url("app_archives_page", {"month": previousMonth, "year": previousYear}) }}">{{ "next"|trans }}</a>
+						<a class="btn btn-light" style="float: right;" href="{{ url("app_archives_page", {"month": previousMonth, "year": previousYear}) }}">{{ "next"|trans }}</a>
 					{% endif %}
 				</div>
 			</p>
@@ -66,10 +66,10 @@
 			<p>
 				<div style="display: inline-block; width: 100%;">
 					{% if nextMonth is not null %}
-						<a type="button" class="btn btn-light" href="{{ url("app_archives_page", {"month": nextMonth, "year": nextYear}) }}">{{ "previous"|trans }}</a>
+						<a class="btn btn-light" href="{{ url("app_archives_page", {"month": nextMonth, "year": nextYear}) }}">{{ "previous"|trans }}</a>
 					{% endif %}
 					{% if previousMonth is not null %}
-						<a type="button" class="btn btn-light" style="float: right;" href="{{ url("app_archives_page", {"month": previousMonth, "year": previousYear}) }}">{{ "next"|trans }}</a>
+						<a class="btn btn-light" style="float: right;" href="{{ url("app_archives_page", {"month": previousMonth, "year": previousYear}) }}">{{ "next"|trans }}</a>
 					{% endif %}
 				</div>
 			</p>

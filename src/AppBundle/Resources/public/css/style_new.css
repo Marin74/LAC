@@ -1,7 +1,6 @@
 :root {
     --main-color: #99195E;
     --second-main-color: #0466C8;
-    --third-main-color: #D8127D;
     --green-color: #009401;
 }
 @font-face {
@@ -31,8 +30,8 @@ a {
 .border-main-color{
     border-color: var(--main-color);
 }
-.third-main-color{
-    color: var(--third-main-color);
+.border-green-color{
+    border-color: var(--green-color);
 }
 .green{
     color: var(--green-color);
@@ -66,6 +65,15 @@ h1, h2, h3, h4, h5, h6{
     color: white;
     background-color: var(--second-main-color);
     border-color: var(--second-main-color);
+}
+.btn-outline-green{
+    color: var(--green-color);
+    border-color: var(--green-color);
+}
+.btn-outline-green:hover{
+    color: white;
+    background-color: var(--green-color);
+    border-color: var(--green-color);
 }
 .btn-outline-white{
     color: white;

@@ -4,12 +4,12 @@
             {{ url("app_association", {"id": association.id, "name": association.nameForURl}) }}
         {% endif %}
         " style="text-decoration: none;">
-    <div class="card border-main-color h-100">
+    <div class="card {% if association.isWorkshop %}border-green-color{% else %}border-main-color{% endif%} h-100">
         <div class="center-cropped"
              style="background-image: url('{{ asset(association.picturePath) }}');">
         </div>
         <div class="card-body center">
-            <h6 class="{% if association.isWorkshop %}green{% else %}third-main-color{% endif %}" style="margin-bottom: 0;">{{ association.name }}</h6>
+            <h6 class="{% if association.isWorkshop %}green{% else %}main-color{% endif %}" style="margin-bottom: 0;">{{ association.name }}</h6>
         </div>
     </div>
 </a>
