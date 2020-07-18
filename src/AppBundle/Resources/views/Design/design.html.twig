@@ -52,7 +52,7 @@
         {% block content %}{% endblock %}
 
         {% if newsletter_url is not empty and is_mobile() %}
-            <div class="center mt-3">
+            <div class="center mt-4">
                 <a class="btn btn-sm btn-outline-primary" style="color: var(--main-color);" onmouseout="this.style.color = 'var(--main-color)';" onmouseover="this.style.color = 'white';" data-toggle="modal" data-target="#modal_newsletter">{{ "subscribe"|trans }}</a>
             </div>
         {% endif %}
