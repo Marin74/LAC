@@ -241,8 +241,8 @@ canceled: Annulé
 postponed: Reporté
 scheduled: Planifié
 status:  Statut
-environment_test: Test
-environment_dev: Dev
+environment_test: "Environnement de test"
+environment_dev: "Environnement de développement"
 newsletter_name: "L'accroche : les infos de LAC-Chablais"
 newsletters: Lettres de diffusion
 newsletter_unknown: "La liste de diffusion n'existe pas."

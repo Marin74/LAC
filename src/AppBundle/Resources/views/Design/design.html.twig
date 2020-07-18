@@ -16,6 +16,11 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ url("app_index") }}">{% if is_mobile() == false %}{{ app_full_name }}{% else %}{{ app_name }}{% endif%} <span class="sr-only">(current)</span></a>
                 </li>
+                {% if environment == "dev" %}
+                    <li class="nav-link" style="color: greenyellow;">{{ "environment_dev"|trans|upper }}</li>
+                {% elseif environment == "test" %}
+                    <li class="nav-link" style="color: greenyellow;">{{ "environment_test"|trans|upper }}</li>
+                {% endif %}
                 <!--<li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
                 </li>
