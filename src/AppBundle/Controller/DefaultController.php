@@ -47,41 +47,42 @@ class DefaultController extends Controller
         ->orderBy("e.startTime", "ASC")
         ;
 
-        $tempEvents = $qb->getQuery()->getResult();
+        $nextEvents = $qb->getQuery()->getResult();
+        /*$tempEvents = $qb->getQuery()->getResult();
         $tempArrayEvents = array();
-        
+
         foreach($tempEvents as $event) {
-        	
+
             if($event->getAssociation()->isDisplayed()) {
-                
+
                 // Check if the event is long like an exhibition
                 $diff = $now->diff($event->getEndTime());
                 $diff->format('%R');
-                
+
                 $sortDate = $event->getStartTime();
-                
+
                 if($event->getStartTime() <= $now) {
-                    
+
                     if($diff->days >= 10) {
-                        
+
                         $sortDate = $event->getEndTime();
-                        
+
                         $sortDate->modify("-7 days");
                     }
                 }
-                
+
                 $tempArrayEvents[$sortDate->format("Y-m-d H:i:s")."_".$event->getId()] = $event;
             }
         }
-        
+
         ksort($tempArrayEvents);
-        
+
         $nextEvents = array();
-        
+
         foreach($tempArrayEvents as $event) {
-            
+
             $nextEvents[] = $event;
-        }
+        }*/
         
         $tempWorkshop = $repoAssociation->findOneBy(array("displayed" => true, "isWorkshop" => true));
         $workshopExists = $tempWorkshop != null;
