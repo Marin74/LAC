@@ -40,10 +40,8 @@
 
     <main role="main">
 
-        <div class="padding-top: 40px;">{# TODO Margin #}
-            {% block top %}<br><br><br>{% endblock %}
-            {% block content %}{% endblock %}
-        </div>
+        {% block top %}<br><br><br>{% endblock %}
+        {% block content %}{% endblock %}
 
         <!-- Main jumbotron for a primary marketing message or call to action -->
         <!--<div class="jumbotron">

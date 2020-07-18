@@ -11,14 +11,12 @@
 
 {% block content %}
     <div class="container">
-        {# TODO #}
-        {% if app.request.query.has("source") %}
+
+    {% if app.request.query.has("source") %}
             {% if app.request.query.get("source") == "super_admin_associations" %}
-                <nav aria-label="...">
-                    <ul class="pager">
-                        <li class="previous"><a href="{{ url("app_admin_workshops") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a></li>
-                    </ul>
-                </nav>
+                <p>
+                    <a class="btn btn-light" href="{{ url("app_admin_workshops") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_admin_page"|trans({}, "messages") }}</a>
+                </p>
             {% endif %}
         {% endif %}
 
