@@ -6,6 +6,10 @@
 	{{ "login"|trans({}, "messages") }} - {{ parent() }}
 {% endblock %}
 
+{% block css %}
+    <link href="https://getbootstrap.com/docs/4.5/examples/sign-in/signin.css" rel="stylesheet">
+{% endblock %}
+
 {% block body %}
     <div class="container">
 
@@ -33,11 +37,9 @@
 
                     <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" class="btn btn-lg btn-primary btn-block" />
                 </p>
-                <nav aria-label="...">
-                    <ul class="pager">
-                        <li class="previous"><a href="{{ url("app_index") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_homepage"|trans({}, "messages") }}</a></li>
-                    </ul>
-                </nav>
+                <p>
+                    <a class="btn btn-light" href="{{ url("app_index") }}"><span aria-hidden="true">&larr;</span> {{ "come_back_to_homepage"|trans({}, "messages") }}</a>
+                </p>
             </form>
         {% endblock fos_user_content %}
     </div> <!-- /container -->
