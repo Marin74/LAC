@@ -149,16 +149,15 @@
                             %}
                                 <h5>{{ "contacts"|trans }}</h5>
                                 <ul>
-                                    {% if association.fullAddress is not empty %}
-
-                                        <li>
-                                            {{ "address_colon"|trans({"%address%": association.fullAddress }) }}
-                                        </li>
-                                    {% endif %}
-
                                     {% if association.phone is not empty %}
                                         <li>
                                             {{ "phone_colon"|trans({"%phone%": association.phone }) }}
+                                        </li>
+                                    {% endif %}
+
+                                    {% if association.fullAddress is not empty %}
+                                        <li>
+                                            {{ "address_colon"|trans({"%address%": association.fullAddress }) }}
                                         </li>
                                     {% endif %}
 
