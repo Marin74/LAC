@@ -47,8 +47,7 @@ class DefaultController extends Controller
         ->orderBy("e.startTime", "ASC")
         ;
 
-        $nextEvents = $qb->getQuery()->getResult();
-        /*$tempEvents = $qb->getQuery()->getResult();
+        $tempEvents = $qb->getQuery()->getResult();
         $tempArrayEvents = array();
 
         foreach($tempEvents as $event) {
@@ -82,7 +81,7 @@ class DefaultController extends Controller
         foreach($tempArrayEvents as $event) {
 
             $nextEvents[] = $event;
-        }*/
+        }
         
         $tempWorkshop = $repoAssociation->findOneBy(array("displayed" => true, "isWorkshop" => true));
         $workshopExists = $tempWorkshop != null;
