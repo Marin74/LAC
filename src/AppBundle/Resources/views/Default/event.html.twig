@@ -82,7 +82,7 @@
             
             <p>{{ "proposed_by"|trans }} <a href="{% if event.association.isWorkshop %}{{ url("app_workshop", {"id": event.association.id, "name": event.association.nameForUrl}) }}{% else %}{{ url("app_association", {"id": event.association.id, "name": event.association.nameForUrl}) }}{% endif %}">{{ event.association.name }}</a></p>
     
-            <p style="font-family: 'Roboto Condensed Light', 'Roboto Condensed Regular', serif; font-size: 1.1em; margin-top: 20px; max-width: 1000px;">{{ event.description|nl2br }}</p>
+            <p style="font-family: 'Roboto Light', 'Roboto Regular', serif; font-size: 1.1em; margin-top: 20px; max-width: 1000px;">{{ event.description|nl2br }}</p>
     		
             {% if event.website is not empty or event.email is not empty %}
                 <p style="margin-bottom: 20px;">

@@ -4,6 +4,14 @@
     --green-color: #009401;
 }
 @font-face {
+    font-family: "Roboto Light";
+    src: url("font/Roboto-Light.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Roboto Regular";
+    src: url("font/Roboto-Regular.ttf") format("truetype");
+}
+@font-face {
     font-family: "Roboto Condensed Light";
     src: url("font/RobotoCondensed-Light.ttf") format("truetype");
 }
@@ -12,7 +20,8 @@
     src: url("font/RobotoCondensed-Regular.ttf") format("truetype");
 }
 body {
-    font-family: "Roboto Condensed Regular", serif;
+    /*font-family: "Roboto Condensed Regular", serif;*/
+    font-family: "Roboto Regular", serif;
 }
 a {
     color: var(--second-main-color);
