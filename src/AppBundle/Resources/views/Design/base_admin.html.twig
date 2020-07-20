@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="{{ app_name }}">
+    <link rel="icon" type="image/svg" href="{{ asset("bundles/app/img/favicon.svg") }}">
+
+    <meta property="og:url"           content="{{ url(app.request.attributes.get("_route"), app.request.attributes.get("_route_params")) }}" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:image"         content="
+		{% if event is defined and event is not null %}
+		    {% if event.picture is not empty%}
+		        {{ asset(event.picturePath) }}
+	        {% elseif event.association.picture is not empty %}
+	            {{ asset(event.association.picturePath) }}
+            {% endif %}
+        {% elseif association is defined and association is not null and association.picture is not empty %}
+            {{ asset(association.picturePath) }}
+        {% endif %}" />
+
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js" integrity="sha256-7LkWEzqTdpEfELxcZZlS6wAx5Ff13zZ83lYO2/ujj7g=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Bootstrap datetimepicker coming from http://www.malot.fr/bootstrap-datetimepicker/ -->
+    <script src="{{ asset("bundles/app/js/bootstrap-datetimepicker.min.js") }}"></script>
+    <script src="{{ asset("bundles/app/js/locales/bootstrap-datetimepicker.fr.js") }}"></script>
+    <script src="https://unpkg.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
+    <script src='https://unpkg.com/leaflet.markercluster@1.0.0/dist/leaflet.markercluster.js'></script>
+
+    <!-- Custom styles for this template -->
+    <link href="{{ asset("bundles/app/css/signin.css") }}" rel="stylesheet">
+    <link href="{{ asset("bundles/app/css/dashboard.css") }}" rel="stylesheet">
+    <link href="{{ asset("bundles/app/css/bootstrap-datetimepicker.min.css") }}" rel="stylesheet">
+    <link href="{{ asset("bundles/app/css/docs.css") }}" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet@1.0.0-rc.2/dist/leaflet.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.0/dist/MarkerCluster.css" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.0/dist/MarkerCluster.Default.css" />
+    <link href="{{ asset("bundles/app/css/style.css") }}" rel="stylesheet">
+
+    {% if piwik_url is not empty and piwik_site_id is not empty %}
+        <!-- Piwik -->
+        <script type="text/javascript">
+            var _paq = _paq || [];
+            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function() {
+                var u="{{ piwik_url }}";
+                _paq.push(['setTrackerUrl', u+'piwik.php']);
+                _paq.push(['setSiteId', '{{ piwik_site_id }}']);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+            })();
+        </script>
+        <!-- End Piwik Code -->
+    {% endif %}
+
+</head>
+
+<body style="{% block body_style %}{% endblock %}">
+{% block body %}{% endblock %}
+</body>
+</html>
