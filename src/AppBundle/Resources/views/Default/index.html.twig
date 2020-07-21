@@ -19,7 +19,7 @@
                     {% for event in nextEvents %}
                         <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
 
-                            <div class="row center" style="width: 80%;">
+                            <div class="row center" style="width: 90%;">
                                 <div class="col mb-4">
                                     {% include 'AppBundle:Template:event.html.twig' with {'event': event} %}
                                 </div>
@@ -35,7 +35,7 @@
                     {% for i in range(1, nbSlides) %}
                         <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
 
-                            <div class="row center" style="width: 80%;">
+                            <div class="row center" style="width: 90%;">
                                 {% if offset < nbNextEvents-1 %}
                                     <div class="col-6 col-sm-6 col-md-3 mb-3">
                                         {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset]} %}
@@ -64,7 +64,12 @@
                 {% endif %}
             </div>
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="fill: red; color: red;"></span>
+
+                <!--<span aria-hidden="true">
+                    <svg xmlns='http://www.w3.org/2000/svg' fill='%23fff' width='8' height='8' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5L4.25 4l2.5-2.5L5.25 0z'/%3e%3c/svg%3e></svg>
+                </span>-->
                 <span class="sr-only">{{ "previous"|trans }}</span>
             </a>
             <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">

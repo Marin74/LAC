@@ -4,23 +4,14 @@
     --green-color: #009401;
 }
 @font-face {
-    font-family: "Roboto Light";
-    src: url("font/Roboto-Light.ttf") format("truetype");
-}
-@font-face {
     font-family: "Roboto Regular";
     src: url("font/Roboto-Regular.ttf") format("truetype");
 }
 @font-face {
-    font-family: "Roboto Condensed Light";
-    src: url("font/RobotoCondensed-Light.ttf") format("truetype");
-}
-@font-face {
-    font-family: "Roboto Condensed Regular";
-    src: url("font/RobotoCondensed-Regular.ttf") format("truetype");
+    font-family: "Roboto Light";
+    src: url("font/Roboto-Light.ttf") format("truetype");
 }
 body {
-    /*font-family: "Roboto Condensed Regular", serif;*/
     font-family: "Roboto Regular", serif;
 }
 a {
@@ -112,4 +103,10 @@ h1, h2, h3, h4, h5, h6{
 }
 .map{
     min-height: 60vh;
+}
+.card-body{
+    padding: 1rem;
+}
+.carousel-control-next, .carousel-control-prev {
+    width: 5%;
 }
