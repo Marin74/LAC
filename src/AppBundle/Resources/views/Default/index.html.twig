@@ -30,28 +30,28 @@
                 {% else %}
                     {% set nbNextEvents = nextEvents|length %}
                     {% set nbElements = 4 %}
-                    {% set nbSlides = nbNextEvents/nbElements %}
+                    {% set nbSlides = (nbNextEvents/nbElements)|round %}
                     {% set offset = 0 %}
                     {% for i in range(1, nbSlides) %}
                         <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
 
                             <div class="row center" style="width: 90%;">
-                                {% if offset < nbNextEvents-1 %}
+                                {% if offset < nbNextEvents %}
                                     <div class="col-6 col-sm-6 col-md-3 mb-3">
                                         {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset]} %}
                                     </div>
                                 {% endif %}
-                                {% if (offset+1) < nbNextEvents-1 %}
+                                {% if (offset+1) < nbNextEvents %}
                                     <div class="col-6 col-sm-6 col-md-3 mb-3">
                                         {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+1]} %}
                                     </div>
                                 {% endif %}
-                                {% if (offset+2) < nbNextEvents-1 %}
+                                {% if (offset+2) < nbNextEvents %}
                                     <div class="col-6 col-sm-6 col-md-3 mb-3">
                                         {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+2]} %}
                                     </div>
                                 {% endif %}
-                                {% if (offset+3) < nbNextEvents-1 %}
+                                {% if (offset+3) < nbNextEvents %}
                                     <div class="col-6 col-sm-6 col-md-3 mb-3">
                                         {% include 'AppBundle:Template:event.html.twig' with {'event': nextEvents[offset+3]} %}
                                     </div>
