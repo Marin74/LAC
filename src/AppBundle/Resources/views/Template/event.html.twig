@@ -17,6 +17,7 @@
     <a href="{{ eventURL }}" style="text-decoration: none;">
     <div class="center-cropped"
          style="background-image: url('{{ asset(picturePath) }}');
+                 background-size: cover;
                  position: relative;">
         {% if event.isCanceled %}
             <div style="width: 100%; height: 100%; background-color: #000000; opacity: 0.5;"></div>
