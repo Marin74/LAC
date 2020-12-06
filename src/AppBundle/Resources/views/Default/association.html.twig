@@ -266,7 +266,7 @@
     </div>
 
     {% if association is not null and association.nextEvents|length > 0 and association.hasNextEventsWithPlace %}
-        <div id="mapid" class="map"></div>
+        <!--<div id="mapid" class="map"></div>-->
     {% endif %}
 {% endblock %}
 
@@ -290,57 +290,57 @@
         	$("#carousel-next-events").carousel('prev');
         }
 
-    	{% if association is not null and association.nextEvents|length > 0 and association.hasNextEventsWithPlace %}
-            {% if association.nextEvents|length != 1 %}
-                var map = L.map('mapid').setView([{{ map_center }}], 11);
-            {% else %}
-                var map = L.map('mapid').setView([{{ association.nextEvents[0].placeEntity.latitude }}, {{ association.nextEvents[0].placeEntity.longitude }}], 11);
-            {% endif %}
-    
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
-                maxZoom: 18,
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                id: 'mapbox.streets'
-            }).addTo(map);
-    
-            // Prevent the zoom when we scroll the webpage
-            map.scrollWheelZoom.disable();
-    
-            var markers = [];
-            var markerClusters = L.markerClusterGroup({
-                showCoverageOnHover: false
-            });
-    
-            {% for event in association.nextEvents %}
+{#    	{% if association is not null and association.nextEvents|length > 0 and association.hasNextEventsWithPlace %}#}
+{#            {% if association.nextEvents|length != 1 %}#}
+{#                var map = L.map('mapid').setView([{{ map_center }}], 11);#}
+{#            {% else %}#}
+{#                var map = L.map('mapid').setView([{{ association.nextEvents[0].placeEntity.latitude }}, {{ association.nextEvents[0].placeEntity.longitude }}], 11);#}
+{#            {% endif %}#}
+{#    #}
+{#            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {#}
+{#                maxZoom: 18,#}
+{#                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +#}
+{#                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +#}
+{#                'Imagery © <a href="http://mapbox.com">Mapbox</a>',#}
+{#                id: 'mapbox.streets'#}
+{#            }).addTo(map);#}
+{#    #}
+{#            // Prevent the zoom when we scroll the webpage#}
+{#            map.scrollWheelZoom.disable();#}
+{#    #}
+{#            var markers = [];#}
+{#            var markerClusters = L.markerClusterGroup({#}
+{#                showCoverageOnHover: false#}
+{#            });#}
+{#    #}
+{#            {% for event in association.nextEvents %}#}
 
-        		{% if event.placeEntity is not null %}
-                    var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
-                    marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong><br/>{{ event.placeEntity.name }}');
-    
-                    marker.on('mouseover', function (e) {
-                        this.openPopup();
-                    });
-                    marker.on('mouseout', function (e) {
-                        this.closePopup();
-                    });
-                    {% if is_mobile() == false %}
-                        marker.on('click', function (e) {
-                            location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}'
-                        });
-                    {% endif %}
-                    
-                    markers.push([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);
-                    markerClusters.addLayer(marker);
-                {% endif %}
-            {% endfor %}
-    
-            {% if association.nextEvents|length > 1 %}
-                map.fitBounds(markers, { padding: [40, 40] });
-            {% endif %}
+{#        		{% if event.placeEntity is not null %}#}
+{#                    var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);#}
+{#                    marker.bindPopup('<a href="{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}"><strong>{{ event.name }}</strong></a><br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong><br/>{{ event.placeEntity.name }}');#}
+{#    #}
+{#                    marker.on('mouseover', function (e) {#}
+{#                        this.openPopup();#}
+{#                    });#}
+{#                    marker.on('mouseout', function (e) {#}
+{#                        this.closePopup();#}
+{#                    });#}
+{#                    {% if is_mobile() == false %}#}
+{#                        marker.on('click', function (e) {#}
+{#                            location.href='{{ url("app_event", {"id": event.id, "name": event.nameForUrl, "source": "association"}) }}'#}
+{#                        });#}
+{#                    {% endif %}#}
+{#                    #}
+{#                    markers.push([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]);#}
+{#                    markerClusters.addLayer(marker);#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#    #}
+{#            {% if association.nextEvents|length > 1 %}#}
+{#                map.fitBounds(markers, { padding: [40, 40] });#}
+{#            {% endif %}#}
 
-            map.addLayer(markerClusters);
-        {% endif %}
+{#            map.addLayer(markerClusters);#}
+{#        {% endif %}#}
     </script>
 {% endblock %}

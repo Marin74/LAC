@@ -182,42 +182,42 @@
         {% endif %}
     </div>
     {% if event is not null and event.placeEntity is not null %}
-    	<div id="mapid" class="map" style=""></div>
+    	<!--<div id="mapid" class="map" style=""></div>-->
     {% endif %}
 {% endblock %}
 
 {% block js %}
     <script type="application/javascript">
 
-    	{% if event is not null and event.placeEntity is not null %}
-            var map = L.map('mapid').setView([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}], 15);
-    
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {
-                maxZoom: 18,
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                id: 'mapbox.streets'
-            }).addTo(map);
-    
-            // Prevent the zoom when we scroll the webpage
-            map.scrollWheelZoom.disable();
-    
-            var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]).addTo(map);
-            marker.bindPopup('<strong>{{ event.placeEntity.name }}</strong>'+
-                    '<br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>'+
-                    '{% if event.placeEntity.street is not empty %}<br/>{{ event.placeEntity.street }}{% endif %}'+
-                    '{% if event.placeEntity.street2 is not empty %}<br/>{{ event.placeEntity.street2 }}{% endif %}'+
-                    '{% if event.placeEntity.zipCode is not empty %}<br/>{{ event.placeEntity.zipCode }}{% if event.placeEntity.city is not empty %} {{ event.placeEntity.city }}{% endif %}{% endif %}'+
-                    '{% if event.placeEntity.zipCode is empty and event.placeEntity.city is not empty %}<br/>{{ event.placeEntity.city }}{% endif %}'
-            );
-            marker.on('mouseover', function (e) {
-                this.openPopup();
-            });
-            marker.on('mouseout', function (e) {
-                this.closePopup();
-            });
-        {% endif %}
+{#    	{% if event is not null and event.placeEntity is not null %}#}
+{#            var map = L.map('mapid').setView([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}], 15);#}
+{#    #}
+{#            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={{ mapbox_access_token }}', {#}
+{#                maxZoom: 18,#}
+{#                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +#}
+{#                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +#}
+{#                'Imagery © <a href="http://mapbox.com">Mapbox</a>',#}
+{#                id: 'mapbox.streets'#}
+{#            }).addTo(map);#}
+{#    #}
+{#            // Prevent the zoom when we scroll the webpage#}
+{#            map.scrollWheelZoom.disable();#}
+{#    #}
+{#            var marker = L.marker([{{ event.placeEntity.latitude }}, {{ event.placeEntity.longitude }}]).addTo(map);#}
+{#            marker.bindPopup('<strong>{{ event.placeEntity.name }}</strong>'+#}
+{#                    '<br/><strong>{{ event.startTime|localizeddate("full", "short", locale, time_zone) }}</strong>'+#}
+{#                    '{% if event.placeEntity.street is not empty %}<br/>{{ event.placeEntity.street }}{% endif %}'+#}
+{#                    '{% if event.placeEntity.street2 is not empty %}<br/>{{ event.placeEntity.street2 }}{% endif %}'+#}
+{#                    '{% if event.placeEntity.zipCode is not empty %}<br/>{{ event.placeEntity.zipCode }}{% if event.placeEntity.city is not empty %} {{ event.placeEntity.city }}{% endif %}{% endif %}'+#}
+{#                    '{% if event.placeEntity.zipCode is empty and event.placeEntity.city is not empty %}<br/>{{ event.placeEntity.city }}{% endif %}'#}
+{#            );#}
+{#            marker.on('mouseover', function (e) {#}
+{#                this.openPopup();#}
+{#            });#}
+{#            marker.on('mouseout', function (e) {#}
+{#                this.closePopup();#}
+{#            });#}
+{#        {% endif %}#}
     </script>
 {% endblock %}
 
