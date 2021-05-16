@@ -151,6 +151,12 @@ class Association
      * @ORM\OrderBy({"name": "asc"})
      */
     private $documents;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\AssociationType",inversedBy="associations")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $types;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\QuizScore",mappedBy="association")
@@ -580,6 +586,14 @@ class Association
     public function getQuizScores()
     {
         return $this->quizScores;
+    }
+    
+    public function getTypes() {
+        return $this->types;
+    }
+    
+    public function setTypes($types) {
+        $this->types = $types;
     }
 
     public function getFile()

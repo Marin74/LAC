@@ -170,19 +170,47 @@ class DefaultController extends Controller
         ));
     }
 
-    public function associationsAction()
+    public function associationsAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $repoAssociation = $em->getRepository("AppBundle:Association");
-        $associations = $repoAssociation->findBy(array("displayed" => true, "isWorkshop" => false), array("name" => "ASC"));
+        $repoAssociationType = $em->getRepository("AppBundle:AssociationType");
+        $associationTypes = $repoAssociationType->findBy(array(), array("name" => "ASC"));
         $mainAssociation = null;
         if($this->container->hasParameter("app_name")) {
             $mainAssociation = $repoAssociation->findOneByName($this->getParameter("app_name"));
         }
+        
+        $selectedType = null;
+        if(!empty($request->get("type"))) {
+            $selectedType = $repoAssociationType->find($request->get("type"));
+        }
+        
+        $associations = null;
+        if($selectedType != null) {
+            
+            $qb = $repoAssociation->createQueryBuilder('a');
+            $qb->where($qb->expr()->eq("a.displayed", ":displayed"))
+            ->andWhere($qb->expr()->eq("a.isWorkshop", ":isWorkshop"))
+            ->andWhere(':type MEMBER OF a.types')
+            ->setParameter("displayed", true)
+            ->setParameter("isWorkshop", false)
+            ->setParameter("type", $selectedType)
+            ->orderBy("a.name", "ASC")
+            ->getQuery();
+                
+            $associations = $qb->getQuery()->getResult();
+        }
+        else {
+            $associations = $repoAssociation->findBy(array("displayed" => true, "isWorkshop" => false), array("name" => "ASC"));
+        }
+        
 
         return $this->render('@App/Default/associations.html.twig', array(
         	'mainAssociation'   => $mainAssociation,
-            'associations'      => $associations
+            'associations'      => $associations,
+            'associationTypes'  => $associationTypes,
+            'selectedType'      => $selectedType
         ));
     }
 

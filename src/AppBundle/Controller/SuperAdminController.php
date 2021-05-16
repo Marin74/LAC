@@ -7,7 +7,8 @@ use AppBundle\Entity\Event;
 use AppBundle\Entity\Newsletter;
 use AppBundle\Entity\NewsletterEvent;
 use AppBundle\Entity\User;
-use AppBundle\Form\AssociationFormType;
+use AppBundle\Form\SuperAdminAssociationFormType;
+use AppBundle\Form\AssociationTypeFormType;
 use AppBundle\Form\NewsletterFormType;
 use AppBundle\Form\SuperAdminEventFormType;
 use AppBundle\Form\UserFormType;
@@ -21,6 +22,7 @@ use AppBundle\Entity\Document;
 use AppBundle\Form\DocumentFormType;
 use AppBundle\Form\PlaceFormType;
 use Doctrine\ORM\Query\Expr\Join;
+use AppBundle\Entity\AssociationType;
 
 class SuperAdminController extends Controller
 {
@@ -414,7 +416,7 @@ class SuperAdminController extends Controller
         $translator = $this->get("translator");
         $repoAssociation = $em->getRepository("AppBundle:Association");
         $newAssociation = new Association();
-        $formAdd = $this->get('form.factory')->createBuilder(AssociationFormType::class, $newAssociation)->getForm();
+        $formAdd = $this->get('form.factory')->createBuilder(SuperAdminAssociationFormType::class, $newAssociation)->getForm();
 
         $associationIdToUpdate = $request->get("associationId");
         $deleteId = $request->get("deleteId");
@@ -435,7 +437,7 @@ class SuperAdminController extends Controller
 
                 // Empty the form
                 $newAssociation = new Association();
-                $formAdd = $this->get('form.factory')->createBuilder(AssociationFormType::class, $newAssociation)->getForm();
+                $formAdd = $this->get('form.factory')->createBuilder(SuperAdminAssociationFormType::class, $newAssociation)->getForm();
             }
         }
 
@@ -461,7 +463,7 @@ class SuperAdminController extends Controller
 
         $forms = array();
         foreach($associations as $association) {
-            $formBuilder = $this->get('form.factory')->createBuilder(AssociationFormType::class, $association);
+            $formBuilder = $this->get('form.factory')->createBuilder(SuperAdminAssociationFormType::class, $association);
 
             $form = $formBuilder->getForm();
 
@@ -492,6 +494,83 @@ class SuperAdminController extends Controller
             "formAdd" => $formAdd->createView(),
             "forms" => $forms,
             "associations" => $associations,
+        ));
+    }
+    
+    public function associationTypesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get("translator");
+        $repoAssociationType = $em->getRepository("AppBundle:AssociationType");
+        $newAssociationType = new AssociationType();
+        $formAdd = $this->get('form.factory')->createBuilder(AssociationTypeFormType::class, $newAssociationType)->getForm();
+        
+        $associationTypeIdToUpdate = $request->get("associationTypeId");
+        $deleteId = $request->get("deleteId");
+        
+        // Add form
+        if ($request->isMethod('POST') && empty($associationTypeIdToUpdate)) {
+            
+            $formAdd->handleRequest($request);
+            
+            if ($formAdd->isValid()) {
+                $em->persist($newAssociationType);
+                $em->flush();
+                
+                $request->getSession()->getFlashBag()->add('success', $translator->trans("association_type_created"));
+                
+                // Empty the form
+                $newAssociationType = new AssociationType();
+                $formAdd = $this->get('form.factory')->createBuilder(AssociationTypeFormType::class, $newAssociationType)->getForm();
+            }
+        }
+        
+        // Delete request
+        if ($request->isMethod('POST') && !empty($deleteId)) {
+            
+            $associationType = $repoAssociationType->find($deleteId);
+            
+            if($associationType != null) {
+                
+                $em->remove($associationType);
+                $em->flush();
+                $request->getSession()->getFlashBag()->add('success', $translator->trans("association_type_deleted"));
+            }
+        }
+        
+        $associationTypes = $repoAssociationType->findBy(array(), array("name" => "ASC"));
+        
+        $forms = array();
+        foreach($associationTypes as $associationType) {
+            $formBuilder = $this->get('form.factory')->createBuilder(AssociationTypeFormType::class, $associationType);
+            
+            $form = $formBuilder->getForm();
+            
+            if ($request->isMethod('POST')) {
+                
+                if(!empty($associationTypeIdToUpdate) && $associationTypeIdToUpdate == $associationType->getId()) {
+                    
+                    $form->handleRequest($request);// Set new data into the form
+                    
+                    if ($form->isValid()) {
+                        $em->flush();
+                        
+                        $request->getSession()->getFlashBag()->add('success', $translator->trans("association_type_updated"));
+                    }
+                    else
+                        $request->getSession()->getFlashBag()->add('warning', $translator->trans("error_field"));
+                }
+            }
+            
+            $formView = $form->createView();
+            
+            $forms[] = $formView;
+        }
+        
+        return $this->render('AppBundle:SuperAdmin:association_types.html.twig', array(
+            "formAdd" => $formAdd->createView(),
+            "forms" => $forms,
+            "associationTypes" => $associationTypes,
         ));
     }
 

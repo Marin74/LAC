@@ -261,3 +261,12 @@ show_associations: "Voir tous les acteurs"
 show_workshops: "Voir tous les ateliers"
 previous: "Précédent"
 next: "Suivant"
+association_types: Types d'association
+association_type_created: Le type est créé.
+association_type_updated: Le type est modifié.
+association_type_deleted: Le type est supprimé.
+new_association_type: Nouveau type
+association_type: Type
+delete_association_type_confirmation: 'Êtes-vous sûr de vouloir supprimer le type d''association "%name%" ? Il sera effacé définitivement.'
+color: Couleur
+association_type_color_placeholder: 'Couleur au format hexadécimal (ex : #FF00FF)'

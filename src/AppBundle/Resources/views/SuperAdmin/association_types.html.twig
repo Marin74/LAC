@@ -1,0 +1,233 @@
+{% extends "AppBundle:Design:design_admin.html.twig" %}
+
+{% block title %}
+    {{ "administration"|trans }} - {{ "association_types"|trans }} - {{ parent() }}
+{% endblock %}
+
+{% block page_title %}
+    {{ "association_types"|trans }}
+{% endblock %}
+
+{% block content %}
+    <p>
+        <a id="addButton" class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_add">{{ "new_association_type"|trans }}</a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ "association_type"|trans }}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for associationType in associationTypes %}
+                <tr>
+                    <td><a data-toggle="modal" data-target="#modal_update_{{ associationType.id }}" id="a_update_{{ associationType.id }}" style="cursor: pointer;">{{ associationType.name }}</a></td>
+                    <td>
+                        <a data-toggle="modal" data-target="#modal_delete_{{ associationType.id }}" class="label label-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true" title="{{ "delete"|trans }}"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    {# Form to add association type #}
+    <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{ "association_type"|trans }}</h4>
+                </div>
+                {{ form_start(formAdd, {'attr': {'class': 'form-horizontal', 'id': 'form_add'}}) }}
+                <div class="modal-body">
+
+                    <div id="warning_add"></div>
+
+                    <p>
+
+                        {# General errors of the form #}
+                        {{ form_errors(formAdd) }}
+
+                        {# Manual and exploded generation: #}
+                        <div class="form-group">
+
+                            {# Label. #}
+                            {{ form_label(formAdd.name, "name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                            <div class="col-sm-10">
+
+                                {# Display errors for this field. #}
+                                {{ form_errors(formAdd.name) }}
+
+                                {# Input #}
+                                {{ form_widget(formAdd.name, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            {# Label. #}
+                            {{ form_label(formAdd.color, "color", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                            <div class="col-sm-10">
+
+                                {# Display errors for this field. #}
+                                {{ form_errors(formAdd.color) }}
+
+                                {# Input #}
+                                {{ form_widget(formAdd.color, {'attr': {'class': 'form-control', 'placeholder': 'association_type_color_placeholder'|trans}}) }}
+                            </div>
+                        </div>
+
+                        {{ form_rest(formAdd) }}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                    <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                </div>
+
+                {# Close <form> #}
+                {{ form_end(formAdd) }}
+            </div>
+        </div>
+    </div>
+
+
+    {% set i = 0 %}
+
+    {% for form in forms %}
+        {% set associationType = associationTypes[i] %}
+
+        {# Form to update association type #}
+        <div class="modal fade" id="modal_update_{{ associationType.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ "association_type"|trans }}</h4>
+                    </div>
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal', 'id': 'form_update_'~associationType.id}}) }}
+                    <div class="modal-body">
+
+                        <div id="warning_update_{{ associationType.id }}"></div>
+
+                        <p>
+
+                            <input type="hidden" name="associationTypeId" value="{{ associationType.id }}"/>
+
+                            {# General errors of the form #}
+                            {{ form_errors(form) }}
+
+                            {# Manual and exploded generation: #}
+                            <div class="form-group">
+
+                                {# Label. #}
+                                {{ form_label(form.name, "name", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                                <div class="col-sm-10">
+
+                                    {# Display errors for this field. #}
+                                    {{ form_errors(form.name) }}
+
+                                    {# Input #}
+                                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                        <div class="form-group">
+
+                            {# Label. #}
+                            {{ form_label(form.color, "color", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+
+                            <div class="col-sm-10">
+
+                                {# Display errors for this field. #}
+                                {{ form_errors(form.color) }}
+
+                                {# Input #}
+                                {{ form_widget(form.color, {'attr': {'class': 'form-control', 'placeholder': 'association_type_color_placeholder'|trans}}) }}
+                            </div>
+                        </div>
+
+                            {{ form_rest(form) }}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
+                        <button type="submit" class="btn btn-success">{{ "save"|trans }}</button>
+                    </div>
+
+                    {# Close <form> #}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+
+
+        {# Form to delete association type #}
+        <div class="modal fade" id="modal_delete_{{ associationType.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{ "delete"|trans }}</h4>
+                    </div>
+                    <form action="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}" method="POST">
+                        <div class="modal-body">
+
+                            <input type="hidden" name="deleteId" value="{{ associationType.id }}"/>
+
+                            <p>
+                                {{ "delete_association_type_confirmation"|trans({'%name%': associationType.name}) }}
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "cancel"|trans }}</button>
+                            <button type="submit" class="btn btn-danger">{{ "delete"|trans }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% set i = i + 1 %}
+    {% endfor %}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+
+        {# Open a modal dialog if there is a error with a form #}
+        {% set i = 0 %}
+        {% for form in forms %}
+            {% if form.name.vars.errors|length
+            	or form.color.vars.errors|length
+            %}
+
+                {% set associationType = associationTypes[i] %}
+
+                $("#warning_update_{{ associationType.id }}").attr("class", "alert alert-warning");
+                $("#warning_update_{{ associationType.id }}").attr("role", "alert");
+                $("#warning_update_{{ associationType.id }}").text("{{ "error_field"|trans }}");
+
+                $("#modal_update_{{ associationType.id }}").modal("show");
+            {% endif %}
+            {% set i = i + 1 %}
+        {% endfor %}
+
+        {% if formAdd.name.vars.errors|length
+        	or formAdd.color.vars.errors|length
+        %}
+
+            $("#warning_add").attr("class", "alert alert-warning");
+            $("#warning_add").attr("role", "alert");
+            $("#warning_add").text("{{ "error_field"|trans }}");
+
+            $("#modal_add").modal("show");
+        {% endif %}
+    </script>
+{% endblock %}

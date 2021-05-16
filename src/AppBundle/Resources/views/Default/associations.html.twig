@@ -27,17 +27,40 @@
         {% else %}
             <h1 class="third-main-color center">{{ "local_associations"|trans }}</h1>
         {% endif %}
+        
+        {% if associationTypes|length %}
+        	<p>
+        		<div style="text-align: center">
+        			{% for type in associationTypes %}
+        				{% set typeUrl = url("app_associations", {"type": type.id}) %}
+        				
+        				{% if selectedType != null and selectedType.id == type.id %}
+        					{% set typeUrl = url("app_associations") %}
+        				{% endif %}
+        				
+        				<a href="{{ typeUrl }}" 
+        				class="badge badge-pill" style="font-size: 1em; 
+        				cursor: pointer; 
+        				color: white; 
+        				background-color: {{ type.color }};
+        				opacity: {% if selectedType != null and selectedType.id == type.id %}1{% else %}0.6{% endif %};
+        				"
+        				>{{ type.name }}</a> 
+        			{% endfor %}
+        		</div>
+        	</p>
+        {% endif %}
 
         <!-- Wrapper for slides -->
         <p>
-        <div class="row">
-
-            {% for association in associations %}
-                <div class="col-sm-6 col-md-4 mb-4">
-                    {% include 'AppBundle:Template:association.html.twig' with {'association': association} %}
-                </div>
-            {% endfor %}
-        </div>
+	        <div class="row">
+	
+	            {% for association in associations %}
+	                <div class="col-sm-6 col-md-4 mb-4">
+	                    {% include 'AppBundle:Template:association.html.twig' with {'association': association} %}
+	                </div>
+	            {% endfor %}
+	        </div>
         </p>
     </div>
 {% endblock %}

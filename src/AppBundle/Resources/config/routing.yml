@@ -98,6 +98,9 @@ app_superadmin_association_document:
     defaults: { _controller: "AppBundle:SuperAdmin:associationDocument" }
     requirements:
         id: \d+
+app_superadmin_association_type:
+    path:     /admin/superadmin/association/type
+    defaults: { _controller: "AppBundle:SuperAdmin:associationTypes" }
         
 app_superadmin_newsletters:
     path:     /admin/superadmin/lettre
