@@ -32,23 +32,40 @@
         	<p>
         		<div style="text-align: center">
         			{% for type in associationTypes %}
-        
-				        <style type="text/css">
-				        	.btn-outline-{{ type.id }}{
-							    color: {{ type.color }};
-							    border-color: {{ type.color }};
-							}
-							.btn-outline-{{ type.id }}:hover{
-							    color: white;
-							    background-color: {{ type.color }};
-							    border-color: {{ type.color }};
-							}
-				        </style>
 	        
         				{% set typeUrl = url("app_associations", {"type": type.id}) %}
         				
         				{% if selectedType != null and selectedType.id == type.id %}
         					{% set typeUrl = url("app_associations") %}
+        					
+        					
+					        <style type="text/css">
+					        	.btn-outline-{{ type.id }}{
+								    background-color: {{ type.color }};
+								    border-color: {{ type.color }};
+								    color: white;
+								}
+								.btn-outline-{{ type.id }}:hover{
+								    color: {{ type.color }};
+								    border-color: {{ type.color }};
+								    background-color: transparent;
+								}
+					        </style>
+					        
+        				{% else %}
+        					
+					        <style type="text/css">
+					        	.btn-outline-{{ type.id }}{
+								    color: {{ type.color }};
+								    border-color: {{ type.color }};
+								}
+								.btn-outline-{{ type.id }}:hover{
+								    color: white;
+								    background-color: {{ type.color }};
+								    border-color: {{ type.color }};
+								}
+					        </style>
+        				
         				{% endif %}
         				
         				<a href="{{ typeUrl }}" 
