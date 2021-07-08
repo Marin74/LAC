@@ -39,11 +39,18 @@
         				{% endif %}
         				
         				<a href="{{ typeUrl }}" 
-        				class="badge badge-pill" style="font-size: 1em; 
-        				cursor: pointer; 
-        				color: white; 
-        				background-color: {{ type.color }};
-        				opacity: {% if selectedType != null and selectedType.id == type.id %}1{% else %}0.6{% endif %};
+        				type="button" class="btn"
+        				style="font-size: 1em; 
+        				cursor: pointer;
+        				{% if selectedType != null and selectedType.id == type.id %}
+	        				color: white;
+	        				border-color: {{ type.color }};
+	        				background-color: {{ type.color }};
+        				{% else %}
+	        				color: {{ type.color }};
+	        				border-color: {{ type.color }};
+	        				background-color: transparent;
+        				{% endif %}
         				"
         				>{{ type.name }}</a> 
         			{% endfor %}
