@@ -270,3 +270,4 @@ association_type: Type
 delete_association_type_confirmation: 'Êtes-vous sûr de vouloir supprimer le type d''association "%name%" ? Il sera effacé définitivement.'
 color: Couleur
 association_type_color_placeholder: 'Couleur au format hexadécimal (ex : #FF00FF)'
+agenda: "L'Agenda de LAC-Chablais"
