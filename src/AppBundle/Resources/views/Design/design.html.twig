@@ -100,13 +100,10 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <iframe class="mj-w-res-iframe"
-                                frameborder="0"
-                                scrolling="no"
-                                marginheight="0"
-                                marginwidth="0"
-                                src="{{ newsletter_url }}"
-                                width="100%"></iframe>
+                        <iframe data-w-type="embedded" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://x3060.mjt.lu/wgt/x3060/31n/form?c=5512738d" width="100%"></iframe>
+
+<script type="text/javascript" src="https://app.mailjet.com/pas-nc-embedded-v1.js"></script>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">{{ "close"|trans }}</button>
@@ -114,7 +111,5 @@
                 </div>
             </div>
         </div>
-
-        <script type="text/javascript" src="https://app.mailjet.com/statics/js/iframeResizer.min.js"></script>
     {% endif %}
 {% endblock %}
